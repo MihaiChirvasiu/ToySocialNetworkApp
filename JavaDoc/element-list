@@ -1,0 +1,10 @@
+unnamed package
+com.company
+com.company.Domain
+com.company.Domain.Validators
+com.company.Repository
+com.company.Repository.Database
+com.company.Repository.File
+com.company.Repository.Memory
+com.company.Service
+com.company.UI
