@@ -117,25 +117,47 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
         }
     }
 
-    private E2 findFriendRequestServ(ID idUser1, ID idUser2) throws SQLException
-    {
+    /**
+     *
+     * @param idUser1 The id of a User
+     * @param idUser2 The id of another User
+     * @return The friendRequest if it was found, null otherwise
+     * @throws SQLException Database
+     */
+    private E2 findFriendRequestServ(ID idUser1, ID idUser2) throws SQLException {
         FriendRequest friendRequest = new FriendRequest((User) findOneServ(idUser1),(User) findOneServ(idUser2));
         return (E2) friendRequestRepository.findFriendRequest((E2)friendRequest);
     }
 
-    public void acceptFriendRequest(ID idUser1, ID idUser2) throws SQLException,IOException
-    {
+    /**
+     *
+     * @param idUser1 The id of a User
+     * @param idUser2 The id of another User
+     * @throws SQLException Database
+     * @throws IOException Inheritance(File)
+     */
+    public void acceptFriendRequest(ID idUser1, ID idUser2) throws SQLException, IOException {
         friendRequestRepository.updateStatus(findFriendRequestServ(idUser1,idUser2), STATUS.APPROVED);
         addFriendshipServ(idUser1,idUser2);
     }
 
-    public void rejectFriendRequest(ID idUser1, ID idUser2) throws SQLException
-    {
+    /**
+     *
+     * @param idUser1 The id of a User
+     * @param idUser2 The id of another User
+     * @throws SQLException Database
+     */
+    public void rejectFriendRequest(ID idUser1, ID idUser2) throws SQLException {
         friendRequestRepository.updateStatus(findFriendRequestServ(idUser1,idUser2),STATUS.REJECTED);
     }
 
-    public void addFriendRequest(ID idUser1, ID idUser2) throws SQLException
-    {
+    /**
+     *
+     * @param idUser1 The id of a User
+     * @param idUser2 The id of another User
+     * @throws SQLException Database
+     */
+    public void addFriendRequest(ID idUser1, ID idUser2) throws SQLException {
         FriendRequest friendRequest = new FriendRequest((User) findOneServ(idUser1),(User) findOneServ(idUser2));
         friendRequestRepository.addFriendRequest((E2)friendRequest);
     }
