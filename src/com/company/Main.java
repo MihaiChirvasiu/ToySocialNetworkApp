@@ -1,9 +1,12 @@
 package com.company;
 
+import com.company.Domain.FriendRequest;
 import com.company.Domain.Friendship;
 import com.company.Domain.User;
+import com.company.Domain.Validators.FriendRequestValidator;
 import com.company.Domain.Validators.FriendshipValidator;
 import com.company.Domain.Validators.UserValidator;
+import com.company.Repository.Database.DatabaseFriendRequestRepository;
 import com.company.Repository.Database.DatabaseFriendshipRepository;
 import com.company.Repository.Database.DatabaseUserRepository;
 import com.company.Repository.File.FriendshipFile;
@@ -27,11 +30,13 @@ public class Main {
                     "1234", new UserValidator());
             FriendshipRepository<Long, Friendship> friendshipRepository = new DatabaseFriendshipRepository<>("jdbc:postgresql://localhost:5432/lab7",
                     "postgres", "1234", new FriendshipValidator());
+            DatabaseFriendRequestRepository<Long, FriendRequest> friendRequestRepository = new DatabaseFriendRequestRepository<>("jdbc:postgresql://localhost:5432/lab7",
+                    "postgres", "1234", new FriendRequestValidator());
             //UserRepository<Long, User> repository = new UserFile<>("data/users.csv", new UserValidator());
             //FriendshipRepository<Long, Friendship> friendshipRepository = new FriendshipFile<>("data/friendships.csv", new FriendshipValidator());
             //UserValidator validator = new UserValidator();
             //Repository<Long, User> repository = new InMemoryRepository<>(validator);
-            Controller<Long, User, Friendship> controller = new Controller<>(repository, friendshipRepository);
+            Controller<Long, User, Friendship, FriendRequest> controller = new Controller<>(repository, friendshipRepository, friendRequestRepository);
             UI<Long, User, Friendship> ui = new UI<>(controller);
             ui.run();
         }
