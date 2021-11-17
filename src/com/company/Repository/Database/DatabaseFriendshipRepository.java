@@ -55,6 +55,7 @@ public class DatabaseFriendshipRepository<ID, E extends Entity<ID>> implements F
 
             PreparedStatement ps = getStatement(sql);
             Friendship friendship1 = (Friendship) friendship;
+            friendship1.setDate(LocalDateTime.now());
 
         ps.setLong(1, friendship1.getFirstUser().getId());
         ps.setString(2, friendship1.getFirstUser().getFirstName());
@@ -65,6 +66,21 @@ public class DatabaseFriendshipRepository<ID, E extends Entity<ID>> implements F
         ps.setString(7, friendship1.getDate().toString());
 
             ps.executeUpdate();
+
+            String sql2 = "insert into friendships (id_user1, first_name_user1, last_name_user1, id_user2 " +
+                    ",first_name_user2, last_name_user2, date ) values (?, ?, ?, ?, ?, ?, ?)";
+
+            PreparedStatement ps2 = getStatement(sql2);
+
+            ps2.setLong(1, friendship1.getSecondUser().getId());
+            ps2.setString(2, friendship1.getSecondUser().getFirstName());
+            ps2.setString(3, friendship1.getSecondUser().getLastName());
+            ps2.setLong(4, friendship1.getFirstUser().getId());
+            ps2.setString(5, friendship1.getFirstUser().getFirstName());
+            ps2.setString(6, friendship1.getFirstUser().getLastName());
+            ps2.setString(7, friendship1.getDate().toString());
+
+            ps2.executeUpdate();
         }
         else
             throw new RepoException("Friendship already exists");

@@ -181,6 +181,17 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Enti
                         ((Friendship) x).getDate().format(Constants.DATE_TIME_FORMATTER)));
     }
 
+    public void printUsersFriendshipsFromMonth(Long idUser,int month) throws SQLException
+    {
+        controller.findFriendshipsForUser((ID)idUser).stream()
+                .filter(
+                        x -> ((Friendship) x).getDate().getMonthValue()==month
+                )
+                .forEach(x-> System.out.println(((Friendship) x).getSecondUser().getLastName() + " | " +
+                        ((Friendship) x).getSecondUser().getFirstName() + " | " +
+                        ((Friendship) x).getDate().format(Constants.DATE_TIME_FORMATTER)));
+    }
+
     /**
      * The menu method
      */
@@ -201,7 +212,8 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Enti
         System.out.println("12. Find one friend");
         System.out.println("13. Update a friendship");
         System.out.println("14. Show all friends for an user");
-        System.out.println("15. Exit the application");
+        System.out.println("15. Show all users who are friends with the given user from the specified month");
+        System.out.println("16. Exit the application");
         System.out.print("Give the desired command ");
     }
 
@@ -318,7 +330,7 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Enti
                     updateFriendUI(id1, id2, id3);
                     System.out.println();
                 }
-                if(command == 15){
+                if(command == 16){
                     in.close();
                     break;
                 }
@@ -326,6 +338,14 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Enti
                     System.out.print("Give the ID of User whose friends you want to show ");
                     Long idUser = in.nextLong();
                     printAllFriendsForUser(idUser);
+                }
+                if(command == 15)
+                {
+                    System.out.println("Give the ID of User whose friends you want to show ");
+                    Long idUser = in.nextLong();
+                    System.out.println("Give the month they started being friends ");
+                    Integer month = in.nextInt();
+                    printUsersFriendshipsFromMonth(idUser,month);
                 }
             }
             catch (InputMismatchException e){
