@@ -1,6 +1,7 @@
 package com.company.UI;
 
 import com.company.Domain.Entity;
+import com.company.Domain.FriendRequest;
 import com.company.Domain.Friendship;
 import com.company.Domain.User;
 import com.company.Domain.Validators.ValidationException;
@@ -14,10 +15,10 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
-public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>> {
-    private Controller<ID, E, E1> controller;
+public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Entity<ID>> {
+    private Controller<ID, E, E1, E2> controller;
 
-    public UI(Controller<ID, E, E1> controller) {
+    public UI(Controller<ID, E, E1, E2> controller) {
         this.controller = controller;
     }
 
@@ -91,7 +92,17 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>> {
      * @param idFriend The id of the user to become a friend
      */
     public void addFriendUI(Long idUser, Long idFriend) throws IOException,SQLException {
-        controller.addFriendshipServ((ID) idUser, (ID) idFriend);
+        controller.addFriendRequest((ID) idUser, (ID) idFriend);
+    }
+
+    public void acceptFriendRequest(Long idUser, Long idFriend) throws IOException,SQLException
+    {
+        controller.acceptFriendRequest((ID)idUser,(ID)idFriend);
+    }
+
+    public void rejectFriendRequest(Long idUser, Long idFriend) throws SQLException
+    {
+        controller.rejectFriendRequest((ID)idUser,(ID)idFriend);
     }
 
     /**
@@ -113,6 +124,16 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>> {
             Friendship fr = (Friendship) friendship;
             System.out.println(fr.getFirstUser().getFirstName() + " " + fr.getFirstUser().getLastName() +
                     " - " + fr.getSecondUser().getFirstName() + " " + fr.getSecondUser().getLastName());
+        }
+    }
+
+    public void allFriendRequestsUI(Long idUser) throws SQLException {
+        List<E2> friendRequestsList = controller.findFriendRequestsForUser((ID)idUser);
+        for(E2 friendRequest : friendRequestsList){
+            FriendRequest fr = (FriendRequest) friendRequest;
+            User user = (User) controller.findOneServ((ID)fr.getUser2().getId());
+            System.out.println(fr.getUser1().getId() + " " + fr.getUser1().getFirstName() + " " + fr.getUser1().getLastName() +
+                    " - " + user.getId() + " " + user.getFirstName() + " " + user.getLastName());
         }
     }
 
@@ -162,15 +183,17 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>> {
         System.out.println("1. Add a new user");
         System.out.println("2. Delete a user with the given id");
         System.out.println("3. Modify a user");
-        System.out.println("4. Add a friend to a given user");
-        System.out.println("5. Delete a friend of a given user");
-        System.out.println("6. Find a user with the given id");
-        System.out.println("7. How many communities are in the network?");
-        System.out.println("8. Find the longest chain in a community");
-        System.out.println("9. Find all friends");
-        System.out.println("10. Find one friend");
-        System.out.println("11. Update a friendship");
-        System.out.println("12. Exit the application");
+        System.out.println("4. Send a friend request");
+        System.out.println("5. Accept a friend request");
+        System.out.println("6. Reject a friend request");
+        System.out.println("7. Delete a friend of a given user");
+        System.out.println("8. Find a user with the given id");
+        System.out.println("9. How many communities are in the network?");
+        System.out.println("10. Find the longest chain in a community");
+        System.out.println("11. Find all friends");
+        System.out.println("12. Find one friend");
+        System.out.println("13. Update a friendship");
+        System.out.println("14. Exit the application");
         System.out.print("Give the desired command ");
     }
 
@@ -218,32 +241,58 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>> {
                     Long idFriend = in.nextLong();
                     addFriendUI(idUser, idFriend);
                 }
-                if (command == 5) {
+                if(command == 5)
+                {
+                    System.out.print("Give the ID of the user ");
+                    Long idUser = in.nextLong();
+                    allFriendRequestsUI(idUser);
+                    if(!controller.findFriendRequestsForUser((ID)idUser).isEmpty()) {
+                        System.out.println("Give the friend whose request you want to accept");
+                        Long idFriend = in.nextLong();
+                        acceptFriendRequest(idUser, idFriend);
+                    }
+                    else
+                        System.out.println("There are no pending friend requests");
+                }
+                if(command == 6)
+                {
+                    System.out.print("Give the ID of the user ");
+                    Long idUser = in.nextLong();
+                    allFriendRequestsUI(idUser);
+                    if(!controller.findFriendRequestsForUser((ID)idUser).isEmpty()) {
+                        System.out.println("Give the friend whose request you want to reject");
+                        Long idFriend = in.nextLong();
+                        rejectFriendRequest(idUser,idFriend);
+                    }
+                    else
+                        System.out.println("There are no pending friend requests");
+                }
+                if (command == 7) {
                     System.out.print("Give the ID of the user whose friend to be deleted ");
                     Long idUser = in.nextLong();
                     System.out.print("Give the ID of the friend to be deleted ");
                     Long idFriend = in.nextLong();
                     deleteFriendUI(idUser, idFriend);
                 }
-                if (command == 6) {
+                if (command == 8) {
                     System.out.print("Give the ID of the user to be returned ");
                     Long id = in.nextLong();
                     findOneUI(id);
                 }
-                if(command == 7){
+                if(command == 9){
                     System.out.println("The number of communities is " + communitiesUI());
                 }
-                if(command == 8){
+                if(command == 10){
                     System.out.print("The longest road is ");
                     longestRoadUI();
                     System.out.println();
                 }
-                if (command == 9) {
+                if (command == 11) {
                     System.out.print("Print all friendships ");
                     allFriendsUI();
                     System.out.println();
                 }
-                if(command == 10){
+                if(command == 12){
                     System.out.print("Give the ID of the user ");
                     Long id = in.nextLong();
                     System.out.print("Give the ID of the friend to be searched ");
@@ -251,7 +300,7 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>> {
                     findOneFriend(id, idFriend);
                     System.out.println();
                 }
-                if(command == 11){
+                if(command == 13){
                     System.out.print("Give the ID of the first User ");
                     Long id1 = in.nextLong();
                     System.out.print("Give the ID of the second User ");
@@ -261,7 +310,7 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>> {
                     updateFriendUI(id1, id2, id3);
                     System.out.println();
                 }
-                if(command == 12){
+                if(command == 14){
                     in.close();
                     break;
                 }

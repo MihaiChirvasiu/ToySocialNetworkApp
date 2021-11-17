@@ -2,11 +2,15 @@ package com.company.Repository.Database;
 
 import com.company.Domain.Entity;
 import com.company.Domain.FriendRequest;
+import com.company.Domain.Friendship;
+import com.company.Domain.User;
 import com.company.Domain.Validators.Validator;
 import com.company.Utils.STATUS;
 
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseFriendRequestRepository<ID, E extends Entity<ID>> {
 
@@ -45,8 +49,7 @@ public class DatabaseFriendRequestRepository<ID, E extends Entity<ID>> {
     {
         validator.validate(friendRequest);
 
-        String sql = "insert into friendrequests (id_user1, id_user2 " +
-                ", status ) values (?, ?, ?)";
+        String sql = "insert into friendrequests (id_user1, id_user2, status ) values (?, ?, ?)";
 
         PreparedStatement ps = getStatement(sql);
         FriendRequest friendRequest1=(FriendRequest) friendRequest;
@@ -61,7 +64,7 @@ public class DatabaseFriendRequestRepository<ID, E extends Entity<ID>> {
     public void updateStatus(E friendRequest, STATUS newStatus) throws SQLException{
         validator.validate(friendRequest);
         FriendRequest friendRequest1 = (FriendRequest) friendRequest;
-        if(newStatus.equals(STATUS.REJECTED))
+        if(newStatus.equals(STATUS.rejected))
             friendRequest1.rejectRequest();
         else
             friendRequest1.acceptRequest();
@@ -71,7 +74,25 @@ public class DatabaseFriendRequestRepository<ID, E extends Entity<ID>> {
 
         PreparedStatement ps = getStatement(sql);
 
+        ps.setString(1, friendRequest1.getStatus().toString());
+
         ps.executeUpdate();
+    }
+
+    public List<E> findAllFriendRequestsForUser(User user) throws SQLException {
+        List<E> friendRequestList = new ArrayList<>();
+        String sql = "select * from friendrequests where id_user1 = " + user.getId() + " and status = 'pending' " ;
+
+        PreparedStatement ps = getStatement(sql);
+
+        ResultSet resultSet = ps.executeQuery();
+        while(resultSet.next()){
+            User user2 = new User("aa", "bb");
+            user2.setId(resultSet.getLong(2));
+            FriendRequest friendRequest = new FriendRequest(user, user2);
+            friendRequestList.add((E) friendRequest);
+        }
+        return friendRequestList;
     }
 
 

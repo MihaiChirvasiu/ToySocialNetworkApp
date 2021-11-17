@@ -26,18 +26,19 @@ public class Main {
 
     public static void main(String[] args) {
 	    try {
-            UserRepository<Long, User> repository = new DatabaseUserRepository<>("jdbc:postgresql://localhost:5432/lab7", "postgres",
-                    "1234", new UserValidator());
-            FriendshipRepository<Long, Friendship> friendshipRepository = new DatabaseFriendshipRepository<>("jdbc:postgresql://localhost:5432/lab7",
-                    "postgres", "1234", new FriendshipValidator());
-            DatabaseFriendRequestRepository<Long, FriendRequest> friendRequestRepository = new DatabaseFriendRequestRepository<>("jdbc:postgresql://localhost:5432/lab7",
-                    "postgres", "1234", new FriendRequestValidator());
+            UserRepository<Long, User> repository = new DatabaseUserRepository<>("jdbc:postgresql://localhost:5432/Repository Lab5", "postgres",
+                    "Oana0910Andreea", new UserValidator());
+            FriendshipRepository<Long, Friendship> friendshipRepository = new DatabaseFriendshipRepository<>("jdbc:postgresql://localhost:5432/Repository Lab5",
+                    "postgres", "Oana0910Andreea", new FriendshipValidator());
+            DatabaseFriendRequestRepository<Long, FriendRequest> friendRequestRepository = new DatabaseFriendRequestRepository<>(
+                    "jdbc:postgresql://localhost:5432/Repository Lab5","postgres", "Oana0910Andreea", new FriendRequestValidator()
+            );
             //UserRepository<Long, User> repository = new UserFile<>("data/users.csv", new UserValidator());
             //FriendshipRepository<Long, Friendship> friendshipRepository = new FriendshipFile<>("data/friendships.csv", new FriendshipValidator());
             //UserValidator validator = new UserValidator();
             //Repository<Long, User> repository = new InMemoryRepository<>(validator);
             Controller<Long, User, Friendship, FriendRequest> controller = new Controller<>(repository, friendshipRepository, friendRequestRepository);
-            UI<Long, User, Friendship> ui = new UI<>(controller);
+            UI<Long, User, Friendship, FriendRequest> ui = new UI<>(controller);
             ui.run();
         }
         catch (ArrayIndexOutOfBoundsException e){

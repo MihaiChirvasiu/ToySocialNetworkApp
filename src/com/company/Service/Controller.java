@@ -117,47 +117,25 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
         }
     }
 
-    /**
-     *
-     * @param idUser1 The id of a User
-     * @param idUser2 The id of another User
-     * @return The friendRequest if it was found, null otherwise
-     * @throws SQLException Database
-     */
-    private E2 findFriendRequestServ(ID idUser1, ID idUser2) throws SQLException {
+    private E2 findFriendRequestServ(ID idUser1, ID idUser2) throws SQLException
+    {
         FriendRequest friendRequest = new FriendRequest((User) findOneServ(idUser1),(User) findOneServ(idUser2));
         return (E2) friendRequestRepository.findFriendRequest((E2)friendRequest);
     }
 
-    /**
-     *
-     * @param idUser1 The id of a User
-     * @param idUser2 The id of another User
-     * @throws SQLException Database
-     * @throws IOException Inheritance(File)
-     */
-    public void acceptFriendRequest(ID idUser1, ID idUser2) throws SQLException, IOException {
-        friendRequestRepository.updateStatus(findFriendRequestServ(idUser1,idUser2), STATUS.APPROVED);
+    public void acceptFriendRequest(ID idUser1, ID idUser2) throws SQLException,IOException
+    {
+        friendRequestRepository.updateStatus(findFriendRequestServ(idUser1,idUser2), STATUS.approved);
         addFriendshipServ(idUser1,idUser2);
     }
 
-    /**
-     *
-     * @param idUser1 The id of a User
-     * @param idUser2 The id of another User
-     * @throws SQLException Database
-     */
-    public void rejectFriendRequest(ID idUser1, ID idUser2) throws SQLException {
-        friendRequestRepository.updateStatus(findFriendRequestServ(idUser1,idUser2),STATUS.REJECTED);
+    public void rejectFriendRequest(ID idUser1, ID idUser2) throws SQLException
+    {
+        friendRequestRepository.updateStatus(findFriendRequestServ(idUser1,idUser2),STATUS.rejected);
     }
 
-    /**
-     *
-     * @param idUser1 The id of a User
-     * @param idUser2 The id of another User
-     * @throws SQLException Database
-     */
-    public void addFriendRequest(ID idUser1, ID idUser2) throws SQLException {
+    public void addFriendRequest(ID idUser1, ID idUser2) throws SQLException
+    {
         FriendRequest friendRequest = new FriendRequest((User) findOneServ(idUser1),(User) findOneServ(idUser2));
         friendRequestRepository.addFriendRequest((E2)friendRequest);
     }
@@ -196,6 +174,12 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
      */
     public List<E1> findFriendships() throws SQLException {
         return friendshipRepository.findAllFriendships();
+    }
+
+    public List<E2> findFriendRequestsForUser(ID idUser) throws SQLException
+    {
+        User user = (User) findOneServ(idUser);
+        return friendRequestRepository.findAllFriendRequestsForUser(user);
     }
 
     /**
