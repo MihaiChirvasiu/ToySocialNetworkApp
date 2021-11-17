@@ -8,6 +8,7 @@ import com.company.Utils.STATUS;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -178,10 +179,13 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
         return friendshipRepository.findAllFriendships();
     }
 
-    public List<E2> findFriendRequestsForUser(ID idUser) throws SQLException
-    {
+    public List<E2> findFriendRequestsForUser(ID idUser) throws SQLException {
         User user = (User) findOneServ(idUser);
         return friendRequestRepository.findAllFriendRequestsForUser(user);
+
+    }
+    public List<E1> findFriendshipsForUser(ID idUser) throws SQLException {
+        return friendshipRepository.findAllFriendshipsForUser(idUser);
     }
 
     /**

@@ -20,4 +20,6 @@ public interface FriendshipRepository<ID, E> {
 
     int getSize() throws SQLException;
 
+    List<E> findAllFriendshipsForUser(ID idUser) throws SQLException;
+
 }

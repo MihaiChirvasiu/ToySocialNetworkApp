@@ -7,6 +7,7 @@ import com.company.Domain.User;
 import com.company.Domain.Validators.ValidationException;
 import com.company.Repository.RepoException;
 import com.company.Service.Controller;
+import com.company.Utils.Constants;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -173,6 +174,12 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Enti
         }
     }
 
+    public void printAllFriendsForUser(Long idUser) throws SQLException {
+        controller.findFriendshipsForUser((ID) idUser).stream().forEach(
+                x-> System.out.println(((Friendship) x).getSecondUser().getLastName() + " | " +
+                        ((Friendship) x).getSecondUser().getFirstName() + " | " +
+                        ((Friendship) x).getDate().format(Constants.DATE_TIME_FORMATTER)));
+    }
 
     /**
      * The menu method
@@ -194,6 +201,16 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Enti
         System.out.println("12. Find one friend");
         System.out.println("13. Update a friendship");
         System.out.println("14. Exit the application");
+        System.out.println("4. Add a friend to a given user");
+        System.out.println("5. Delete a friend of a given user");
+        System.out.println("6. Find a user with the given id");
+        System.out.println("7. How many communities are in the network?");
+        System.out.println("8. Find the longest chain in a community");
+        System.out.println("9. Find all friends");
+        System.out.println("10. Find one friend");
+        System.out.println("11. Update a friendship");
+        System.out.println("12. Exit the application");
+        System.out.println("15. Show all friends for an user");
         System.out.print("Give the desired command ");
     }
 
@@ -313,6 +330,11 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Enti
                 if(command == 14){
                     in.close();
                     break;
+                }
+                if(command == 15){
+                    System.out.print("Give the ID of User whose friends you want to show ");
+                    Long idUser = in.nextLong();
+                    printAllFriendsForUser(idUser);
                 }
             }
             catch (InputMismatchException e){
