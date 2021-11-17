@@ -126,6 +126,7 @@ public class DatabaseFriendshipRepository<ID, E extends Entity<ID>> implements F
             User user2 = new User(resultSet.getString(5), resultSet.getString(6));
             user2.setId(resultSet.getLong(4));
             Friendship friendship = new Friendship(user1, user2);
+            friendship.setDate(LocalDateTime.parse(resultSet.getString(7)));
             friendshipsList.add((E) friendship);
         }
         return friendshipsList;
