@@ -5,6 +5,7 @@ import com.company.Domain.Friendship;
 import com.company.Domain.User;
 import com.company.Domain.Validators.Validator;
 import com.company.Repository.FriendshipRepository;
+import com.company.Repository.RepoException;
 
 import java.io.IOException;
 import java.sql.*;
@@ -47,22 +48,25 @@ public class DatabaseFriendshipRepository<ID, E extends Entity<ID>> implements F
     public void addFriendshipRepo(E friendship) throws IOException, SQLException {
         validator.validate(friendship);
 
-        String sql = "insert into friendships (id_user1, first_name_user1, last_name_user1, id_user2 " +
-                ",first_name_user2, last_name_user2 ) values (?, ?, ?, ?, ?, ?)";
+        if(findOneFriendship(friendship)==null) {
+            String sql = "insert into friendships (id_user1, first_name_user1, last_name_user1, id_user2 " +
+                    ",first_name_user2, last_name_user2 ) values (?, ?, ?, ?, ?, ?)";
 
-        PreparedStatement ps = getStatement(sql);
-        Friendship friendship1 = (Friendship) friendship;
+            PreparedStatement ps = getStatement(sql);
+            Friendship friendship1 = (Friendship) friendship;
 
-        ps.setLong(1, friendship1.getFirstUser().getId());
-        ps.setString(2, friendship1.getFirstUser().getFirstName());
-        ps.setString(3, friendship1.getFirstUser().getLastName());
-        ps.setLong(4, friendship1.getSecondUser().getId());
-        ps.setString(5, friendship1.getSecondUser().getFirstName());
-        ps.setString(6, friendship1.getSecondUser().getLastName());
+            ps.setLong(1, friendship1.getFirstUser().getId());
+            ps.setString(2, friendship1.getFirstUser().getFirstName());
+            ps.setString(3, friendship1.getFirstUser().getLastName());
+            ps.setLong(4, friendship1.getSecondUser().getId());
+            ps.setString(5, friendship1.getSecondUser().getFirstName());
+            ps.setString(6, friendship1.getSecondUser().getLastName());
 
 
-        ps.executeUpdate();
-
+            ps.executeUpdate();
+        }
+        else
+            throw new RepoException("Friendship already exists");
     }
 
     /**

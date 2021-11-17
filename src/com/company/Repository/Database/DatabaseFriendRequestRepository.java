@@ -5,6 +5,7 @@ import com.company.Domain.FriendRequest;
 import com.company.Domain.Friendship;
 import com.company.Domain.User;
 import com.company.Domain.Validators.Validator;
+import com.company.Repository.RepoException;
 import com.company.Utils.STATUS;
 
 import java.io.IOException;
@@ -48,17 +49,20 @@ public class DatabaseFriendRequestRepository<ID, E extends Entity<ID>> {
     public void addFriendRequest(E friendRequest) throws SQLException
     {
         validator.validate(friendRequest);
+        if(findFriendRequest(friendRequest)==null) {
+            String sql = "insert into friendrequests (id_user1, id_user2, status ) values (?, ?, ?)";
 
-        String sql = "insert into friendrequests (id_user1, id_user2, status ) values (?, ?, ?)";
+            PreparedStatement ps = getStatement(sql);
+            FriendRequest friendRequest1 = (FriendRequest) friendRequest;
 
-        PreparedStatement ps = getStatement(sql);
-        FriendRequest friendRequest1=(FriendRequest) friendRequest;
+            ps.setLong(1, friendRequest1.getUser1().getId());
+            ps.setLong(2, friendRequest1.getUser2().getId());
+            ps.setString(3, friendRequest1.getStatus().toString());
 
-        ps.setLong(1, friendRequest1.getUser1().getId());
-        ps.setLong(2, friendRequest1.getUser2().getId());
-        ps.setString(3, friendRequest1.getStatus().toString());
-
-        ps.executeUpdate();
+            ps.executeUpdate();
+        }
+        else
+            throw new RepoException("Friend request already exists");
     }
 
     public void updateStatus(E friendRequest, STATUS newStatus) throws SQLException{
