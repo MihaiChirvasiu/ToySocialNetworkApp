@@ -49,7 +49,7 @@ public class DatabaseFriendRequestRepository<ID, E extends Entity<ID>> {
     public void addFriendRequest(E friendRequest) throws SQLException
     {
         validator.validate(friendRequest);
-        if(findFriendRequest(friendRequest)==null) {
+        if(findFriendRequest(friendRequest)==null || !findFriendRequest(friendRequest).getStatus().equals(STATUS.pending)) {
             String sql = "insert into friendrequests (id_user1, id_user2, status ) values (?, ?, ?)";
 
             PreparedStatement ps = getStatement(sql);

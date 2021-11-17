@@ -136,8 +136,10 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
 
     public void addFriendRequest(ID idUser1, ID idUser2) throws SQLException
     {
-        FriendRequest friendRequest = new FriendRequest((User) findOneServ(idUser1),(User) findOneServ(idUser2));
-        friendRequestRepository.addFriendRequest((E2)friendRequest);
+        if(findFriendshipServ(idUser1,idUser2)!=null) {
+            FriendRequest friendRequest = new FriendRequest((User) findOneServ(idUser1), (User) findOneServ(idUser2));
+            friendRequestRepository.addFriendRequest((E2) friendRequest);
+        }
     }
 
     /**
