@@ -13,8 +13,8 @@ public class TestsFriendRequest {
         user2.setId(2L);
         FriendRequest friendRequest = new FriendRequest(user1, user2);
         Assertions.assertTrue(friendRequest.getStatus().equals(STATUS.PENDING));
-        Assertions.assertTrue(friendRequest.getIdUser1().getId().equals(1L));
-        Assertions.assertTrue(friendRequest.getIdUser2().getId().equals(2L));
+        Assertions.assertTrue(friendRequest.getUser1().equals(user1));
+        Assertions.assertTrue(friendRequest.getUser2().equals(user2));
         friendRequest.acceptRequest();
         Assertions.assertTrue(friendRequest.getStatus().equals(STATUS.APPROVED));
         friendRequest.rejectRequest();
