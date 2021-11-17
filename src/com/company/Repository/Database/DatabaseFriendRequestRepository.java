@@ -6,10 +6,7 @@ import com.company.Domain.Validators.Validator;
 import com.company.Utils.STATUS;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class DatabaseFriendRequestRepository<ID, E extends Entity<ID>> {
 
@@ -31,11 +28,24 @@ public class DatabaseFriendRequestRepository<ID, E extends Entity<ID>> {
         return ps;
     }
 
+    public FriendRequest findFriendRequest(E friendRequest) throws SQLException
+    {
+        validator.validate(friendRequest);
+        FriendRequest friendRequest1 = (FriendRequest) friendRequest;
+        String sql = "select * from friendrequests where id_user1 = " + friendRequest1.getUser1().getId() +
+                " and id_user2 = " + friendRequest1.getUser2().getId();
+        PreparedStatement ps = getStatement(sql);
+        ResultSet resultSet = ps.executeQuery();
+        if(resultSet==null)
+            return null;
+        return friendRequest1;
+    }
+
     public void addFriendRequest(E friendRequest) throws SQLException
     {
         validator.validate(friendRequest);
 
-        String sql = "insert into friendrequest (id_user1, id_user2 " +
+        String sql = "insert into friendrequests (id_user1, id_user2 " +
                 ", status ) values (?, ?, ?)";
 
         PreparedStatement ps = getStatement(sql);
@@ -48,7 +58,7 @@ public class DatabaseFriendRequestRepository<ID, E extends Entity<ID>> {
         ps.executeUpdate();
     }
 
-    public void updateStatus(E friendRequest, STATUS newStatus) throws IOException, SQLException{
+    public void updateStatus(E friendRequest, STATUS newStatus) throws SQLException{
         validator.validate(friendRequest);
         FriendRequest friendRequest1 = (FriendRequest) friendRequest;
         if(newStatus.equals(STATUS.REJECTED))

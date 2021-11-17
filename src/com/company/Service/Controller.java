@@ -1,25 +1,26 @@
 package com.company.Service;
 
-import com.company.Domain.Entity;
-import com.company.Domain.Friendship;
-import com.company.Domain.Network;
-import com.company.Domain.User;
+import com.company.Domain.*;
+import com.company.Repository.Database.DatabaseFriendRequestRepository;
 import com.company.Repository.FriendshipRepository;
 import com.company.Repository.UserRepository;
+import com.company.Utils.STATUS;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
 
-public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>> {
+public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Entity<ID>> {
     private UserRepository<ID, E> repository;
     private FriendshipRepository<ID, E1> friendshipRepository;
+    private DatabaseFriendRequestRepository<ID,E2> friendRequestRepository;
     private Network network;
 
-    public Controller(UserRepository<ID, E> repository, FriendshipRepository<ID, E1> friendshipRepository){
+    public Controller(UserRepository<ID, E> repository, FriendshipRepository<ID, E1> friendshipRepository, DatabaseFriendRequestRepository<ID, E2> friendRequestRepository){
         this.repository = repository;
         this.friendshipRepository = friendshipRepository;
+        this.friendRequestRepository=friendRequestRepository;
     }
 
     /**
@@ -109,11 +110,34 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>> {
      * @param idUser1 The id of a User
      * @param idUser2 The id of another User
      */
-    public void addFriendshipServ(ID idUser1, ID idUser2) throws SQLException, IOException {
+    private void addFriendshipServ(ID idUser1, ID idUser2) throws SQLException, IOException {
         if(findOneServ(idUser1) != null && findOneServ(idUser2) != null) {
             Friendship friendship = new Friendship((User) findOneServ(idUser1), (User) findOneServ(idUser2));
             friendshipRepository.addFriendshipRepo((E1) friendship);
         }
+    }
+
+    private E2 findFriendRequestServ(ID idUser1, ID idUser2) throws SQLException
+    {
+        FriendRequest friendRequest = new FriendRequest((User) findOneServ(idUser1),(User) findOneServ(idUser2));
+        return (E2) friendRequestRepository.findFriendRequest((E2)friendRequest);
+    }
+
+    public void acceptFriendRequest(ID idUser1, ID idUser2) throws SQLException,IOException
+    {
+        friendRequestRepository.updateStatus(findFriendRequestServ(idUser1,idUser2), STATUS.APPROVED);
+        addFriendshipServ(idUser1,idUser2);
+    }
+
+    public void rejectFriendRequest(ID idUser1, ID idUser2) throws SQLException
+    {
+        friendRequestRepository.updateStatus(findFriendRequestServ(idUser1,idUser2),STATUS.REJECTED);
+    }
+
+    public void addFriendRequest(ID idUser1, ID idUser2) throws SQLException
+    {
+        FriendRequest friendRequest = new FriendRequest((User) findOneServ(idUser1),(User) findOneServ(idUser2));
+        friendRequestRepository.addFriendRequest((E2)friendRequest);
     }
 
     /**
@@ -198,31 +222,6 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>> {
                 maxx = (long) k;
             }
         }
-        /*
-        LinkedList<Long>[] adj = new LinkedList[(int) (maxx + 1)];
-        for(ID k : keys){
-            adj[Math.toIntExact((Long) k)] = new LinkedList<>();
-        }
-        int vertices = getSizeServ();
-        long nrc = 0;
-        Long[] componente_conexe = new Long[(int) (maxx + 1)];
-        List<Long> viz = new ArrayList<>();
-        for(ID k : keys){
-            E user = findOneServ(k);
-            Utilizator utilizator = (Utilizator) user;
-            for(Utilizator usr : utilizator.getFriends()){
-                adj[Math.toIntExact((Long) k)].add(usr.getId());
-            }
-        }
-        for(ID k : keys){
-            if(!viz.contains((Long) k)) {
-                nrc++;
-                BFS(adj, viz, componente_conexe, (Long) k, nrc);
-            }
-        }
-        return nrc;
-
-         */
         this.network = new Network(Math.toIntExact(getMaxx()), getKeysServ(), this.repository, this.friendshipRepository);
         return network.numberOfCommunities(getKeysServ(), (int) maxx);
     }
@@ -240,43 +239,6 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>> {
                 maxx = (long) k;
             }
         }
-        /*
-        LinkedList<Long>[] adj = new LinkedList[(int) (maxx + 1)];
-        for(ID k : keys){
-            adj[Math.toIntExact((Long) k)] = new LinkedList<>();
-        }
-        int vertices = getSizeServ();
-        long nrc = 0;
-        Long[] componente_conexe = new Long[(int) (maxx + 1)];
-        List<Long> viz = new ArrayList<>();
-        for(ID k : keys) {
-            E user = findOneServ(k);
-            Utilizator utilizator = (Utilizator) user;
-            for (Utilizator usr : utilizator.getFriends()) {
-                adj[Math.toIntExact((Long) k)].add(usr.getId());
-            }
-        }
-        for(ID k : keys){
-            if(!viz.contains((Long) k)) {
-                nrc++;
-                BFS(adj, viz, componente_conexe, (Long) k, nrc);
-            }
-        }
-        Long[] actualRoad = new Long[(int) (maxx + 1)];
-        for(int i = 1; i <= nrc; i++){
-            Long[] potentialRoad = new Long[(int) (maxx + 1)];
-            Long[] s = new Long[(int) (maxx + 1)];
-            int index = 0;
-            for(ID k : keys){
-                if(componente_conexe[Math.toIntExact((Long) k)] == i)
-                    potentialRoad[index++] = (Long) k;
-            }
-            int[] maxLength = {0};
-            back(0, index, maxLength, actualRoad, potentialRoad, adj, s);
-        }
-        return actualRoad;
-
-         */
         this.network = new Network(Math.toIntExact(getMaxx()), getKeysServ(), this.repository, this.friendshipRepository);
         return network.longestRoadInACommunity(getKeysServ(), (int) maxx);
     }
