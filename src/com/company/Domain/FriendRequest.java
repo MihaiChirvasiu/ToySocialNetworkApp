@@ -14,24 +14,43 @@ public class FriendRequest extends Entity<Long> {
         this.status = STATUS.pending;
     }
 
-    public User getUser1()
-    {
+    /**
+     *
+     * @return The user that sent the friendRequest
+     */
+    public User getUser1() {
         return user1;
     }
 
+    /**
+     * Getter for User
+     * @return The user that received the friendRequest
+     */
     public User getUser2() {
         return user2;
     }
 
+    /**
+     * Getter for Status
+     * @return The Status of the friendRequest
+     */
     public STATUS getStatus() {
         return status;
     }
 
+    /**
+     * Setter for updating the friendRequest Status
+     * to APPROVED
+     */
     public void acceptRequest()
     {
         this.status=STATUS.approved;
     }
 
+    /**
+     * Setter for updating the friendRequest Status
+     * to REJECTED
+     */
     public void rejectRequest()
     {
         this.status=STATUS.rejected;
