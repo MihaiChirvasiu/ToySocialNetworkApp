@@ -125,13 +125,13 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
 
     public void acceptFriendRequest(ID idUser1, ID idUser2) throws SQLException,IOException
     {
-        friendRequestRepository.updateStatus(findFriendRequestServ(idUser1,idUser2), STATUS.APPROVED);
+        friendRequestRepository.updateStatus(findFriendRequestServ(idUser1,idUser2), STATUS.approved);
         addFriendshipServ(idUser1,idUser2);
     }
 
     public void rejectFriendRequest(ID idUser1, ID idUser2) throws SQLException
     {
-        friendRequestRepository.updateStatus(findFriendRequestServ(idUser1,idUser2),STATUS.REJECTED);
+        friendRequestRepository.updateStatus(findFriendRequestServ(idUser1,idUser2),STATUS.rejected);
     }
 
     public void addFriendRequest(ID idUser1, ID idUser2) throws SQLException
@@ -174,6 +174,12 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
      */
     public List<E1> findFriendships() throws SQLException {
         return friendshipRepository.findAllFriendships();
+    }
+
+    public List<E2> findFriendRequestsForUser(ID idUser) throws SQLException
+    {
+        User user = (User) findOneServ(idUser);
+        return friendRequestRepository.findAllFriendRequestsForUser(user);
     }
 
     /**

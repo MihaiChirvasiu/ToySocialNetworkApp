@@ -11,7 +11,7 @@ public class FriendRequest extends Entity<Long> {
     public FriendRequest(User user1, User user2) {
         this.user1 = user1;
         this.user2 = user2;
-        this.status = STATUS.PENDING;
+        this.status = STATUS.pending;
     }
 
     public User getUser1()
@@ -29,11 +29,11 @@ public class FriendRequest extends Entity<Long> {
 
     public void acceptRequest()
     {
-        this.status=STATUS.APPROVED;
+        this.status=STATUS.approved;
     }
 
     public void rejectRequest()
     {
-        this.status=STATUS.REJECTED;
+        this.status=STATUS.rejected;
     }
 }
