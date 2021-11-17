@@ -7,6 +7,7 @@ import com.company.Domain.Validators.Validator;
 import com.company.Repository.FriendshipRepository;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -115,5 +116,10 @@ public class InMemoryRepositoryFriendship<ID, E extends Entity<ID>> implements F
     @Override
     public int getSize(){
         return friendships.size();
+    }
+
+    @Override
+    public List<E> findAllFriendshipsForUser(ID idUser) throws SQLException {
+        return null;
     }
 }

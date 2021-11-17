@@ -1,3 +1,4 @@
+/*
 import com.company.Domain.Friendship;
 import com.company.Domain.User;
 import com.company.Domain.Validators.FriendshipValidator;
@@ -236,3 +237,4 @@ public class TestsController {
         }
     }
 }
+*/
