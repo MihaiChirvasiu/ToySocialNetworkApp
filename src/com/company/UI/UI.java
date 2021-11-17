@@ -200,17 +200,8 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Enti
         System.out.println("11. Find all friends");
         System.out.println("12. Find one friend");
         System.out.println("13. Update a friendship");
-        System.out.println("14. Exit the application");
-        System.out.println("4. Add a friend to a given user");
-        System.out.println("5. Delete a friend of a given user");
-        System.out.println("6. Find a user with the given id");
-        System.out.println("7. How many communities are in the network?");
-        System.out.println("8. Find the longest chain in a community");
-        System.out.println("9. Find all friends");
-        System.out.println("10. Find one friend");
-        System.out.println("11. Update a friendship");
-        System.out.println("12. Exit the application");
-        System.out.println("15. Show all friends for an user");
+        System.out.println("14. Show all friends for an user");
+        System.out.println("15. Exit the application");
         System.out.print("Give the desired command ");
     }
 
@@ -327,11 +318,11 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Enti
                     updateFriendUI(id1, id2, id3);
                     System.out.println();
                 }
-                if(command == 14){
+                if(command == 15){
                     in.close();
                     break;
                 }
-                if(command == 15){
+                if(command == 14){
                     System.out.print("Give the ID of User whose friends you want to show ");
                     Long idUser = in.nextLong();
                     printAllFriendsForUser(idUser);

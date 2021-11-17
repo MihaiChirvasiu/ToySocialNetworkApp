@@ -41,9 +41,14 @@ public class DatabaseFriendRequestRepository<ID, E extends Entity<ID>> {
                 " and id_user2 = " + friendRequest1.getUser2().getId();
         PreparedStatement ps = getStatement(sql);
         ResultSet resultSet = ps.executeQuery();
-        if(resultSet==null)
-            return null;
-        return friendRequest1;
+        if(resultSet.next()) {
+            if(resultSet.getString(3).equals("approved"))
+                friendRequest1.acceptRequest();
+            else if(resultSet.getString(3).equals("rejected"))
+                friendRequest1.rejectRequest();
+            return friendRequest1;
+        }
+        return null;
     }
 
     public void addFriendRequest(E friendRequest) throws SQLException
@@ -54,6 +59,7 @@ public class DatabaseFriendRequestRepository<ID, E extends Entity<ID>> {
 
             PreparedStatement ps = getStatement(sql);
             FriendRequest friendRequest1 = (FriendRequest) friendRequest;
+            friendRequest1.setStatus();
 
             ps.setLong(1, friendRequest1.getUser1().getId());
             ps.setLong(2, friendRequest1.getUser2().getId());
@@ -74,7 +80,7 @@ public class DatabaseFriendRequestRepository<ID, E extends Entity<ID>> {
             friendRequest1.acceptRequest();
         ID idUser1 = (ID) friendRequest1.getUser1().getId();
         ID idUser2 = (ID) friendRequest1.getUser2().getId();
-        String sql = "update friendrequests set status = " + friendRequest1.getStatus() + " where id_user1 = " + idUser1 + " and id_user2 = " + idUser2 ;
+        String sql = "update friendrequests set status = ? where id_user1 = " + idUser1 + " and id_user2 = " + idUser2 ;
 
         PreparedStatement ps = getStatement(sql);
 

@@ -38,6 +38,11 @@ public class FriendRequest extends Entity<Long> {
         return status;
     }
 
+    public void setStatus()
+    {
+        status=STATUS.pending;
+    }
+
     /**
      * Setter for updating the friendRequest Status
      * to APPROVED
