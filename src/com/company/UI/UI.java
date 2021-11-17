@@ -6,6 +6,7 @@ import com.company.Domain.User;
 import com.company.Domain.Validators.ValidationException;
 import com.company.Repository.RepoException;
 import com.company.Service.Controller;
+import com.company.Utils.Constants;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -152,6 +153,12 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>> {
         }
     }
 
+    public void printAllFriendsForUser(Long idUser) throws SQLException {
+        controller.findFriendshipsForUser((ID) idUser).stream().forEach(
+                x-> System.out.println(((Friendship) x).getSecondUser().getLastName() + " | " +
+                        ((Friendship) x).getSecondUser().getFirstName() + " | " +
+                        ((Friendship) x).getDate().format(Constants.DATE_TIME_FORMATTER)));
+    }
 
     /**
      * The menu method
@@ -171,6 +178,7 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>> {
         System.out.println("10. Find one friend");
         System.out.println("11. Update a friendship");
         System.out.println("12. Exit the application");
+        System.out.println("15. Show all friends for an user");
         System.out.print("Give the desired command ");
     }
 
@@ -264,6 +272,11 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>> {
                 if(command == 12){
                     in.close();
                     break;
+                }
+                if(command == 15){
+                    System.out.print("Give the ID of User whose friends you want to show ");
+                    Long idUser = in.nextLong();
+                    printAllFriendsForUser(idUser);
                 }
             }
             catch (InputMismatchException e){

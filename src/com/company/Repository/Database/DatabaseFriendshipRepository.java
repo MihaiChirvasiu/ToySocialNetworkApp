@@ -8,6 +8,7 @@ import com.company.Repository.FriendshipRepository;
 
 import java.io.IOException;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class DatabaseFriendshipRepository<ID, E extends Entity<ID>> implements F
     @Override
     public void addFriendshipRepo(E friendship) throws IOException, SQLException {
         String sql = "insert into friendships (id_user1, first_name_user1, last_name_user1, id_user2 " +
-                ",first_name_user2, last_name_user2 ) values (?, ?, ?, ?, ?, ?)";
+                ",first_name_user2, last_name_user2, date ) values (?, ?, ?, ?, ?, ?, ?)";
 
         PreparedStatement ps = getStatement(sql);
         Friendship friendship1 = (Friendship) friendship;
@@ -57,6 +58,7 @@ public class DatabaseFriendshipRepository<ID, E extends Entity<ID>> implements F
         ps.setLong(4, friendship1.getSecondUser().getId());
         ps.setString(5, friendship1.getSecondUser().getFirstName());
         ps.setString(6, friendship1.getSecondUser().getLastName());
+        ps.setString(7, friendship1.getDate().toString());
 
 
         ps.executeUpdate();
@@ -91,6 +93,29 @@ public class DatabaseFriendshipRepository<ID, E extends Entity<ID>> implements F
     public List<E> findAllFriendships() throws SQLException {
         List<E> friendshipsList = new ArrayList<>();
         String sql = "select * from friendships";
+
+        PreparedStatement ps = getStatement(sql);
+
+        ResultSet resultSet = ps.executeQuery();
+        while(resultSet.next()){
+            User user1 = new User(resultSet.getString(2), resultSet.getString(3));
+            user1.setId(resultSet.getLong(1));
+            User user2 = new User(resultSet.getString(5), resultSet.getString(6));
+            user2.setId(resultSet.getLong(4));
+            Friendship friendship = new Friendship(user1, user2);
+            friendshipsList.add((E) friendship);
+        }
+        return friendshipsList;
+    }
+
+    /**
+     *
+     * @return A list representing all the friendships of a user in the database
+     * @throws SQLException if the Statement can't be executed or is incorrect
+     */
+    public List<E> findAllFriendshipsForUser(ID idUser) throws SQLException {
+        List<E> friendshipsList = new ArrayList<>();
+        String sql = "select * from friendships where id_user1 = " + idUser;
 
         PreparedStatement ps = getStatement(sql);
 

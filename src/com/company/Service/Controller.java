@@ -9,6 +9,7 @@ import com.company.Repository.UserRepository;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -150,6 +151,10 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>> {
      */
     public List<E1> findFriendships() throws SQLException {
         return friendshipRepository.findAllFriendships();
+    }
+
+    public List<E1> findFriendshipsForUser(ID idUser) throws SQLException {
+        return friendshipRepository.findAllFriendshipsForUser(idUser);
     }
 
     /**

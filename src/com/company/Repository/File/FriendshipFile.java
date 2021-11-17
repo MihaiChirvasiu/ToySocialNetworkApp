@@ -7,6 +7,7 @@ import com.company.Domain.Validators.Validator;
 import com.company.Repository.Memory.InMemoryRepositoryFriendship;
 
 import java.io.*;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -64,7 +65,9 @@ public class FriendshipFile <ID, E extends Entity<ID>> extends InMemoryRepositor
                 ";" +
                 fr.getSecondUser().getFirstName() +
                 ";" +
-                fr.getSecondUser().getLastName();
+                fr.getSecondUser().getLastName() +
+                ";" +
+                fr.getDate();
         return friendships;
     }
 
@@ -77,7 +80,9 @@ public class FriendshipFile <ID, E extends Entity<ID>> extends InMemoryRepositor
         user1.setId(Long.parseLong(attributes.get(0)));
         User user2 = new User(attributes.get(4), attributes.get(5));
         user2.setId(Long.parseLong(attributes.get(3)));
+        LocalDateTime date = LocalDateTime.parse(attributes.get(6));
         Friendship friendship = new Friendship(user1, user2);
+        friendship.setDate(date);
         super.addFriendshipRepo((E) friendship);
     }
 
