@@ -45,6 +45,8 @@ public class DatabaseFriendshipRepository<ID, E extends Entity<ID>> implements F
      */
     @Override
     public void addFriendshipRepo(E friendship) throws IOException, SQLException {
+        validator.validate(friendship);
+
         String sql = "insert into friendships (id_user1, first_name_user1, last_name_user1, id_user2 " +
                 ",first_name_user2, last_name_user2 ) values (?, ?, ?, ?, ?, ?)";
 
@@ -71,6 +73,7 @@ public class DatabaseFriendshipRepository<ID, E extends Entity<ID>> implements F
      */
     @Override
     public void deleteFriendshipRepo(E friendship) throws IOException, SQLException {
+        validator.validate(friendship);
         Friendship friendship1 = (Friendship) friendship;
         ID idUser1 = (ID) friendship1.getFirstUser().getId();
         ID idUser2 = (ID) friendship1.getSecondUser().getId();
@@ -114,6 +117,7 @@ public class DatabaseFriendshipRepository<ID, E extends Entity<ID>> implements F
      */
     @Override
     public E findOneFriendship(E friendship) throws SQLException {
+        validator.validate(friendship);
         Friendship friendship1 = (Friendship) friendship;
         ID idUser1 = (ID) friendship1.getFirstUser().getId();
         ID idUSer2 = (ID) friendship1.getSecondUser().getId();
@@ -138,6 +142,8 @@ public class DatabaseFriendshipRepository<ID, E extends Entity<ID>> implements F
      */
     @Override
     public void updateFriendship(E oldFriendship, E newFriendship) throws SQLException, IOException {
+        validator.validate(oldFriendship);
+        validator.validate(newFriendship);
         Friendship friendship1 = (Friendship) oldFriendship;
         ID idUser1 = (ID) friendship1.getFirstUser().getId();
         ID idUSer2 = (ID) friendship1.getSecondUser().getId();

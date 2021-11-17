@@ -14,12 +14,12 @@ public class FriendRequest extends Entity<Long> {
         this.status = STATUS.PENDING;
     }
 
-    public User getIdUser1()
+    public User getUser1()
     {
         return user1;
     }
 
-    public User getIdUser2() {
+    public User getUser2() {
         return user2;
     }
 
