@@ -9,17 +9,18 @@ import java.util.List;
 
 public class Message extends Entity<Long> {
 
-    private Long id;
     private User from;
     private List<User> to;
     private String message;
     private LocalDateTime date;
+    private Message replyMessage;
 
     public Message(User from, String message, LocalDateTime date){
         this.from = from;
         this.message = message;
         this.to = new ArrayList<>();
         this.date = date;
+        this.replyMessage = null;
     }
 
     /**
@@ -44,6 +45,14 @@ public class Message extends Entity<Long> {
 
     public LocalDateTime getDate(){
         return date;
+    }
+
+    public void setReplyMessage(Message message){
+        this.replyMessage = message;
+    }
+
+    public Message getReplyMessage(){
+        return replyMessage;
     }
 
 }
