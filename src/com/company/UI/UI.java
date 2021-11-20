@@ -1,9 +1,6 @@
 package com.company.UI;
 
-import com.company.Domain.Entity;
-import com.company.Domain.FriendRequest;
-import com.company.Domain.Friendship;
-import com.company.Domain.User;
+import com.company.Domain.*;
 import com.company.Domain.Validators.ValidationException;
 import com.company.Repository.RepoException;
 import com.company.Service.Controller;
@@ -11,15 +8,13 @@ import com.company.Utils.Constants;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.*;
 
-public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Entity<ID>> {
-    private Controller<ID, E, E1, E2> controller;
+public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Entity<ID>, E3 extends Entity<ID>> {
+    private Controller<ID, E, E1, E2, E3> controller;
 
-    public UI(Controller<ID, E, E1, E2> controller) {
+    public UI(Controller<ID, E, E1, E2, E3> controller) {
         this.controller = controller;
     }
 
@@ -192,6 +187,34 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Enti
                         ((Friendship) x).getDate().format(Constants.DATE_TIME_FORMATTER)));
     }
 
+    public void sendMessageUI(Long idUser, List<Long> toIDUsers, String message) throws SQLException {
+        controller.sendMessage((ID) idUser, (List<ID>) toIDUsers, message, LocalDateTime.now());
+    }
+
+    public void printConversation(Long idUser1, Long idUser2) throws SQLException{
+        List<Message> messageList = (List<Message>) controller.getConversationServ((ID) idUser1, (ID) idUser2);
+        for(int i = 0; i < messageList.size(); i++){
+            if(messageList.get(i).getReplyMessage() == null)
+                System.out.println(messageList.get(i).getMessage() + " " + messageList.get(i).getDate().format(Constants.DATE_TIME_FORMATTER));
+            else
+                System.out.println("    " + messageList.get(i).getMessage() + " " + messageList.get(i).getDate().format(Constants.DATE_TIME_FORMATTER));
+        }
+    }
+
+    public void printIndexedConversation(Long idUser1, Long idUser2) throws SQLException{
+        List<Message> messageList = (List<Message>) controller.getConversationServ((ID) idUser1, (ID) idUser2);
+        for(int i = 0; i < messageList.size(); i++){
+            if(messageList.get(i).getReplyMessage() == null)
+                System.out.println(i + " " + messageList.get(i).getMessage() + " " + messageList.get(i).getDate().format(Constants.DATE_TIME_FORMATTER));
+            else
+                System.out.println(i + " " + "    " + messageList.get(i).getMessage() + " " + messageList.get(i).getDate().format(Constants.DATE_TIME_FORMATTER));
+        }
+    }
+
+    public void replyMessageUI(Long idUser1, Long idUser2, int index, String message) throws SQLException{
+        controller.replyMessage((ID) idUser1, (ID) idUser2, index, message, LocalDateTime.now());
+    }
+
     /**
      * The menu method
      */
@@ -213,7 +236,10 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Enti
         System.out.println("13. Update a friendship");
         System.out.println("14. Show all friends for an user");
         System.out.println("15. Show all users who are friends with the given user from the specified month");
-        System.out.println("16. Exit the application");
+        System.out.println("16. Send a message");
+        System.out.println("17. Reply to a message");
+        System.out.println("18. Show conversation");
+        System.out.println("19. Exit the application");
         System.out.print("Give the desired command ");
     }
 
@@ -330,7 +356,7 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Enti
                     updateFriendUI(id1, id2, id3);
                     System.out.println();
                 }
-                if(command == 16){
+                if(command == 19){
                     in.close();
                     break;
                 }
@@ -346,6 +372,44 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Enti
                     System.out.println("Give the month they started being friends ");
                     Integer month = in.nextInt();
                     printUsersFriendshipsFromMonth(idUser,month);
+                }
+                if(command == 16){
+                    List<Long> idUsersTo = new ArrayList<>();
+                    System.out.println("Give the ID of the user who sends a message ");
+                    Long idUser = in.nextLong();
+                    System.out.println("Give the message you want to send ");
+                    String message = in.next();
+                    message += in.nextLine();
+                    while(true){
+                        System.out.println("Give the ID of the user who receives the message ");
+                        Long idUserTo = in.nextLong();
+                        idUsersTo.add(idUserTo);
+                        System.out.println("Do you want to send the message to anyone else? [y/n]");
+                        if(Objects.equals(in.next().toLowerCase(), "n"))
+                            break;
+                    }
+                    sendMessageUI(idUser, idUsersTo, message);
+                }
+                if(command == 18){
+                    System.out.println("Give the ID of the first user whose conversation you want to show ");
+                    Long idUser1 = in.nextLong();
+                    System.out.println("Give the ID of the second user whose conversation you want to show ");
+                    Long idUser2 = in.nextLong();
+                    printConversation(idUser1, idUser2);
+                }
+                if(command == 17){
+                    System.out.println("Give the ID of the User who replies to a message ");
+                    Long idUser1 = in.nextLong();
+                    System.out.println("Give the ID of the User with whom the other user converses");
+                    Long idUser2 = in.nextLong();
+                    printIndexedConversation(idUser1, idUser2);
+                    System.out.println();
+                    System.out.println("Give the ID of the message the user is replying to ");
+                    Integer index = in.nextInt();
+                    System.out.println("Write the message ");
+                    String message = in.next();
+                    message += in.nextLine();
+                    replyMessageUI(idUser1, idUser2, index, message);
                 }
             }
             catch (InputMismatchException e){

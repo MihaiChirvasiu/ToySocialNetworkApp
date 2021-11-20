@@ -2,6 +2,7 @@ package com.company.Service;
 
 import com.company.Domain.*;
 import com.company.Repository.Database.DatabaseFriendRequestRepository;
+import com.company.Repository.Database.DatabaseMessageRepository;
 import com.company.Repository.FriendshipRepository;
 import com.company.Repository.UserRepository;
 import com.company.Utils.STATUS;
@@ -9,19 +10,23 @@ import com.company.Utils.STATUS;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Entity<ID>> {
+public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Entity<ID>, E3 extends Entity<ID>> {
     private UserRepository<ID, E> repository;
     private FriendshipRepository<ID, E1> friendshipRepository;
     private DatabaseFriendRequestRepository<ID,E2> friendRequestRepository;
+    private DatabaseMessageRepository<ID, E3, E> messageRepository;
     private Network network;
 
-    public Controller(UserRepository<ID, E> repository, FriendshipRepository<ID, E1> friendshipRepository, DatabaseFriendRequestRepository<ID, E2> friendRequestRepository){
+    public Controller(UserRepository<ID, E> repository, FriendshipRepository<ID, E1> friendshipRepository, DatabaseFriendRequestRepository<ID, E2> friendRequestRepository
+    , DatabaseMessageRepository<ID, E3, E> messageRepository){
         this.repository = repository;
         this.friendshipRepository = friendshipRepository;
         this.friendRequestRepository=friendRequestRepository;
+        this.messageRepository = messageRepository;
     }
 
     /**
@@ -141,6 +146,25 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
             FriendRequest friendRequest = new FriendRequest((User) findOneServ(idUser1), (User) findOneServ(idUser2));
             friendRequestRepository.addFriendRequest((E2) friendRequest);
         }
+    }
+
+    public void sendMessage(ID idUser1, List<ID> idToUsers, String message, LocalDateTime date) throws SQLException{
+        Message message1 = new Message((User) findOneServ(idUser1), message, date);
+        for(int i = 0; i < idToUsers.size(); i++){
+            messageRepository.addMessage((E3) message1, (User) findOneServ(idToUsers.get(i)));
+        }
+    }
+
+    public List<E3> getConversationServ(ID idUser1, ID idUser2) throws SQLException{
+        return messageRepository.getConversation(findOneServ(idUser1), findOneServ(idUser2));
+    }
+
+    public void replyMessage(ID idUser1, ID idUser2, int index, String message, LocalDateTime date) throws SQLException {
+        List<E3> conversation = getConversationServ(idUser1, idUser2);
+        Message messageRepliedTo = (Message) conversation.get(index);
+        Message reply = new Message((User) findOneServ(idUser1), message, date);
+        messageRepository.addMessage((E3) reply, (User) findOneServ(idUser2));
+        messageRepository.setReplyMessage((E3) reply, (E3) messageRepliedTo);
     }
 
     /**
