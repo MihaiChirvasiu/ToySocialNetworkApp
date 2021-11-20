@@ -10,6 +10,7 @@ import com.company.Utils.STATUS;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -156,6 +157,14 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
 
     public List<E3> getConversationServ(ID idUser1, ID idUser2) throws SQLException{
         return messageRepository.getConversation(findOneServ(idUser1), findOneServ(idUser2));
+    }
+
+    public void replyMessage(ID idUser1, ID idUser2, int index, String message, LocalDateTime date) throws SQLException {
+        List<E3> conversation = getConversationServ(idUser1, idUser2);
+        Message messageRepliedTo = (Message) conversation.get(index);
+        Message reply = new Message((User) findOneServ(idUser1), message, date);
+        messageRepository.addMessage((E3) reply, (User) findOneServ(idUser2));
+        messageRepository.setReplyMessage((E3) reply, (E3) messageRepliedTo);
     }
 
     /**

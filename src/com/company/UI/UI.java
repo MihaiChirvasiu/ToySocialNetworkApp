@@ -201,6 +201,20 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Enti
         }
     }
 
+    public void printIndexedConversation(Long idUser1, Long idUser2) throws SQLException{
+        List<Message> messageList = (List<Message>) controller.getConversationServ((ID) idUser1, (ID) idUser2);
+        for(int i = 0; i < messageList.size(); i++){
+            if(messageList.get(i).getReplyMessage() == null)
+                System.out.println(i + " " + messageList.get(i).getMessage() + " " + messageList.get(i).getDate().format(Constants.DATE_TIME_FORMATTER));
+            else
+                System.out.println(i + " " + "    " + messageList.get(i).getMessage() + " " + messageList.get(i).getDate().format(Constants.DATE_TIME_FORMATTER));
+        }
+    }
+
+    public void replyMessageUI(Long idUser1, Long idUser2, int index, String message) throws SQLException{
+        controller.replyMessage((ID) idUser1, (ID) idUser2, index, message, LocalDateTime.now());
+    }
+
     /**
      * The menu method
      */
@@ -365,6 +379,7 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Enti
                     Long idUser = in.nextLong();
                     System.out.println("Give the message you want to send ");
                     String message = in.next();
+                    message += in.nextLine();
                     while(true){
                         System.out.println("Give the ID of the user who receives the message ");
                         Long idUserTo = in.nextLong();
@@ -381,6 +396,20 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Enti
                     System.out.println("Give the ID of the second user whose conversation you want to show ");
                     Long idUser2 = in.nextLong();
                     printConversation(idUser1, idUser2);
+                }
+                if(command == 17){
+                    System.out.println("Give the ID of the User who replies to a message ");
+                    Long idUser1 = in.nextLong();
+                    System.out.println("Give the ID of the User with whom the other user converses");
+                    Long idUser2 = in.nextLong();
+                    printIndexedConversation(idUser1, idUser2);
+                    System.out.println();
+                    System.out.println("Give the ID of the message the user is replying to ");
+                    Integer index = in.nextInt();
+                    System.out.println("Write the message ");
+                    String message = in.next();
+                    message += in.nextLine();
+                    replyMessageUI(idUser1, idUser2, index, message);
                 }
             }
             catch (InputMismatchException e){

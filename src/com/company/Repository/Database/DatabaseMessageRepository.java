@@ -96,4 +96,14 @@ public class DatabaseMessageRepository<ID, E extends Entity<ID>, E1 extends Enti
         }
         return messageList;
     }
+
+    public void setReplyMessage(E message, E reply) throws SQLException {
+        Message replyMessage =(Message) reply;
+        Message message1 = (Message) message;
+        String sql = "update messages set reply = ? where date = '" + message1.getDate().toString() + "'";
+
+        PreparedStatement ps = getStatement(sql);
+        ps.setString(1, replyMessage.getDate().toString());
+        ps.executeUpdate();
+    }
 }
