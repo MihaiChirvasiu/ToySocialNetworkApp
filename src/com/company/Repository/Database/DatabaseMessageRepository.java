@@ -29,12 +29,24 @@ public class DatabaseMessageRepository<ID, E extends Entity<ID>, E1 extends Enti
         this.databaseUserRepository = databaseUserRepository;
     }
 
+    /**
+     *
+     * @param sql The SQL command to be executed
+     * @return The statement
+     * @throws SQLException if the command is not a valid one
+     */
     PreparedStatement getStatement(String sql) throws SQLException {
         Connection connection = DriverManager.getConnection(url, username, password);
         PreparedStatement ps = connection.prepareStatement(sql);
         return ps;
     }
 
+    /**
+     *
+     * @param message The message to be added in the database
+     * @param toUser The user the message is addressed to
+     * @throws SQLException if the command is not a valid one
+     */
     public void addMessage(E message, User toUser) throws SQLException{
 
         validator.validate(message);
@@ -56,6 +68,12 @@ public class DatabaseMessageRepository<ID, E extends Entity<ID>, E1 extends Enti
         ps.executeUpdate();
     }
 
+    /**
+     *
+     * @param date The date to be searched
+     * @return The message with the specified date or null if it doesn't exist
+     * @throws SQLException if the command is not a valid one
+     */
     public E findOneMessage(LocalDateTime date) throws SQLException{
         String sql = "select * from messages where date = '" + date.toString() + "'";
 
@@ -78,6 +96,13 @@ public class DatabaseMessageRepository<ID, E extends Entity<ID>, E1 extends Enti
         return null;
     }
 
+    /**
+     *
+     * @param idUser1 The first User
+     * @param idUser2 The second User
+     * @return The conversation between the two users
+     * @throws SQLException if the command is not a valid one
+     */
     public List<E> getConversation(E1 idUser1, E1 idUser2) throws SQLException{
         List<E> messageList = new ArrayList<>();
         String sql = "select * from messages where (id_user_from = " + idUser1.getId() + " and id_user_to = " + idUser2.getId() +
@@ -97,6 +122,12 @@ public class DatabaseMessageRepository<ID, E extends Entity<ID>, E1 extends Enti
         return messageList;
     }
 
+    /**
+     *
+     * @param message The message the reply will be sent to
+     * @param reply The reply to the message
+     * @throws SQLException if the command is not a valid one
+     */
     public void setReplyMessage(E message, E reply) throws SQLException {
         Message replyMessage =(Message) reply;
         Message message1 = (Message) message;

@@ -7,6 +7,11 @@ import java.util.Objects;
 
 public class MessageValidator implements Validator<Message>{
 
+    /**
+     *
+     * @param entity The message to be validated
+     * @throws ValidationException if the entity is not a valid one
+     */
     @Override
     public void validate(Message entity) throws ValidationException {
         if(entity.getFromUser()==null)

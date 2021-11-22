@@ -27,14 +27,25 @@ public class DatabaseFriendRequestRepository<ID, E extends Entity<ID>> {
         this.validator = validator;
     }
 
+    /**
+     *
+     * @param sql The SQL command to be executed
+     * @return The statement
+     * @throws SQLException if the command is not a valid one
+     */
     PreparedStatement getStatement(String sql) throws SQLException {
         Connection connection = DriverManager.getConnection(url, username, password);
         PreparedStatement ps = connection.prepareStatement(sql);
         return ps;
     }
 
-    public FriendRequest findFriendRequest(E friendRequest) throws SQLException
-    {
+    /**
+     *
+     * @param friendRequest The friendRequest to be searched for
+     * @return The friendRequest if it exists, null otherwise
+     * @throws SQLException if the command is not a valid one
+     */
+    public FriendRequest findFriendRequest(E friendRequest) throws SQLException {
         validator.validate(friendRequest);
         FriendRequest friendRequest1 = (FriendRequest) friendRequest;
         String sql = "select * from friendrequests where id_user1 = " + friendRequest1.getUser1().getId() +
@@ -51,8 +62,12 @@ public class DatabaseFriendRequestRepository<ID, E extends Entity<ID>> {
         return null;
     }
 
-    public void addFriendRequest(E friendRequest) throws SQLException
-    {
+    /**
+     *
+     * @param friendRequest The friendRequest to be added in the database
+     * @throws SQLException if the command is not a valid one
+     */
+    public void addFriendRequest(E friendRequest) throws SQLException {
         validator.validate(friendRequest);
         if(findFriendRequest(friendRequest)==null || !findFriendRequest(friendRequest).getStatus().equals(STATUS.pending)) {
             String sql = "insert into friendrequests (id_user1, id_user2, status ) values (?, ?, ?)";
@@ -71,6 +86,12 @@ public class DatabaseFriendRequestRepository<ID, E extends Entity<ID>> {
             throw new RepoException("Friend request already exists");
     }
 
+    /**
+     *
+     * @param friendRequest The friendRequest to be updated with a new status
+     * @param newStatus The new status for the friendRequest
+     * @throws SQLException if the command is not a valid one
+     */
     public void updateStatus(E friendRequest, STATUS newStatus) throws SQLException{
         validator.validate(friendRequest);
         FriendRequest friendRequest1 = (FriendRequest) friendRequest;
@@ -89,6 +110,12 @@ public class DatabaseFriendRequestRepository<ID, E extends Entity<ID>> {
         ps.executeUpdate();
     }
 
+    /**
+     *
+     * @param user The user that we will search all the friendRequests
+     * @return A list of all friendRequests
+     * @throws SQLException if the command is not a valid one
+     */
     public List<E> findAllFriendRequestsForUser(User user) throws SQLException {
         List<E> friendRequestList = new ArrayList<>();
         String sql = "select * from friendrequests where id_user1 = " + user.getId() + " and status = 'pending' " ;

@@ -123,31 +123,61 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
         }
     }
 
-    private E2 findFriendRequestServ(ID idUser1, ID idUser2) throws SQLException
-    {
+    /**
+     *
+     * @param idUser1 The id of the first user
+     * @param idUser2 the id of the second user
+     * @return The friendRequest if it exists, null otherwise
+     * @throws SQLException Database
+     */
+    private E2 findFriendRequestServ(ID idUser1, ID idUser2) throws SQLException {
         FriendRequest friendRequest = new FriendRequest((User) findOneServ(idUser1),(User) findOneServ(idUser2));
         return (E2) friendRequestRepository.findFriendRequest((E2)friendRequest);
     }
 
-    public void acceptFriendRequest(ID idUser1, ID idUser2) throws SQLException,IOException
-    {
+    /**
+     * Accept the friendRequest
+     * @param idUser1 The id of the first user
+     * @param idUser2 The id of the second user
+     * @throws SQLException Database
+     * @throws IOException File
+     */
+    public void acceptFriendRequest(ID idUser1, ID idUser2) throws SQLException,IOException {
         friendRequestRepository.updateStatus(findFriendRequestServ(idUser1,idUser2), STATUS.approved);
         addFriendshipServ(idUser1,idUser2);
     }
 
-    public void rejectFriendRequest(ID idUser1, ID idUser2) throws SQLException
-    {
+    /**
+     * Rejects the friendRequest
+     * @param idUser1 The id of the first user
+     * @param idUser2 The id of the second user
+     * @throws SQLException Database
+     */
+    public void rejectFriendRequest(ID idUser1, ID idUser2) throws SQLException {
         friendRequestRepository.updateStatus(findFriendRequestServ(idUser1,idUser2),STATUS.rejected);
     }
 
-    public void addFriendRequest(ID idUser1, ID idUser2) throws SQLException
-    {
+    /**
+     * Adds a friendRequest in the database
+     * @param idUser1 The id of the first user
+     * @param idUser2 The id of the second user
+     * @throws SQLException Database
+     */
+    public void addFriendRequest(ID idUser1, ID idUser2) throws SQLException {
         if(findFriendshipServ(idUser1,idUser2)==null) {
             FriendRequest friendRequest = new FriendRequest((User) findOneServ(idUser1), (User) findOneServ(idUser2));
             friendRequestRepository.addFriendRequest((E2) friendRequest);
         }
     }
 
+    /**
+     * Saves a message in the database
+     * @param idUser1 The id of user that sends the message
+     * @param idToUsers The id of the users that will receive the message
+     * @param message The message sent
+     * @param date The date when the message was sent
+     * @throws SQLException Database
+     */
     public void sendMessage(ID idUser1, List<ID> idToUsers, String message, LocalDateTime date) throws SQLException{
         Message message1 = new Message((User) findOneServ(idUser1), message, date);
         for(int i = 0; i < idToUsers.size(); i++){
@@ -155,10 +185,26 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
         }
     }
 
+    /**
+     * Getter for the conversation between two users
+     * @param idUser1 The id of the first user
+     * @param idUser2 The id of the second user
+     * @return A list of messages between the two users specified
+     * @throws SQLException Database
+     */
     public List<E3> getConversationServ(ID idUser1, ID idUser2) throws SQLException{
         return messageRepository.getConversation(findOneServ(idUser1), findOneServ(idUser2));
     }
 
+    /**
+     * Reply to a message
+     * @param idUser1 The id of the user that replies
+     * @param idUser2 The id of the user that receives the reply
+     * @param index The message replied to
+     * @param message The reply message
+     * @param date The date when the reply happens
+     * @throws SQLException Database
+     */
     public void replyMessage(ID idUser1, ID idUser2, int index, String message, LocalDateTime date) throws SQLException {
         List<E3> conversation = getConversationServ(idUser1, idUser2);
         Message messageRepliedTo = (Message) conversation.get(index);
@@ -203,11 +249,24 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
         return friendshipRepository.findAllFriendships();
     }
 
+    /**
+     * Finds all friendRequests for a user
+     * @param idUser The id of the user to search the friendRequests for
+     * @return A list consisting of all the friendRequests
+     * @throws SQLException Database
+     */
     public List<E2> findFriendRequestsForUser(ID idUser) throws SQLException {
         User user = (User) findOneServ(idUser);
         return friendRequestRepository.findAllFriendRequestsForUser(user);
 
     }
+
+    /**
+     * Finds all the friendships of the given user
+     * @param idUser The id of the user to search the friendships for
+     * @return A list consisting of all the friendships
+     * @throws SQLException Database
+     */
     public List<E1> findFriendshipsForUser(ID idUser) throws SQLException {
         return friendshipRepository.findAllFriendshipsForUser(idUser);
     }

@@ -6,6 +6,11 @@ import java.util.Objects;
 
 public class FriendRequestValidator implements Validator<FriendRequest>{
 
+    /**
+     *
+     * @param entity The friendRequest to be validated
+     * @throws ValidationException if the entity is not valid
+     */
     @Override
     public void validate(FriendRequest entity) throws ValidationException {
         if(entity.getUser1()==null || entity.getUser2()==null)

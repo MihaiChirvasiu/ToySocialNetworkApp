@@ -91,13 +91,24 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Enti
         controller.addFriendRequest((ID) idUser, (ID) idFriend);
     }
 
-    public void acceptFriendRequest(Long idUser, Long idFriend) throws IOException,SQLException
-    {
+    /**
+     * Accept the friendRequest
+     * @param idUser The id of the user that accepts the friendRequest
+     * @param idFriend The id of the user that sent the friendRequest
+     * @throws IOException File
+     * @throws SQLException Database
+     */
+    public void acceptFriendRequest(Long idUser, Long idFriend) throws IOException,SQLException {
         controller.acceptFriendRequest((ID)idUser,(ID)idFriend);
     }
 
-    public void rejectFriendRequest(Long idUser, Long idFriend) throws SQLException
-    {
+    /**
+     * Reject the friendRequest
+     * @param idUser The id of the user that reject the friendRequest
+     * @param idFriend The id of the user that will get rejected
+     * @throws SQLException Database
+     */
+    public void rejectFriendRequest(Long idUser, Long idFriend) throws SQLException {
         controller.rejectFriendRequest((ID)idUser,(ID)idFriend);
     }
 
@@ -123,6 +134,11 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Enti
         }
     }
 
+    /**
+     * Prints all friendRequests for a given user
+     * @param idUser The id of the user we will print the friendRequests for
+     * @throws SQLException Database
+     */
     public void allFriendRequestsUI(Long idUser) throws SQLException {
         List<E2> friendRequestsList = controller.findFriendRequestsForUser((ID)idUser);
         for(E2 friendRequest : friendRequestsList){
@@ -169,6 +185,11 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Enti
         }
     }
 
+    /**
+     * Prints all friends for a given user
+     * @param idUser The id of the user we will print friends for
+     * @throws SQLException Database
+     */
     public void printAllFriendsForUser(Long idUser) throws SQLException {
         controller.findFriendshipsForUser((ID) idUser).stream().forEach(
                 x-> System.out.println(((Friendship) x).getSecondUser().getLastName() + " | " +
@@ -176,8 +197,13 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Enti
                         ((Friendship) x).getDate().format(Constants.DATE_TIME_FORMATTER)));
     }
 
-    public void printUsersFriendshipsFromMonth(Long idUser,int month) throws SQLException
-    {
+    /**
+     * Prints all friends from a given month
+     * @param idUser The id of the user we will print friends for
+     * @param month The month specified
+     * @throws SQLException Database
+     */
+    public void printUsersFriendshipsFromMonth(Long idUser,int month) throws SQLException {
         controller.findFriendshipsForUser((ID)idUser).stream()
                 .filter(
                         x -> ((Friendship) x).getDate().getMonthValue()==month
@@ -187,10 +213,23 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Enti
                         ((Friendship) x).getDate().format(Constants.DATE_TIME_FORMATTER)));
     }
 
+    /**
+     * Sends a message
+     * @param idUser The id of the user that sens the message
+     * @param toIDUsers The list of ids of the users that will receive the message
+     * @param message The message that will be sent
+     * @throws SQLException Database
+     */
     public void sendMessageUI(Long idUser, List<Long> toIDUsers, String message) throws SQLException {
         controller.sendMessage((ID) idUser, (List<ID>) toIDUsers, message, LocalDateTime.now());
     }
 
+    /**
+     * Prints the conversation between two users
+     * @param idUser1 The id of the first user
+     * @param idUser2 The id of the second user
+     * @throws SQLException Database
+     */
     public void printConversation(Long idUser1, Long idUser2) throws SQLException{
         List<Message> messageList = (List<Message>) controller.getConversationServ((ID) idUser1, (ID) idUser2);
         for(int i = 0; i < messageList.size(); i++){
@@ -201,6 +240,12 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Enti
         }
     }
 
+    /**
+     * Prints the conversation indexed between two users
+     * @param idUser1 The id of the first user
+     * @param idUser2 The id of the second user
+     * @throws SQLException Database
+     */
     public void printIndexedConversation(Long idUser1, Long idUser2) throws SQLException{
         List<Message> messageList = (List<Message>) controller.getConversationServ((ID) idUser1, (ID) idUser2);
         for(int i = 0; i < messageList.size(); i++){
@@ -211,6 +256,14 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Enti
         }
     }
 
+    /**
+     * Sends a reply message
+     * @param idUser1 The id of the user that sends the reply
+     * @param idUser2 The id of the user that will receive the reply
+     * @param index The index to reply to
+     * @param message The reply message
+     * @throws SQLException Database
+     */
     public void replyMessageUI(Long idUser1, Long idUser2, int index, String message) throws SQLException{
         controller.replyMessage((ID) idUser1, (ID) idUser2, index, message, LocalDateTime.now());
     }
