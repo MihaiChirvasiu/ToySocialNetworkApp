@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toysocialnetwork.ControllerDetails">
+   <children>
+      <TableView fx:id="tableViewFriends" layoutY="6.0" prefHeight="200.0" prefWidth="200.0">
+        <columns>
+          <TableColumn fx:id="tableColumnFirstName" prefWidth="75.0" text="FirstName" />
+          <TableColumn fx:id="tableColumnLastName" prefWidth="75.0" text="LastName" />
+        </columns>
+      </TableView>
+      <TableView fx:id="tableViewRequests" layoutX="400.0" layoutY="6.0" prefHeight="200.0" prefWidth="200.0" >
+        <columns>
+          <TableColumn fx:id="tableColumnFirstNameRequest" prefWidth="75.0" text="FirstName" />
+          <TableColumn fx:id="tableColumnLastNameRequest" prefWidth="75.0" text="LastName" />
+          <TableColumn fx:id="tableColumnStatus" prefWidth="75.0" text="Status" />
+        </columns>
+      </TableView>
+      <Button layoutY="206.0" mnemonicParsing="false" text="AddFriend" onAction="#addFriend"/>
+      <Button layoutX="148.0" layoutY="206.0" mnemonicParsing="false" text="DeleteFriend" onAction="#deleteFriend" />
+      <Button layoutX="400.0" layoutY="206.0" mnemonicParsing="false" text="AcceptRequest" />
+      <Button layoutX="548.0" layoutY="206.0" mnemonicParsing="false" text="RejectRequest" />
+      <TextField fx:id="searchFriend" layoutX="226.0" layoutY="51.0" />
+   </children>
+</AnchorPane>
