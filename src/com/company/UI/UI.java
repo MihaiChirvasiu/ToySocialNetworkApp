@@ -250,9 +250,19 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Enti
         List<Message> messageList = (List<Message>) controller.getConversationServ((ID) idUser1, (ID) idUser2);
         for(int i = 0; i < messageList.size(); i++){
             if(messageList.get(i).getReplyMessage() == null)
-                System.out.println(i + " " + messageList.get(i).getMessage() + " " + messageList.get(i).getDate().format(Constants.DATE_TIME_FORMATTER));
+                System.out.println(messageList.get(i).getId() + " " + messageList.get(i).getMessage() + " " + messageList.get(i).getDate().format(Constants.DATE_TIME_FORMATTER));
             else
-                System.out.println(i + " " + "    " + messageList.get(i).getMessage() + " " + messageList.get(i).getDate().format(Constants.DATE_TIME_FORMATTER));
+                System.out.println(messageList.get(i).getId()  + " " + "    " + messageList.get(i).getMessage() + " " + messageList.get(i).getDate().format(Constants.DATE_TIME_FORMATTER));
+        }
+    }
+
+    public void printIndexedConversationAll(Long idUser1) throws SQLException{
+        List<Message> messageList = (List<Message>) controller.getAllConversationServ((ID) idUser1);
+        for(int i = 0; i < messageList.size(); i++){
+            if(messageList.get(i).getReplyMessage() == null)
+                System.out.println(messageList.get(i).getId() + " " + messageList.get(i).getMessage() + " " + messageList.get(i).getDate().format(Constants.DATE_TIME_FORMATTER));
+            else
+                System.out.println(messageList.get(i).getId()  + " " + "    " + messageList.get(i).getMessage() + " " + messageList.get(i).getDate().format(Constants.DATE_TIME_FORMATTER));
         }
     }
 
@@ -260,12 +270,16 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Enti
      * Sends a reply message
      * @param idUser1 The id of the user that sends the reply
      * @param idUser2 The id of the user that will receive the reply
-     * @param index The index to reply to
+     * @param idMessage The index to reply to
      * @param message The reply message
      * @throws SQLException Database
      */
-    public void replyMessageUI(Long idUser1, Long idUser2, int index, String message) throws SQLException{
-        controller.replyMessage((ID) idUser1, (ID) idUser2, index, message, LocalDateTime.now());
+    public void replyMessageUI(Long idUser1, Long idUser2, Long idMessage, String message) throws SQLException{
+        controller.replyMessage((ID) idUser1, (ID) idUser2, (ID) idMessage, message, LocalDateTime.now());
+    }
+
+    public void replyAllUI(Long idUser1, Long idMessage, String message) throws SQLException{
+        controller.replyAllMessage((ID) idUser1, (ID) idMessage, message, LocalDateTime.now());
     }
 
     /**
@@ -292,7 +306,8 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Enti
         System.out.println("16. Send a message");
         System.out.println("17. Reply to a message");
         System.out.println("18. Show conversation");
-        System.out.println("19. Exit the application");
+        System.out.println("19. Reply all");
+        System.out.println("20. Exit the application");
         System.out.print("Give the desired command ");
     }
 
@@ -409,7 +424,7 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Enti
                     updateFriendUI(id1, id2, id3);
                     System.out.println();
                 }
-                if(command == 19){
+                if(command == 20){
                     in.close();
                     break;
                 }
@@ -458,11 +473,23 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Enti
                     printIndexedConversation(idUser1, idUser2);
                     System.out.println();
                     System.out.println("Give the ID of the message the user is replying to ");
-                    Integer index = in.nextInt();
+                    Long index = in.nextLong();
                     System.out.println("Write the message ");
                     String message = in.next();
                     message += in.nextLine();
                     replyMessageUI(idUser1, idUser2, index, message);
+                }
+                if(command == 19){
+                    System.out.println("Give the ID of the User who replies to a message ");
+                    Long idUser1 = in.nextLong();
+                    printIndexedConversationAll(idUser1);
+                    System.out.println();
+                    System.out.println("Give the ID of the message the user is replying to ");
+                    Long index = in.nextLong();
+                    System.out.println("Write the message ");
+                    String message = in.next();
+                    message += in.nextLine();
+                    replyAllUI(idUser1, index, message);
                 }
             }
             catch (InputMismatchException e){
@@ -482,6 +509,9 @@ public class UI<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Enti
                 System.out.println(e.getMessage());
             }
             catch (SQLException e){
+                System.out.println(e.getMessage());
+            }
+            catch (NullPointerException e){
                 System.out.println(e.getMessage());
             }
         }

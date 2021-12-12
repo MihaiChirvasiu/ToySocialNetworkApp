@@ -1,3 +1,4 @@
+/*
 import com.company.Domain.Message;
 import com.company.Domain.User;
 import com.company.Domain.Validators.MessageValidator;
@@ -42,3 +43,4 @@ public class TestsDatabaseMessages {
         }
     }
 }
+*/

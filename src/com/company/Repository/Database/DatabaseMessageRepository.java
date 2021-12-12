@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class DatabaseMessageRepository<ID, E extends Entity<ID>, E1 extends Entity<ID>> {
 
@@ -41,59 +42,131 @@ public class DatabaseMessageRepository<ID, E extends Entity<ID>, E1 extends Enti
         return ps;
     }
 
+    private void generateID(Message msg) throws SQLException {
+        while(true){
+            long randomID = ThreadLocalRandom.current().nextInt(0, 10001);
+            String sql = "select id_message from messages where id_message = " + randomID;
+            PreparedStatement ps = getStatement(sql);
+            ResultSet resultSet = ps.executeQuery();
+            if(!resultSet.next()) {
+                msg.setId(randomID);
+                return;
+            }
+        }
+    }
+
     /**
      *
      * @param message The message to be added in the database
      * @param toUser The user the message is addressed to
      * @throws SQLException if the command is not a valid one
      */
-    public void addMessage(E message, User toUser) throws SQLException{
+    public void addMessage(E message, List<User> toUser) throws SQLException{
 
         validator.validate(message);
-        String sql = "insert into messages (id_user_from, id_user_to, message, date, reply ) values(?, ?, ?, ?, ?)";
+        String sql = "insert into messages (id_message, id_user_from, message, date, reply ) values(?, ?, ?, ?, ?)";
         PreparedStatement ps = getStatement(sql);
 
         Message message1 = (Message) message;
-        ps.setLong(1, message1.getFromUser().getId());
-        ps.setLong(2, toUser.getId());
+        generateID(message1);
+        ps.setLong(1, message1.getId());
+        ps.setLong(2, message1.getFromUser().getId());
         ps.setString(3, message1.getMessage());
         ps.setString(4, message1.getDate().toString());
         try {
-            ps.setString(5, message1.getReplyMessage().getDate().toString());
+            ps.setLong(5, message1.getReplyMessage().getId());
         }
         catch (NullPointerException e){
-            ps.setString(5, "null");
+            ps.setLong(5, -1);
+        }
+        ps.executeUpdate();
+        addMessageUsersTo((E) message1, toUser);
+
+    }
+
+    private void addMessageUsersTo(E message, List<User> users) throws SQLException{
+        for(int i = 0; i < users.size(); i++) {
+            String sql = "insert into message_to_users (id_message, id_to ) values(?, ?)";
+
+            PreparedStatement ps = getStatement(sql);
+
+            ps.setLong(1, (Long) message.getId());
+            ps.setLong(2, (Long) users.get(i).getId());
+            ps.executeUpdate();
         }
 
-        ps.executeUpdate();
+
+
+    }
+
+    public List<ID> getUsersFromIDMessage(Long id) throws SQLException {
+        List<Long> idList = new ArrayList<>();
+        String sql = "select id_to from message_to_users where id_message = " + id;
+        String sql1 = "select id_user_from from messages where id_message = " + id;
+        PreparedStatement ps = getStatement(sql);
+        PreparedStatement ps1 = getStatement(sql1);
+        ResultSet resultSet = ps.executeQuery();
+        while(resultSet.next()){
+            idList.add(resultSet.getLong(1));
+        }
+        ResultSet resultSet1 = ps1.executeQuery();
+        if(resultSet1.next())
+            idList.add(resultSet1.getLong(1));
+        return (List<ID>) idList;
     }
 
     /**
      *
-     * @param date The date to be searched
+     * @param id The date to be searched
      * @return The message with the specified date or null if it doesn't exist
      * @throws SQLException if the command is not a valid one
      */
-    public E findOneMessage(LocalDateTime date) throws SQLException{
-        String sql = "select * from messages where date = '" + date.toString() + "'";
-
+    public E findOneMessage(ID id) throws SQLException{
+        String sql = "select * from messages where id_message = " + id;
+        List<ID> idList = getUsersFromIDMessage((Long) id);
         PreparedStatement ps = getStatement(sql);
 
         ResultSet resultSet = ps.executeQuery();
         if(resultSet.next()) {
-            Long idUser = resultSet.getLong(1);
+            Long idUser = resultSet.getLong(2);
             Message message = new Message((User) databaseUserRepository.findOne((ID) idUser), resultSet.getString(3), LocalDateTime.parse(resultSet.getString(4)));
-            if (!Objects.equals(resultSet.getString(5), "null"))
-                message.setReplyMessage((Message) findOneMessage(LocalDateTime.parse(resultSet.getString(5))));
-            while (true) {
-                Long idToUser = resultSet.getLong(2);
+            message.setId(resultSet.getLong(1));
+            if (!Objects.equals(resultSet.getLong(5), -1)) {
+                Long idUserTo = resultSet.getLong(5);
+                message.setReplyMessage((Message) findOneMessage((ID) idUserTo));
+            }
+            for(int i = 0; i < idList.size(); i++){
+                Long idToUser = (Long) idList.get(i);
                 message.setToUsers((User) databaseUserRepository.findOne((ID) idToUser));
-                if(!resultSet.next())
-                    break;
             }
             return (E) message;
         }
         return null;
+    }
+
+    private List<ID> idMessageConversation(E1 idUser1, E1 idUser2) throws SQLException {
+        List<Long> idList = new ArrayList<>();
+        String sql = "select id_message from message_to_users where id_to = " + idUser2.getId() + " or id_to = " + idUser1.getId();
+        PreparedStatement ps = getStatement(sql);
+
+        ResultSet resultSet = ps.executeQuery();
+        while(resultSet.next()){
+            idList.add(resultSet.getLong(1));
+        }
+        return (List<ID>) idList;
+
+    }
+
+    public List<ID> idMessageConvOf(E1 idUser1) throws SQLException {
+        List<Long> idList = new ArrayList<>();
+        String sql = "select id_message from message_to_users where id_to = " + idUser1.getId();
+        PreparedStatement ps = getStatement(sql);
+
+        ResultSet resultSet = ps.executeQuery();
+        while(resultSet.next()){
+            idList.add(resultSet.getLong(1));
+        }
+        return (List<ID>) idList;
     }
 
     /**
@@ -104,20 +177,52 @@ public class DatabaseMessageRepository<ID, E extends Entity<ID>, E1 extends Enti
      * @throws SQLException if the command is not a valid one
      */
     public List<E> getConversation(E1 idUser1, E1 idUser2) throws SQLException{
+        List<ID> idMessageConv = idMessageConversation(idUser1, idUser2);
         List<E> messageList = new ArrayList<>();
-        String sql = "select * from messages where (id_user_from = " + idUser1.getId() + " and id_user_to = " + idUser2.getId() +
-                " ) or (id_user_from = " + idUser2.getId() + " and id_user_to = " + idUser1.getId() + " ) order by date";
+        String sql = "select * from messages where id_user_from = " + idUser1.getId() +
+                " or id_user_from = " + idUser2.getId() + " order by date";
 
         PreparedStatement ps = getStatement(sql);
 
         ResultSet resultSet = ps.executeQuery();
 
         while(resultSet.next()){
+            for(int i = 0; i < idMessageConv.size(); i++)
+                if(resultSet.getLong(1) == (Long) idMessageConv.get(i)) {
+                    Message message = new Message((User) idUser1, resultSet.getString(3), LocalDateTime.parse(resultSet.getString(4)));
+                    message.setToUsers((User) idUser1);
+                    if (!Objects.equals(resultSet.getLong(5), -1)) {
+                        Long idUserTo = resultSet.getLong(5);
+                        message.setReplyMessage((Message) findOneMessage((ID) idUserTo));
+                    }
+                    messageList.add((E) message);
+                }
+        }
+        return messageList;
+    }
+
+    public List<E> getAllConversation(E1 idUser1) throws SQLException{
+        List<ID> idList = idMessageConvOf(idUser1);
+        List<E> messageList = new ArrayList<>();
+        String sql = "select * from messages where id_user_from = " + idUser1.getId() + " order by date";
+        PreparedStatement ps = getStatement(sql);
+        ResultSet resultSet = ps.executeQuery();
+        while(resultSet.next()) {
+
             Message message = new Message((User) idUser1, resultSet.getString(3), LocalDateTime.parse(resultSet.getString(4)));
-            message.setToUsers((User) idUser1);
-            if (!Objects.equals(resultSet.getString(5), "null"))
-                message.setReplyMessage((Message) findOneMessage(LocalDateTime.parse(resultSet.getString(5))));
+            message.setId(resultSet.getLong(1));
             messageList.add((E) message);
+        }
+        for(int i = 0; i < idList.size(); i++){
+            String sql2 = "select * from messages where id_message = " + idList.get(i) + " order by date";
+            PreparedStatement ps2 = getStatement(sql2);
+            ResultSet resultSet2 = ps2.executeQuery();
+            while(resultSet2.next()) {
+
+                Message message = new Message((User) idUser1, resultSet2.getString(3), LocalDateTime.parse(resultSet2.getString(4)));
+                message.setId(resultSet2.getLong(1));
+                messageList.add((E) message);
+            }
         }
         return messageList;
     }
@@ -131,10 +236,9 @@ public class DatabaseMessageRepository<ID, E extends Entity<ID>, E1 extends Enti
     public void setReplyMessage(E message, E reply) throws SQLException {
         Message replyMessage =(Message) reply;
         Message message1 = (Message) message;
-        String sql = "update messages set reply = ? where date = '" + message1.getDate().toString() + "'";
+        String sql = "update messages set reply = " + replyMessage.getId() + " where id_message = " + message1.getId();
 
         PreparedStatement ps = getStatement(sql);
-        ps.setString(1, replyMessage.getDate().toString());
         ps.executeUpdate();
     }
 }

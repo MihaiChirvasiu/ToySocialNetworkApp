@@ -1,9 +1,6 @@
 package com.company;
 
-import com.company.Domain.FriendRequest;
-import com.company.Domain.Friendship;
-import com.company.Domain.Message;
-import com.company.Domain.User;
+import com.company.Domain.*;
 import com.company.Domain.Validators.FriendRequestValidator;
 import com.company.Domain.Validators.FriendshipValidator;
 import com.company.Domain.Validators.MessageValidator;
@@ -29,15 +26,15 @@ public class Main {
 
     public static void main(String[] args) {
 	    try {
-            UserRepository<Long, User> repository = new DatabaseUserRepository<>("jdbc:postgresql://localhost:5432/Repository Lab5",
-                    "postgres", "Oana0910Andreea", new UserValidator());
-            FriendshipRepository<Long, Friendship> friendshipRepository = new DatabaseFriendshipRepository<>("jdbc:postgresql://localhost:5432/Repository Lab5",
-                    "postgres", "Oana0910Andreea", new FriendshipValidator());
+            UserRepository<Long, User> repository = new DatabaseUserRepository<>("jdbc:postgresql://localhost:5432/lab7",
+                    "postgres", "1234", new UserValidator());
+            FriendshipRepository<Long, Friendship> friendshipRepository = new DatabaseFriendshipRepository<>("jdbc:postgresql://localhost:5432/lab7",
+                    "postgres", "1234", new FriendshipValidator());
             DatabaseFriendRequestRepository<Long, FriendRequest> friendRequestRepository = new DatabaseFriendRequestRepository<>(
-                    "jdbc:postgresql://localhost:5432/Repository Lab5",
-                    "postgres", "Oana0910Andreea", new FriendRequestValidator());
-            DatabaseMessageRepository<Long, Message, User> messageRepository = new DatabaseMessageRepository<>("jdbc:postgresql://localhost:5432/Repository Lab5",
-                    "postgres", "Oana0910Andreea", new MessageValidator(), repository);
+                    "jdbc:postgresql://localhost:5432/lab7",
+                    "postgres", "1234", new FriendRequestValidator());
+            DatabaseMessageRepository<Long, Message, User> messageRepository = new DatabaseMessageRepository<>("jdbc:postgresql://localhost:5432/lab7",
+                    "postgres", "1234", new MessageValidator(), repository);
             //UserRepository<Long, User> repository = new UserFile<>("data/users.csv", new UserValidator());
             //FriendshipRepository<Long, Friendship> friendshipRepository = new FriendshipFile<>("data/friendships.csv", new FriendshipValidator());
             //UserValidator validator = new UserValidator();

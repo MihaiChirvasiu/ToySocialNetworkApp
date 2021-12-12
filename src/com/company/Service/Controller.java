@@ -180,9 +180,11 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
      */
     public void sendMessage(ID idUser1, List<ID> idToUsers, String message, LocalDateTime date) throws SQLException{
         Message message1 = new Message((User) findOneServ(idUser1), message, date);
+        List<User> list = new ArrayList<>();
         for(int i = 0; i < idToUsers.size(); i++){
-            messageRepository.addMessage((E3) message1, (User) findOneServ(idToUsers.get(i)));
+           list.add((User) findOneServ(idToUsers.get(i)));
         }
+        messageRepository.addMessage((E3) message1, list);
     }
 
     /**
@@ -196,20 +198,38 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
         return messageRepository.getConversation(findOneServ(idUser1), findOneServ(idUser2));
     }
 
+    public List<E3> getAllConversationServ(ID idUser1) throws SQLException{
+        return messageRepository.getAllConversation(findOneServ(idUser1));
+    }
+
     /**
      * Reply to a message
      * @param idUser1 The id of the user that replies
      * @param idUser2 The id of the user that receives the reply
-     * @param index The message replied to
+     * @param idMessage The message replied to
      * @param message The reply message
      * @param date The date when the reply happens
      * @throws SQLException Database
      */
-    public void replyMessage(ID idUser1, ID idUser2, int index, String message, LocalDateTime date) throws SQLException {
-        List<E3> conversation = getConversationServ(idUser1, idUser2);
-        Message messageRepliedTo = (Message) conversation.get(index);
+    public void replyMessage(ID idUser1, ID idUser2, ID idMessage, String message, LocalDateTime date) throws SQLException {
+        Message messageRepliedTo = (Message) messageRepository.findOneMessage(idMessage);
         Message reply = new Message((User) findOneServ(idUser1), message, date);
-        messageRepository.addMessage((E3) reply, (User) findOneServ(idUser2));
+        List<User> list = new ArrayList<>();
+        list.add((User) findOneServ(idUser2));
+        messageRepository.addMessage((E3) reply, list);
+        messageRepository.setReplyMessage((E3) reply, (E3) messageRepliedTo);
+    }
+
+    public void replyAllMessage(ID idUser1, ID idMessage, String message, LocalDateTime date) throws SQLException {
+        Message messageRepliedTo = (Message) messageRepository.findOneMessage(idMessage);
+        Message reply = new Message((User) findOneServ(idUser1), message, date);
+        List<User> list = new ArrayList<>();
+        List<ID> idUsersTo = messageRepository.getUsersFromIDMessage((Long) idMessage);
+        for(int i = 0; i < idUsersTo.size(); i++){
+            if(idUsersTo.get(i) != idUser1)
+                list.add((User) findOneServ(idUsersTo.get(i)));
+        }
+        messageRepository.addMessage((E3) reply, list);
         messageRepository.setReplyMessage((E3) reply, (E3) messageRepliedTo);
     }
 
