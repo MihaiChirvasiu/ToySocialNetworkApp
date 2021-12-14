@@ -18,11 +18,11 @@ import java.util.Set;
 public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Entity<ID>, E3 extends Entity<ID>> {
     private UserRepository<ID, E> repository;
     private FriendshipRepository<ID, E1> friendshipRepository;
-    private DatabaseFriendRequestRepository<ID,E2> friendRequestRepository;
+    private DatabaseFriendRequestRepository<ID,E2,E> friendRequestRepository;
     private DatabaseMessageRepository<ID, E3, E> messageRepository;
     private Network network;
 
-    public Controller(UserRepository<ID, E> repository, FriendshipRepository<ID, E1> friendshipRepository, DatabaseFriendRequestRepository<ID, E2> friendRequestRepository
+    public Controller(UserRepository<ID, E> repository, FriendshipRepository<ID, E1> friendshipRepository, DatabaseFriendRequestRepository<ID, E2, E> friendRequestRepository
             , DatabaseMessageRepository<ID, E3, E> messageRepository){
         this.repository = repository;
         this.friendshipRepository = friendshipRepository;
@@ -167,6 +167,7 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
     public void addFriendRequest(ID idUser1, ID idUser2) throws SQLException {
         if(findFriendshipServ(idUser1,idUser2)==null) {
             FriendRequest friendRequest = new FriendRequest((User) findOneServ(idUser1), (User) findOneServ(idUser2));
+            friendRequest.setDate(LocalDateTime.now());
             friendRequestRepository.addFriendRequest((E2) friendRequest);
         }
         else
@@ -281,6 +282,12 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
     public List<E2> findFriendRequestsForUser(ID idUser) throws SQLException {
         User user = (User) findOneServ(idUser);
         return friendRequestRepository.findAllFriendRequestsForUser(user);
+
+    }
+
+    public List<E2> findFriendRequestsForUserReceived(ID idUser) throws SQLException {
+        User user = (User) findOneServ(idUser);
+        return friendRequestRepository.findAllFriendRequestsForUserReceived(user);
 
     }
 

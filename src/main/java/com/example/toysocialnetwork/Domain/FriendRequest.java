@@ -2,11 +2,14 @@ package com.example.toysocialnetwork.Domain;
 
 import com.example.toysocialnetwork.Utils.STATUS;
 
+import java.time.LocalDateTime;
+
 public class FriendRequest extends Entity<Long> {
 
     private User user1;
     private User user2;
     private STATUS status;
+    private LocalDateTime date;
 
     public FriendRequest(User user1, User user2) {
         this.user1 = user1;
@@ -36,6 +39,16 @@ public class FriendRequest extends Entity<Long> {
      */
     public STATUS getStatus() {
         return status;
+    }
+
+    public void setDate(LocalDateTime date)
+    {
+        this.date=date;
+    }
+
+    public LocalDateTime getDate()
+    {
+        return this.date;
     }
 
     public void setStatus()

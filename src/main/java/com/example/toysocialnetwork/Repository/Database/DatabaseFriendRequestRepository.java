@@ -6,25 +6,29 @@ import com.example.toysocialnetwork.Domain.Friendship;
 import com.example.toysocialnetwork.Domain.User;
 import com.example.toysocialnetwork.Domain.Validators.Validator;
 import com.example.toysocialnetwork.Repository.RepoException;
+import com.example.toysocialnetwork.Repository.UserRepository;
 import com.example.toysocialnetwork.Utils.STATUS;
 
 import java.io.IOException;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DatabaseFriendRequestRepository<ID, E extends Entity<ID>> {
+public class DatabaseFriendRequestRepository<ID, E extends Entity<ID>, E1 extends Entity<ID>> {
 
     String url;
     String username;
     String password;
     private Validator<E> validator;
+    private UserRepository<ID,E1> userRepository;
 
-    public DatabaseFriendRequestRepository(String url, String username, String password, Validator<E> validator) {
+    public DatabaseFriendRequestRepository(String url, String username, String password, Validator<E> validator, UserRepository<ID, E1> userRepository) {
         this.url = url;
         this.username = username;
         this.password = password;
         this.validator = validator;
+        this.userRepository=userRepository;
     }
 
     /**
@@ -70,7 +74,7 @@ public class DatabaseFriendRequestRepository<ID, E extends Entity<ID>> {
     public void addFriendRequest(E friendRequest) throws SQLException {
         validator.validate(friendRequest);
         if(findFriendRequest(friendRequest)==null || !findFriendRequest(friendRequest).getStatus().equals(STATUS.pending)) {
-            String sql = "insert into friendrequests (id_user1, id_user2, status ) values (?, ?, ?)";
+            String sql = "insert into friendrequests (id_user1, id_user2, status, date ) values (?, ?, ?, ?)";
 
             PreparedStatement ps = getStatement(sql);
             FriendRequest friendRequest1 = (FriendRequest) friendRequest;
@@ -79,6 +83,7 @@ public class DatabaseFriendRequestRepository<ID, E extends Entity<ID>> {
             ps.setLong(1, friendRequest1.getUser1().getId());
             ps.setLong(2, friendRequest1.getUser2().getId());
             ps.setString(3, friendRequest1.getStatus().toString());
+            ps.setString(4, friendRequest1.getDate().toString());
 
             ps.executeUpdate();
         }
@@ -124,13 +129,36 @@ public class DatabaseFriendRequestRepository<ID, E extends Entity<ID>> {
 
         ResultSet resultSet = ps.executeQuery();
         while(resultSet.next()){
-            User user2 = new User("aa", "bb");
+            Long idUser=resultSet.getLong(2);
+            String user2FirstName=((User)userRepository.findOne((ID)idUser)).getFirstName();
+            String user2LastName=((User)userRepository.findOne((ID)idUser)).getLastName();
+            User user2 = new User(user2FirstName, user2LastName);
             user2.setId(resultSet.getLong(2));
             FriendRequest friendRequest = new FriendRequest(user, user2);
+            friendRequest.setDate(LocalDateTime.parse(resultSet.getString(4)));
             friendRequestList.add((E) friendRequest);
         }
         return friendRequestList;
     }
 
+    public List<E> findAllFriendRequestsForUserReceived(User user) throws SQLException {
+        List<E> friendRequestList = new ArrayList<>();
+        String sql = "select * from friendrequests where id_user2 = " + user.getId() + " and status = 'pending' " ;
+
+        PreparedStatement ps = getStatement(sql);
+
+        ResultSet resultSet = ps.executeQuery();
+        while(resultSet.next()){
+            Long idUser=resultSet.getLong(1);
+            String user2FirstName=((User)userRepository.findOne((ID)idUser)).getFirstName();
+            String user2LastName=((User)userRepository.findOne((ID)idUser)).getLastName();
+            User user2 = new User(user2FirstName, user2LastName);
+            user2.setId(resultSet.getLong(1));
+            FriendRequest friendRequest = new FriendRequest(user, user2);
+            friendRequest.setDate(LocalDateTime.parse(resultSet.getString(4)));
+            friendRequestList.add((E) friendRequest);
+        }
+        return friendRequestList;
+    }
 
 }

@@ -89,16 +89,18 @@ public class ControllerAddFriend {
 
     public void handleAdd() {
         User selectedUser = tableViewAddFriend.getSelectionModel().getSelectedItem();
-        try{
-            controller.addFriendRequest(this.friend.getId(), selectedUser.getId());
-        } catch (SQLException throwables) {
-            MessageAlert.showErrorMessage(null, throwables.getMessage());
-        }
-        catch (ValidationException e){
-            MessageAlert.showErrorMessage(null, e.getMessage());
-        }
-        catch (RepoException e){
-            MessageAlert.showErrorMessage(null, e.getErrorMessage());
+        if (selectedUser == null)
+            MessageAlert.showErrorMessage(null, "No user selected!");
+        else {
+            try {
+                controller.addFriendRequest(this.friend.getId(), selectedUser.getId());
+            } catch (SQLException throwables) {
+                MessageAlert.showErrorMessage(null, throwables.getMessage());
+            } catch (ValidationException e) {
+                MessageAlert.showErrorMessage(null, e.getMessage());
+            } catch (RepoException e) {
+                MessageAlert.showErrorMessage(null, e.getErrorMessage());
+            }
         }
     }
 }
