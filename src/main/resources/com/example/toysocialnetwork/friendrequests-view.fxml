@@ -32,11 +32,11 @@
          <effect>
             <Blend mode="MULTIPLY" />
          </effect></Button>
-      <Button alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="332.0" layoutY="271.0" mnemonicParsing="false" prefHeight="54.0" prefWidth="150.0" styleClass="button2" stylesheets="file:/E:/MAP/ToySocialNetwork/Sources/Button2.css" text="AcceptRequest" textFill="WHITE">
+      <Button alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="332.0" layoutY="271.0" mnemonicParsing="false" onAction="#acceptFriendRequest" prefHeight="54.0" prefWidth="150.0" styleClass="button2" stylesheets="file:/E:/MAP/ToySocialNetwork/Sources/Button2.css" text="AcceptRequest" textFill="WHITE">
          <effect>
             <Blend mode="MULTIPLY" />
          </effect></Button>
-      <Button alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="491.0" layoutY="276.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="150.0" styleClass="button2" stylesheets="file:/E:/MAP/ToySocialNetwork/Sources/Button2.css" text="RejectRequest" textFill="WHITE">
+      <Button alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="491.0" layoutY="276.0" mnemonicParsing="false" onAction="#rejectFriendRequest" prefHeight="45.0" prefWidth="150.0" styleClass="button2" stylesheets="file:/E:/MAP/ToySocialNetwork/Sources/Button2.css" text="RejectRequest" textFill="WHITE">
          <effect>
             <Blend mode="MULTIPLY" />
          </effect></Button>
