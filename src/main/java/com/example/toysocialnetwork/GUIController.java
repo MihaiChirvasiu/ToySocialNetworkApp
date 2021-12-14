@@ -51,6 +51,10 @@ public class GUIController {
         tableView.setItems(model);
     }
 
+    /**
+     * Loads all the users
+     * @throws SQLException
+     */
     private void initModel() throws SQLException {
         Set<Long> keysSet = controller.getKeysServ();
         List<User> users = new ArrayList<User>();
@@ -61,6 +65,12 @@ public class GUIController {
 
     }
 
+    /**
+     * Loads another window with details if a User is selected
+     * @param ev
+     * @throws IOException
+     * @throws SQLException
+     */
     @FXML
     public void handleFriendRequests(ActionEvent ev) throws IOException, SQLException {
         User selectedUser = tableView.getSelectionModel().getSelectedItem();

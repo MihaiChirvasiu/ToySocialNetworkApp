@@ -74,6 +74,10 @@ public class ControllerAddFriend {
 
     }
 
+    /**
+     * Filter for searching a User
+     * @throws SQLException From Database
+     */
     private void handleFilter() throws SQLException {
         Set<Long> keysSet = controller.getKeysServ();
         List<User> users = new ArrayList<User>();

@@ -99,6 +99,11 @@ public class ControllerDetails {
         initModelRequestReceived(user);
     }
 
+    /**
+     * Accepts a friendRequest, or shows an error message if no User is selected
+     * @throws SQLException From database
+     * @throws IOException
+     */
     @FXML
     public void acceptFriendRequest() throws SQLException, IOException {
         FriendRequestDTO selectedUser = tableViewRequestsReceived.getSelectionModel().getSelectedItem();
@@ -108,6 +113,11 @@ public class ControllerDetails {
             this.controller.acceptFriendRequest(selectedUser.getId(), this.friend.getId());
     }
 
+    /**
+     * Rejects a friendRequest, or shows an error message if no User is selected
+     * @throws SQLException
+     * @throws IOException
+     */
     @FXML
     public void rejectFriendRequest() throws SQLException, IOException {
         FriendRequestDTO selectedUser = tableViewRequestsReceived.getSelectionModel().getSelectedItem();
@@ -117,6 +127,11 @@ public class ControllerDetails {
             this.controller.rejectFriendRequest(selectedUser.getId(), this.friend.getId());
     }
 
+    /**
+     * Deletes a friend or shows an error message if no user is selected
+     * @throws SQLException
+     * @throws IOException
+     */
     @FXML
     public void deleteFriend() throws SQLException, IOException {
         User selectedUser = tableViewFriends.getSelectionModel().getSelectedItem();
@@ -179,6 +194,11 @@ public class ControllerDetails {
         });
     }
 
+    /**
+     * Loads the data for the User
+     * @param user The user selected
+     * @throws SQLException
+     */
     private void initModel(User user) throws SQLException {
         List<User> secondUsers = new ArrayList<User>();
         List<Friendship> friendships = controller.findFriendshipsForUser(user.getId());
@@ -189,6 +209,11 @@ public class ControllerDetails {
 
     }
 
+    /**
+     * Load the data for the User
+     * @param user The user selected
+     * @throws SQLException
+     */
     private void initModelRequestSent(User user) throws SQLException
     {
         List<FriendRequestDTO> secondUsers = new ArrayList<FriendRequestDTO>();
@@ -200,6 +225,11 @@ public class ControllerDetails {
         modelRequestSent.setAll(secondUsers);
     }
 
+    /**
+     * Load the data for the user
+     * @param user The user selected
+     * @throws SQLException
+     */
     private void initModelRequestReceived(User user) throws SQLException
     {
         List<FriendRequestDTO> secondUsers = new ArrayList<FriendRequestDTO>();
@@ -211,6 +241,10 @@ public class ControllerDetails {
         modelRequestReceived.setAll(secondUsers);
     }
 
+    /**
+     * Filter to search friendRequests
+     * @throws SQLException
+     */
     private void handleFilterReceived() throws SQLException {
         List<FriendRequestDTO> users = new ArrayList<FriendRequestDTO>();
         List<FriendRequest> friendRequests = controller.findFriendRequestsForUserReceived(this.friend.getId());
@@ -225,6 +259,10 @@ public class ControllerDetails {
                 .collect(Collectors.toList()));
     }
 
+    /**
+     * Filter for friendships
+     * @throws SQLException
+     */
     private void handleFilter() throws SQLException {
         List<User> users = new ArrayList<User>();
         List<Friendship> friendships= controller.findFriendshipsForUser(this.friend.getId());
