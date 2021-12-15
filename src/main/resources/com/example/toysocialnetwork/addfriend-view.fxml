@@ -26,5 +26,10 @@
             <Blend mode="MULTIPLY" />
          </effect>
       </Label>
+      <Button blendMode="MULTIPLY" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" mouseTransparent="true"  prefHeight="26.0" prefWidth="36.0" styleClass="backbutton" stylesheets="file:/E:/MAP/ReparareToySocialNetwork/Sources/BackButton.css">
+         <effect>
+            <Blend mode="MULTIPLY" />
+         </effect>
+      </Button>
    </children>
 </AnchorPane>

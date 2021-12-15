@@ -4,13 +4,12 @@ import com.example.toysocialnetwork.Domain.*;
 import com.example.toysocialnetwork.Service.Controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
@@ -83,6 +82,15 @@ public class ControllerDetails {
     @FXML
     private Button rejectFriendRequest;
 
+    @FXML
+    private Label searchFriends;
+
+    @FXML
+    private Label searchFriendRequestReceived;
+
+    @FXML
+    private Button cancelRequest;
+
     Controller<Long, User, Friendship, FriendRequest, Message> controller;
     ObservableList<User> model = FXCollections.observableArrayList();
     ObservableList<FriendRequestDTO> modelRequestSent = FXCollections.observableArrayList();
@@ -153,7 +161,7 @@ public class ControllerDetails {
         Stage dialogStage = new Stage();
         dialogStage.setTitle("AddFriend");
         dialogStage.initModality(Modality.WINDOW_MODAL);
-        //dialogStage.initOwner(primaryStage);
+//        dialogStage.initOwner(primaryStage);
         Scene scene = new Scene(root);
         dialogStage.setScene(scene);
 
@@ -193,6 +201,60 @@ public class ControllerDetails {
             }
         });
     }
+
+    public void showFriends(ActionEvent event)
+    {
+        tableViewRequestsReceived.setVisible(false);
+        tableViewRequestsSent.setVisible(false);
+        deleteFriend.setVisible(true);
+        acceptFriendRequest.setVisible(false);
+        rejectFriendRequest.setVisible(false);
+        searchFriends.setVisible(true);
+        searchFriend.setVisible(true);
+        searchFriendRequestReceived.setVisible(false);
+        searchRequestReceived.setVisible(false);
+        tableViewFriends.setVisible(true);
+        cancelRequest.setVisible(false);
+    }
+
+    public void showSentRequests(ActionEvent event)
+    {
+        tableViewRequestsReceived.setVisible(false);
+        tableViewRequestsSent.setVisible(true);
+        deleteFriend.setVisible(false);
+        acceptFriendRequest.setVisible(false);
+        rejectFriendRequest.setVisible(false);
+        searchFriends.setVisible(false);
+        searchFriend.setVisible(false);
+        searchFriendRequestReceived.setVisible(false);
+        searchRequestReceived.setVisible(false);
+        tableViewFriends.setVisible(false);
+        cancelRequest.setVisible(true);
+    }
+
+    public void showReceivedRequests(ActionEvent event)
+    {
+        tableViewRequestsReceived.setVisible(true);
+        tableViewRequestsSent.setVisible(false);
+        deleteFriend.setVisible(false);
+        acceptFriendRequest.setVisible(true);
+        rejectFriendRequest.setVisible(true);
+        searchFriends.setVisible(false);
+        searchFriend.setVisible(false);
+        searchFriendRequestReceived.setVisible(true);
+        searchRequestReceived.setVisible(true);
+        tableViewFriends.setVisible(false);
+        cancelRequest.setVisible(false);
+    }
+
+    public void cancelRequest(ActionEvent event) throws SQLException {
+        FriendRequestDTO selectedUser = tableViewRequestsSent.getSelectionModel().getSelectedItem();
+        if(selectedUser == null)
+            MessageAlert.showErrorMessage(null, "No user selected!");
+        else
+            this.controller.deleteFriendRequest(this.friend.getId(),selectedUser.getId());
+    }
+
 
     /**
      * Loads the data for the User

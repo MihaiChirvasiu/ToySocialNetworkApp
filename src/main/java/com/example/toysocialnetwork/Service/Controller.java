@@ -174,6 +174,15 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
             throw new RepoException("Already Friends!");
     }
 
+    public void deleteFriendRequest(ID idUser1, ID idUser2) throws SQLException {
+        if(findFriendshipServ(idUser1,idUser2)==null) {
+            FriendRequest friendRequest = new FriendRequest((User) findOneServ(idUser1), (User) findOneServ(idUser2));
+            friendRequestRepository.deleteFriendRequest((E2) friendRequest);
+        }
+        else
+            throw new RepoException("Already Friends!");
+    }
+
     /**
      * Saves a message in the database
      * @param idUser1 The id of user that sends the message

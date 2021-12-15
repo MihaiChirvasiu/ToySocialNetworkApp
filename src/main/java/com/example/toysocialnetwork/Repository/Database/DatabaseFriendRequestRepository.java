@@ -52,8 +52,9 @@ public class DatabaseFriendRequestRepository<ID, E extends Entity<ID>, E1 extend
     public FriendRequest findFriendRequest(E friendRequest) throws SQLException {
         validator.validate(friendRequest);
         FriendRequest friendRequest1 = (FriendRequest) friendRequest;
-        String sql = "select * from friendrequests where id_user1 = " + friendRequest1.getUser1().getId() +
-                " and id_user2 = " + friendRequest1.getUser2().getId();
+        String sql = "select * from friendrequests where (id_user1 = " + friendRequest1.getUser1().getId() +
+                " and id_user2 = " + friendRequest1.getUser2().getId() + " ) or (id_user1 = " + friendRequest1.getUser2().getId() +
+                " and id_user2 = " + friendRequest1.getUser1().getId() + " )";
         PreparedStatement ps = getStatement(sql);
         ResultSet resultSet = ps.executeQuery();
         if(resultSet.next()) {
@@ -64,6 +65,19 @@ public class DatabaseFriendRequestRepository<ID, E extends Entity<ID>, E1 extend
             return friendRequest1;
         }
         return null;
+    }
+
+    public void deleteFriendRequest(E friendRequest) throws SQLException {
+        validator.validate(friendRequest);
+        FriendRequest friendRequest1 = (FriendRequest) friendRequest;
+        if(findFriendRequest(friendRequest)!=null && findFriendRequest(friendRequest).getStatus().equals(STATUS.pending)) {
+            String sql = "delete from friendrequests where id_user1 = " + friendRequest1.getUser1().getId() +
+                    " and id_user2 = " + friendRequest1.getUser2().getId();
+            PreparedStatement ps = getStatement(sql);
+            ps.executeUpdate();
+        }
+        else
+            throw new RepoException("Friend request does not exist");
     }
 
     /**

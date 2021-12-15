@@ -1,40 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Blend?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="437.0" prefWidth="639.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toysocialnetwork.ControllerDetails">
+<AnchorPane prefHeight="425.0" prefWidth="695.0" styleClass="bodybg2" stylesheets="file:/E:/MAP/ToySocialNetwork/Sources/Background2.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toysocialnetwork.ControllerDetails">
    <children>
-      <TableView fx:id="tableViewFriends" layoutY="6.0" prefHeight="200.0" prefWidth="200.0">
+      <TableView fx:id="tableViewFriends" layoutX="236.0" layoutY="27.0" prefHeight="305.0" prefWidth="254.0" visible="false">
         <columns>
-          <TableColumn fx:id="tableColumnFirstName" prefWidth="75.0" text="FirstName" />
-          <TableColumn fx:id="tableColumnLastName" prefWidth="75.0" text="LastName" />
+          <TableColumn fx:id="tableColumnFirstName" prefWidth="126.40003967285156" text="FirstName" />
+          <TableColumn fx:id="tableColumnLastName" prefWidth="124.0" text="LastName" />
         </columns>
       </TableView>
-      <TableView fx:id="tableViewRequestsSent" layoutX="380.0" layoutY="73.0" prefHeight="200.0" prefWidth="295.0">
+      <TableView fx:id="tableViewRequestsSent" layoutX="236.0" layoutY="18.0" prefHeight="318.0" prefWidth="436.0" visible="false">
         <columns>
-          <TableColumn fx:id="tableColumnFirstNameRequestSent" prefWidth="75.0" text="FirstName" />
-          <TableColumn fx:id="tableColumnLastNameRequestSent" prefWidth="75.0" text="LastName" />
-          <TableColumn fx:id="tableColumnStatusSent" prefWidth="75.0" text="Status" />
-            <TableColumn fx:id="tableColumnDateSent" prefWidth="75.0" text="Date" />
+          <TableColumn fx:id="tableColumnFirstNameRequestSent" prefWidth="113.59999084472656" text="FirstName" />
+          <TableColumn fx:id="tableColumnLastNameRequestSent" prefWidth="104.79998779296875" text="LastName" />
+          <TableColumn fx:id="tableColumnStatusSent" minWidth="7.20001220703125" prefWidth="76.79998779296875" text="Status" />
+            <TableColumn fx:id="tableColumnDateSent" minWidth="4.79998779296875" prefWidth="136.00006103515625" text="Date" />
         </columns>
       </TableView>
-      <Button layoutY="206.0" mnemonicParsing="false" onAction="#addFriend" text="AddFriend" />
-      <Button layoutX="148.0" layoutY="206.0" mnemonicParsing="false" onAction="#deleteFriend" text="DeleteFriend" />
-      <Button layoutX="332.0" layoutY="381.0" mnemonicParsing="false" text="AcceptRequest" />
-      <Button layoutX="465.0" layoutY="381.0" mnemonicParsing="false" text="RejectRequest" />
-      <TextField fx:id="searchFriend" layoutX="211.0" layoutY="36.0" />
-      <TableView fx:id="tableViewRequestsReceived" layoutY="236.0" prefHeight="200.0" prefWidth="295.0">
+      <Button fx:id="addFriend" alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="33.0" layoutY="20.0" mnemonicParsing="false" onAction="#addFriend" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/E:/MAP/ToySocialNetwork/Sources/Button2.css" text="AddFriend" textAlignment="CENTER" textFill="WHITE">
+         <effect>
+            <Blend mode="MULTIPLY" />
+         </effect></Button>
+      <Button fx:id="deleteFriend" alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="493.0" layoutY="107.0" mnemonicParsing="false" onAction="#deleteFriend" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/E:/MAP/ToySocialNetwork/Sources/Button2.css" text="DeleteFriend" textAlignment="CENTER" textFill="WHITE" visible="false">
+         <effect>
+            <Blend mode="MULTIPLY" />
+         </effect></Button>
+      <Button fx:id="acceptFriendRequest" alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="250.0" layoutY="354.0" mnemonicParsing="false" onAction="#acceptFriendRequest" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/E:/MAP/ToySocialNetwork/Sources/Button2.css" text="AcceptRequest" textFill="WHITE" visible="false">
+         <effect>
+            <Blend mode="MULTIPLY" />
+         </effect></Button>
+      <Button fx:id="rejectFriendRequest" alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="487.0" layoutY="358.0" mnemonicParsing="false" onAction="#rejectFriendRequest" prefHeight="45.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/E:/MAP/ToySocialNetwork/Sources/Button2.css" text="RejectRequest" textFill="WHITE" visible="false">
+         <effect>
+            <Blend mode="MULTIPLY" />
+         </effect></Button>
+      <TextField fx:id="searchFriend" layoutX="500.0" layoutY="34.0" visible="false" />
+      <TableView fx:id="tableViewRequestsReceived" layoutX="257.0" layoutY="51.0" prefHeight="298.0" prefWidth="394.0" visible="false">
         <columns>
-          <TableColumn fx:id="tableColumnFirstNameRequestReceived" prefWidth="75.0" text="FirstName" />
-          <TableColumn fx:id="tableColumnLastNameRequestReceived" prefWidth="75.0" text="LastName" />
-            <TableColumn fx:id="tableColumnStatusReceived" prefWidth="75.0" text="Status" />
-            <TableColumn fx:id="tableColumnDateReceived" prefWidth="75.0" text="Date" />
+          <TableColumn fx:id="tableColumnFirstNameRequestReceived" prefWidth="103.20001220703125" text="FirstName" />
+          <TableColumn fx:id="tableColumnLastNameRequestReceived" prefWidth="89.60003662109375" text="LastName" />
+            <TableColumn fx:id="tableColumnStatusReceived" prefWidth="60.79998779296875" text="Status" />
+            <TableColumn fx:id="tableColumnDateReceived" prefWidth="135.20001220703125" text="Date" />
         </columns>
       </TableView>
-      <TextField fx:id="searchRequestReceived" layoutX="352.0" layoutY="323.0" />
+      <TextField fx:id="searchRequestReceived" layoutX="443.0" layoutY="14.0" prefHeight="26.0" prefWidth="206.0" visible="false" />
+      <Label fx:id="searchFriends" alignment="CENTER" blendMode="MULTIPLY" layoutX="507.0" layoutY="18.0" prefHeight="18.0" prefWidth="135.0" text="Search friend" textAlignment="CENTER" visible="false">
+         <effect>
+            <Blend mode="LIGHTEN" />
+         </effect>
+      </Label>
+      <Label fx:id="searchFriendRequestReceived" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="264.0" layoutY="18.0" prefHeight="18.0" prefWidth="168.0" text="Search friend request received" visible="false">
+         <effect>
+            <Blend mode="MULTIPLY" />
+         </effect>
+      </Label>
+      <Button alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="33.0" layoutY="97.0" mnemonicParsing="false" onAction="#showSentRequests" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/E:/MAP/ToySocialNetwork/Sources/Button2.css" text="ShowSentRequests" textAlignment="CENTER" textFill="WHITE">
+         <effect>
+            <Blend mode="MULTIPLY" />
+         </effect>
+      </Button>
+      <Button alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="33.0" layoutY="173.0" mnemonicParsing="false" onAction="#showReceivedRequests" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/E:/MAP/ToySocialNetwork/Sources/Button2.css" text="ShowReceivedRequests" textAlignment="CENTER" textFill="WHITE">
+         <effect>
+            <Blend mode="MULTIPLY" />
+         </effect>
+      </Button>
+      <Button alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="33.0" layoutY="260.0" mnemonicParsing="false" onAction="#showFriends" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/E:/MAP/ToySocialNetwork/Sources/Button2.css" text="ShowFriends" textAlignment="CENTER" textFill="WHITE">
+         <effect>
+            <Blend mode="MULTIPLY" />
+         </effect>
+      </Button>
+      <Button fx:id="cancelRequest" alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="366.0" layoutY="349.0" mnemonicParsing="false" onAction="#cancelRequest" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/E:/MAP/ToySocialNetwork/Sources/Button2.css" text="CancelRequest" textAlignment="CENTER" textFill="WHITE" visible="false">
+         <effect>
+            <Blend mode="MULTIPLY" />
+         </effect>
+      </Button>
    </children>
 </AnchorPane>
