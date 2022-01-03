@@ -8,7 +8,7 @@
 <?import javafx.scene.effect.Blend?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="bodybg3" stylesheets="file:/E:/MAP/ToySocialNetwork/Sources/Background3.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toysocialnetwork.ControllerAddFriend">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="bodybg3" stylesheets="file:/C:/Users/mnist/IdeaProjects/ToySocialNetwork/Sources/Background3.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toysocialnetwork.ControllerAddFriend">
    <children>
       <TableView fx:id="tableViewAddFriend" layoutX="100.0" layoutY="71.0" prefHeight="200.0" prefWidth="203.0">
         <columns>
@@ -17,7 +17,7 @@
         </columns>
       </TableView>
       <TextField fx:id="searchFriend" layoutX="348.0" layoutY="145.0" />
-      <Button alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="313.0" layoutY="171.0" mnemonicParsing="false" onAction="#handleAdd" prefHeight="102.0" prefWidth="218.0" styleClass="button3" stylesheets="file:/E:/MAP/ToySocialNetwork/Sources/Button3.css" text="Add" textAlignment="CENTER" textFill="WHITE">
+      <Button alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="313.0" layoutY="171.0" mnemonicParsing="false" onAction="#handleAdd" prefHeight="102.0" prefWidth="218.0" styleClass="button3" stylesheets="file:/C:/Users/mnist/IdeaProjects/ToySocialNetwork/Sources/Button3.css" text="Add" textAlignment="CENTER" textFill="WHITE">
          <effect>
             <Blend mode="MULTIPLY" />
          </effect></Button>
@@ -26,7 +26,7 @@
             <Blend mode="MULTIPLY" />
          </effect>
       </Label>
-      <Button blendMode="MULTIPLY" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" mouseTransparent="true"  prefHeight="26.0" prefWidth="36.0" styleClass="backbutton" stylesheets="file:/E:/MAP/ReparareToySocialNetwork/Sources/BackButton.css">
+      <Button blendMode="MULTIPLY" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" mouseTransparent="true" prefHeight="26.0" prefWidth="36.0" styleClass="backbutton" stylesheets="file:/C:/Users/mnist/IdeaProjects/ToySocialNetwork/Sources/BackButton.css">
          <effect>
             <Blend mode="MULTIPLY" />
          </effect>

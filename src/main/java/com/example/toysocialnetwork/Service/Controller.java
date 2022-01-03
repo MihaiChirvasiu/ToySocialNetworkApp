@@ -1,6 +1,10 @@
 package com.example.toysocialnetwork.Service;
 
 import com.example.toysocialnetwork.Domain.*;
+import com.example.toysocialnetwork.Events.ChangeEventType;
+import com.example.toysocialnetwork.Events.EntityChangeEvent;
+import com.example.toysocialnetwork.Observer.Observable;
+import com.example.toysocialnetwork.Observer.Observer;
 import com.example.toysocialnetwork.Repository.Database.DatabaseFriendRequestRepository;
 import com.example.toysocialnetwork.Repository.Database.DatabaseMessageRepository;
 import com.example.toysocialnetwork.Repository.FriendshipRepository;
@@ -15,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Entity<ID>, E3 extends Entity<ID>> {
+public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Entity<ID>, E3 extends Entity<ID>> implements Observable<EntityChangeEvent> {
     private UserRepository<ID, E> repository;
     private FriendshipRepository<ID, E1> friendshipRepository;
     private DatabaseFriendRequestRepository<ID,E2,E> friendRequestRepository;
@@ -169,6 +173,7 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
             FriendRequest friendRequest = new FriendRequest((User) findOneServ(idUser1), (User) findOneServ(idUser2));
             friendRequest.setDate(LocalDateTime.now());
             friendRequestRepository.addFriendRequest((E2) friendRequest);
+            notifyObservers(new EntityChangeEvent(ChangeEventType.ADD, friendRequest));
         }
         else
             throw new RepoException("Already Friends!");
@@ -198,6 +203,7 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
             list.add((User) findOneServ(idToUsers.get(i)));
         }
         messageRepository.addMessage((E3) message1, list);
+        notifyObservers(new EntityChangeEvent(ChangeEventType.ADD, message1));
     }
 
     /**
@@ -376,5 +382,26 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
         this.network = new Network(Math.toIntExact(getMaxx()), getKeysServ(), this.repository, this.friendshipRepository);
         return network.longestRoadInACommunity(getKeysServ(), (int) maxx);
     }
+    private List<Observer<EntityChangeEvent>> observers = new ArrayList<>();
 
+    @Override
+    public void addObserver(Observer<EntityChangeEvent> e) {
+        observers.add(e);
+    }
+
+    @Override
+    public void removeObserver(Observer<EntityChangeEvent> e) {
+
+    }
+
+    @Override
+    public void notifyObservers(EntityChangeEvent t) {
+        observers.stream().forEach(x -> {
+            try {
+                x.update(t);
+            } catch (SQLException | IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
 }

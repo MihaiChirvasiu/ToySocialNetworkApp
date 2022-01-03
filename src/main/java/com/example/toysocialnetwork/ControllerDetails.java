@@ -1,6 +1,8 @@
 package com.example.toysocialnetwork;
 
 import com.example.toysocialnetwork.Domain.*;
+import com.example.toysocialnetwork.Events.EntityChangeEvent;
+import com.example.toysocialnetwork.Observer.Observer;
 import com.example.toysocialnetwork.Service.Controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,7 +25,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class ControllerDetails {
+public class ControllerDetails implements Observer<EntityChangeEvent> {
 
     @FXML
     private TableView<User> tableViewFriends;
@@ -90,6 +92,9 @@ public class ControllerDetails {
 
     @FXML
     private Button cancelRequest;
+
+    @FXML
+    private Button ChatButton;
 
     Controller<Long, User, Friendship, FriendRequest, Message> controller;
     ObservableList<User> model = FXCollections.observableArrayList();
@@ -166,6 +171,26 @@ public class ControllerDetails {
         dialogStage.setScene(scene);
 
         ControllerAddFriend controllerDetails = loader.getController();
+        controllerDetails.setService(controller, dialogStage, this.friend);
+
+        dialogStage.show();
+    }
+
+    @FXML
+    public void chat() throws IOException, SQLException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("chat-view.fxml"));
+
+        AnchorPane root = (AnchorPane) loader.load();
+
+        Stage dialogStage = new Stage();
+        dialogStage.setTitle("Chat");
+        dialogStage.initModality(Modality.WINDOW_MODAL);
+//        dialogStage.initOwner(primaryStage);
+        Scene scene = new Scene(root);
+        dialogStage.setScene(scene);
+
+        ControllerChat controllerDetails = loader.getController();
         controllerDetails.setService(controller, dialogStage, this.friend);
 
         dialogStage.show();
@@ -271,11 +296,17 @@ public class ControllerDetails {
 
     }
 
+    @Override
+    public void update(EntityChangeEvent entityChangeEvent) throws SQLException {
+        initModelRequestSent(friend);
+    }
+
     /**
      * Load the data for the User
      * @param user The user selected
      * @throws SQLException
      */
+
     private void initModelRequestSent(User user) throws SQLException
     {
         List<FriendRequestDTO> secondUsers = new ArrayList<FriendRequestDTO>();

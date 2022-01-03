@@ -4,6 +4,8 @@ import com.example.toysocialnetwork.Domain.FriendRequest;
 import com.example.toysocialnetwork.Domain.Friendship;
 import com.example.toysocialnetwork.Domain.Message;
 import com.example.toysocialnetwork.Domain.User;
+import com.example.toysocialnetwork.Events.EntityChangeEvent;
+import com.example.toysocialnetwork.Observer.Observer;
 import com.example.toysocialnetwork.Service.Controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,7 +28,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public class GUIController {
+public class GUIController implements Observer<EntityChangeEvent> {
 
     Controller<Long, User, Friendship, FriendRequest, Message> controller;
     ObservableList<User> model = FXCollections.observableArrayList();
@@ -41,6 +43,12 @@ public class GUIController {
 
     public void setController(Controller<Long, User, Friendship, FriendRequest, Message> controller) throws SQLException {
         this.controller = controller;
+        controller.addObserver(this);
+        initModel();
+    }
+
+    @Override
+    public void update(EntityChangeEvent entityChangeEvent) throws SQLException {
         initModel();
     }
 

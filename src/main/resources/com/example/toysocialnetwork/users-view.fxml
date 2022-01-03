@@ -9,7 +9,7 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="bodybg" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toysocialnetwork.GUIController">
    <children>
-      <TableView fx:id="tableView" layoutX="246.0" layoutY="100.0" prefHeight="200.0" prefWidth="300.0" styleClass="tablebg" stylesheets="file:/E:/MAP/ToySocialNetwork/Sources/TableBackground.css">
+      <TableView fx:id="tableView" layoutX="246.0" layoutY="100.0" prefHeight="200.0" prefWidth="300.0" styleClass="tablebg" stylesheets="file:/C:/Users/mnist/IdeaProjects/ToySocialNetwork/Sources/TableBackground.css">
         <columns>
           <TableColumn fx:id="tableColumnFirstName" prefWidth="148.800048828125" text="FirstName" />
           <TableColumn fx:id="tableColumnLastName" prefWidth="148.79998779296875" text="LastName" />
@@ -18,10 +18,10 @@
             <Blend mode="SOFT_LIGHT" />
          </effect>
       </TableView>
-      <Button blendMode="MULTIPLY" layoutX="241.0" layoutY="319.0" mnemonicParsing="false" onAction="#handleFriendRequests" prefHeight="80.0" prefWidth="150.0" styleClass="button1" stylesheets="file:/E:/MAP/ToySocialNetwork/Sources/Button.css" text="ShowDetails" textFill="#00eaff" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="225.0" AnchorPane.rightAnchor="225.0" AnchorPane.topAnchor="300.0" />
+      <Button blendMode="MULTIPLY" layoutX="241.0" layoutY="319.0" mnemonicParsing="false" onAction="#handleFriendRequests" prefHeight="80.0" prefWidth="150.0" styleClass="button1" stylesheets="file:/C:/Users/mnist/IdeaProjects/ToySocialNetwork/Sources/Button.css" text="ShowDetails" textFill="#00eaff" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="225.0" AnchorPane.rightAnchor="225.0" AnchorPane.topAnchor="300.0" />
    </children>
    <stylesheets>
-      <URL value="file:/E:/MAP/ToySocialNetwork/Sources/BackgroundMain.css" />
-      <URL value="file:/E:/MAP/ToySocialNetwork/Sources/Background2.css" />
+      <URL value="file:/C:/Users/mnist/IdeaProjects/ToySocialNetwork/Sources/BackgroundMain.css" />
+      <URL value="file:/C:/Users/mnist/IdeaProjects/ToySocialNetwork/Sources/Background2.css" />
    </stylesheets>
 </AnchorPane>

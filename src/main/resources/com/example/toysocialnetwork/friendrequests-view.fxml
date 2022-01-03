@@ -8,7 +8,7 @@
 <?import javafx.scene.effect.Blend?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="425.0" prefWidth="695.0" styleClass="bodybg2" stylesheets="file:/E:/MAP/ToySocialNetwork/Sources/Background2.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toysocialnetwork.ControllerDetails">
+<AnchorPane prefHeight="425.0" prefWidth="695.0" styleClass="bodybg2" stylesheets="file:/C:/Users/mnist/IdeaProjects/ToySocialNetwork/Sources/Background2.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toysocialnetwork.ControllerDetails">
    <children>
       <TableView fx:id="tableViewFriends" layoutX="236.0" layoutY="27.0" prefHeight="305.0" prefWidth="254.0" visible="false">
         <columns>
@@ -24,19 +24,19 @@
             <TableColumn fx:id="tableColumnDateSent" minWidth="4.79998779296875" prefWidth="136.00006103515625" text="Date" />
         </columns>
       </TableView>
-      <Button fx:id="addFriend" alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="33.0" layoutY="20.0" mnemonicParsing="false" onAction="#addFriend" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/E:/MAP/ToySocialNetwork/Sources/Button2.css" text="AddFriend" textAlignment="CENTER" textFill="WHITE">
+      <Button fx:id="addFriend" alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="33.0" layoutY="20.0" mnemonicParsing="false" onAction="#addFriend" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/C:/Users/mnist/IdeaProjects/ToySocialNetwork/Sources/Button2.css" text="AddFriend" textAlignment="CENTER" textFill="WHITE">
          <effect>
             <Blend mode="MULTIPLY" />
          </effect></Button>
-      <Button fx:id="deleteFriend" alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="493.0" layoutY="107.0" mnemonicParsing="false" onAction="#deleteFriend" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/E:/MAP/ToySocialNetwork/Sources/Button2.css" text="DeleteFriend" textAlignment="CENTER" textFill="WHITE" visible="false">
+      <Button fx:id="deleteFriend" alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="493.0" layoutY="107.0" mnemonicParsing="false" onAction="#deleteFriend" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/C:/Users/mnist/IdeaProjects/ToySocialNetwork/Sources/Button2.css" text="DeleteFriend" textAlignment="CENTER" textFill="WHITE" visible="false">
          <effect>
             <Blend mode="MULTIPLY" />
          </effect></Button>
-      <Button fx:id="acceptFriendRequest" alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="250.0" layoutY="354.0" mnemonicParsing="false" onAction="#acceptFriendRequest" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/E:/MAP/ToySocialNetwork/Sources/Button2.css" text="AcceptRequest" textFill="WHITE" visible="false">
+      <Button fx:id="acceptFriendRequest" alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="250.0" layoutY="354.0" mnemonicParsing="false" onAction="#acceptFriendRequest" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/C:/Users/mnist/IdeaProjects/ToySocialNetwork/Sources/Button2.css" text="AcceptRequest" textFill="WHITE" visible="false">
          <effect>
             <Blend mode="MULTIPLY" />
          </effect></Button>
-      <Button fx:id="rejectFriendRequest" alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="487.0" layoutY="358.0" mnemonicParsing="false" onAction="#rejectFriendRequest" prefHeight="45.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/E:/MAP/ToySocialNetwork/Sources/Button2.css" text="RejectRequest" textFill="WHITE" visible="false">
+      <Button fx:id="rejectFriendRequest" alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="487.0" layoutY="358.0" mnemonicParsing="false" onAction="#rejectFriendRequest" prefHeight="45.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/C:/Users/mnist/IdeaProjects/ToySocialNetwork/Sources/Button2.css" text="RejectRequest" textFill="WHITE" visible="false">
          <effect>
             <Blend mode="MULTIPLY" />
          </effect></Button>
@@ -60,22 +60,27 @@
             <Blend mode="MULTIPLY" />
          </effect>
       </Label>
-      <Button alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="33.0" layoutY="97.0" mnemonicParsing="false" onAction="#showSentRequests" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/E:/MAP/ToySocialNetwork/Sources/Button2.css" text="ShowSentRequests" textAlignment="CENTER" textFill="WHITE">
+      <Button alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="33.0" layoutY="97.0" mnemonicParsing="false" onAction="#showSentRequests" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/C:/Users/mnist/IdeaProjects/ToySocialNetwork/Sources/Button2.css" text="ShowSentRequests" textAlignment="CENTER" textFill="WHITE">
          <effect>
             <Blend mode="MULTIPLY" />
          </effect>
       </Button>
-      <Button alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="33.0" layoutY="173.0" mnemonicParsing="false" onAction="#showReceivedRequests" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/E:/MAP/ToySocialNetwork/Sources/Button2.css" text="ShowReceivedRequests" textAlignment="CENTER" textFill="WHITE">
+      <Button alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="33.0" layoutY="173.0" mnemonicParsing="false" onAction="#showReceivedRequests" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/C:/Users/mnist/IdeaProjects/ToySocialNetwork/Sources/Button2.css" text="ShowReceivedRequests" textAlignment="CENTER" textFill="WHITE">
          <effect>
             <Blend mode="MULTIPLY" />
          </effect>
       </Button>
-      <Button alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="33.0" layoutY="260.0" mnemonicParsing="false" onAction="#showFriends" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/E:/MAP/ToySocialNetwork/Sources/Button2.css" text="ShowFriends" textAlignment="CENTER" textFill="WHITE">
+      <Button alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="33.0" layoutY="260.0" mnemonicParsing="false" onAction="#showFriends" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/C:/Users/mnist/IdeaProjects/ToySocialNetwork/Sources/Button2.css" text="ShowFriends" textAlignment="CENTER" textFill="WHITE">
          <effect>
             <Blend mode="MULTIPLY" />
          </effect>
       </Button>
-      <Button fx:id="cancelRequest" alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="366.0" layoutY="349.0" mnemonicParsing="false" onAction="#cancelRequest" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/E:/MAP/ToySocialNetwork/Sources/Button2.css" text="CancelRequest" textAlignment="CENTER" textFill="WHITE" visible="false">
+      <Button fx:id="cancelRequest" alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="366.0" layoutY="349.0" mnemonicParsing="false" onAction="#cancelRequest" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/C:/Users/mnist/IdeaProjects/ToySocialNetwork/Sources/Button2.css" text="CancelRequest" textAlignment="CENTER" textFill="WHITE" visible="false">
+         <effect>
+            <Blend mode="MULTIPLY" />
+         </effect>
+      </Button>
+      <Button fx:id="ChatButton" alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="33.0" layoutY="349.0" mnemonicParsing="false" onAction="#chat" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/C:/Users/mnist/IdeaProjects/ToySocialNetwork/Sources/Button2.css" text="Chat" textAlignment="CENTER" textFill="WHITE">
          <effect>
             <Blend mode="MULTIPLY" />
          </effect>
