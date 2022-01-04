@@ -73,6 +73,7 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
 
     public void setService(Controller<Long, User, Friendship, FriendRequest, Message> controller, Stage stage, User user) throws SQLException {
         this.controller = controller;
+        controller.addObserver(this);
         this.detailStage = stage;
         this.friend = user;
         this.mainScene = detailStage.getScene();
@@ -189,10 +190,16 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
         sendButton.setVisible(true);
         sendButton.setOnAction(event -> {
             try {
-                addMsg(selectedUser.getId(), messageField.getText());
+                if(Objects.equals(messageField.getText(), ""))
+                    MessageAlert.showErrorMessage(null, "No message written");
+                else
+                    addMsg(selectedUser.getId(), messageField.getText());
             }
             catch (SQLException e) {
                 e.printStackTrace();
+            }
+            catch (NullPointerException e){
+                MessageAlert.showErrorMessage(null, "No user selected");
             }
         });
 
@@ -244,6 +251,9 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
             }
             catch (SQLException e) {
                 e.printStackTrace();
+            }
+            catch(NullPointerException e){
+                MessageAlert.showErrorMessage(null, "No message selected");
             }
         });
 
