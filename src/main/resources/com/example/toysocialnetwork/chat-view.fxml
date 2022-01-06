@@ -4,12 +4,13 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Blend?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toysocialnetwork.ControllerChat">
    <children>
-      <TableView fx:id="usersView" layoutX="14.0" layoutY="57.0" prefHeight="298.0" prefWidth="156.0" onMouseClicked="#buildChatBox">
+      <TableView fx:id="usersView" layoutX="14.0" layoutY="57.0" onMouseClicked="#buildChatBox" prefHeight="298.0" prefWidth="156.0">
         <columns>
           <TableColumn fx:id="userFirstName" prefWidth="76.0" text="FirstName" />
             <TableColumn fx:id="userLastName" prefWidth="77.0" text="LastName" />
@@ -19,5 +20,10 @@
       <VBox fx:id="chatHistory" layoutX="200.0" layoutY="30.0" prefHeight="287.0" prefWidth="343.0" />
       <TextField layoutX="200.0" layoutY="330.0" prefHeight="25.0" prefWidth="306.0" />
       <Button layoutX="506.0" layoutY="330.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="35.0" text="Button" />
+      <Button fx:id="backButton" blendMode="MULTIPLY" layoutX="14.0" layoutY="3.0" mnemonicParsing="false" onAction="#goBack" prefHeight="26.0" prefWidth="36.0" styleClass="backbutton" stylesheets="file:/E:/MAP/ReparareToySocialNetwork/Sources/BackButton.css">
+         <effect>
+            <Blend mode="MULTIPLY" />
+         </effect>
+      </Button>
    </children>
 </AnchorPane>

@@ -32,6 +32,7 @@ public class GUIController implements Observer<EntityChangeEvent> {
 
     Controller<Long, User, Friendship, FriendRequest, Message> controller;
     ObservableList<User> model = FXCollections.observableArrayList();
+    Stage primaryStage;
     @FXML
     private TableView<User> tableView;
 
@@ -41,8 +42,9 @@ public class GUIController implements Observer<EntityChangeEvent> {
     @FXML
     private TableColumn<User, String> tableColumnLastName;
 
-    public void setController(Controller<Long, User, Friendship, FriendRequest, Message> controller) throws SQLException {
+    public void setController(Controller<Long, User, Friendship, FriendRequest, Message> controller, Stage stage) throws SQLException {
         this.controller = controller;
+        this.primaryStage=stage;
         controller.addObserver(this);
         initModel();
     }
@@ -92,17 +94,16 @@ public class GUIController implements Observer<EntityChangeEvent> {
 
         AnchorPane root = (AnchorPane) loader.load();
 
-        Stage dialogStage = new Stage();
-        dialogStage.setTitle("FriendRequests");
-        dialogStage.initModality(Modality.WINDOW_MODAL);
+        primaryStage.setTitle("FriendRequests");
+        /*primaryStage.initModality(Modality.WINDOW_MODAL);*/
         //dialogStage.initOwner(primaryStage);
         Scene scene = new Scene(root);
-        dialogStage.setScene(scene);
+        primaryStage.setScene(scene);
 
         ControllerDetails controllerDetails = loader.getController();
-        controllerDetails.setService(controller, dialogStage, user);
+        controllerDetails.setService(controller, primaryStage, user);
 
-        dialogStage.show();
+  /*      dialogStage.show();*/
 
     }
 

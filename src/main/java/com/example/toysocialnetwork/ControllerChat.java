@@ -18,6 +18,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -58,6 +60,9 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
 
     @FXML
     private TextField searchReceiver;
+
+    @FXML
+    private Button backButton;
 
     Controller<Long, User, Friendship, FriendRequest, Message> controller;
     ObservableList<Message> modelMessage = FXCollections.observableArrayList();
@@ -127,6 +132,22 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
         controller.replyMessage(friend.getId(), receiverID, selectedMessage.getId(), text, LocalDateTime.now());
     }
 
+    @FXML
+    public void goBack() throws IOException, SQLException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("friendrequests-view.fxml"));
+
+        AnchorPane root = (AnchorPane) loader.load();
+        detailStage.setTitle("FriendRequests");
+
+        Scene scene = new Scene(root);
+        detailStage.setScene(scene);
+
+        ControllerDetails controllerDetails = loader.getController();
+        controllerDetails.setService(controller, detailStage, this.friend);
+    }
+
+
     public void buildChatBox() throws SQLException, IOException {
         User selectedUser = usersView.getSelectionModel().getSelectedItem();
 
@@ -141,7 +162,7 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
 
         VBox vBox = new VBox();
         vBox.setId("chatHistory");
-        vBox.setPrefWidth(150);
+        vBox.setPrefWidth(770);
         vBox.setPrefHeight(200);
 
         vBox.setVisible(true);
@@ -149,41 +170,10 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
         Text chatWindowInfo = new Text("public chat room");
         chatWindowInfo.setId("chatWindowInfo");
 
-        List<Message> messageList = controller.getConversationServ(friend.getId(), selectedUser.getId());
-        for(int i = 0; i < messageList.size(); i++) {
-            if (Objects.equals(messageList.get(i).getFromUser().getId(), friend.getId())) {
-
-                Label label = new Label(messageList.get(i).getMessage());
-                //label.getStylesheets().add("sample/styles/send.css");
-                label.setId("receive");
-                HBox hBox = new HBox();
-                if(messageList.get(i).getReplyMessage() != null)
-                    hBox.setBackground(new Background(new BackgroundFill(Color.AQUA, CornerRadii.EMPTY, Insets.EMPTY)));
-                hBox.getChildren().add(label);
-                hBox.setAlignment(Pos.BASELINE_RIGHT);
-                vBox.getChildren().add(hBox);
-                vBox.setSpacing(10);
-                hBox.setVisible(true);
-            }
-            else {
-                Label label = new Label(messageList.get(i).getMessage());
-                //label.getStylesheets().add("sample/styles/send.css");
-                label.setId("send");
-                HBox hBox = new HBox();
-                if(messageList.get(i).getReplyMessage() != null)
-                    hBox.setBackground(new Background(new BackgroundFill(Color.AQUA, CornerRadii.EMPTY, Insets.EMPTY)));
-                hBox.getChildren().add(label);
-                hBox.setAlignment(Pos.BASELINE_LEFT);
-                vBox.getChildren().add(hBox);
-                vBox.setSpacing(10);
-                hBox.setVisible(true);
-            }
-        }
-
         TextField messageField = new TextField();
         messageField.setId("messageField");
         messageField.setPrefHeight(30);
-        messageField.setPrefWidth(190);
+        messageField.setPrefWidth(740);
 
         Button sendButton = new Button("send");
         sendButton.setId("sendMessage");
@@ -203,28 +193,81 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
             }
         });
 
-        //Button sendButton = new Button("send");
-        /*SendMessage.setText("Send");
-        SendMessage.setId("sendButton");
-        SendMessage.setPrefHeight(30);*/
-        /*SendMessage.setOnMouseClicked(event -> {
-            VBox vBox = addMsg(
-                    "Aran",
-                    "hi, i'm aran",
-                    "5:19");
-            vBox.setAlignment(Pos.TOP_LEFT);
-            chatHistory.getChildren().add(vBox);
-            VBox vBox2 = addMsg(
-                    "Farnam",
-                    "oh, I love you!",
-                    "5:19");
-            vBox2.setAlignment(Pos.TOP_RIGHT);
-            chatHistory.getChildren().add(vBox2);
-        });
-*/
 
+        List<Message> messageList = controller.getConversationServ(friend.getId(), selectedUser.getId());
+        for(int i = 0; i < messageList.size(); i++) {
+            if (Objects.equals(messageList.get(i).getFromUser().getId(), friend.getId())) {
 
-        TableView<Message> messageTableView = new TableView<>();
+                Message selectedMessage = messageList.get(i);
+                Label label = new Label(messageList.get(i).getMessage());
+                label.setWrapText(true);
+                Image playI=new Image("file:///E:/MAP/ReparareToySocialNetwork/Sources/replyIcon.jpeg");
+                ImageView iv1=new ImageView(playI);
+                iv1.setFitHeight(10);
+                iv1.setFitWidth(10);
+                Button reply = new Button("",iv1);
+                reply.setOnAction(event -> {
+                    try {
+                        if(Objects.equals(messageField.getText(), ""))
+                            MessageAlert.showErrorMessage(null, "No message written");
+                        else
+                            replyMessage(selectedUser.getId(), selectedMessage, messageField.getText());
+                    }
+                    catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    catch(NullPointerException e){
+                        MessageAlert.showErrorMessage(null, "No user selected");
+                    }
+                });
+                label.setId("receive");
+                HBox hBox = new HBox();
+                if(messageList.get(i).getReplyMessage() != null)
+                    hBox.setBackground(new Background(new BackgroundFill(Color.AQUA, CornerRadii.EMPTY, Insets.EMPTY)));
+                hBox.getChildren().add(label);
+                hBox.getChildren().add(reply);
+                hBox.setAlignment(Pos.BASELINE_RIGHT);
+                vBox.getChildren().add(hBox);
+                vBox.setSpacing(10);
+                hBox.setVisible(true);
+            }
+            else {
+                Message selectedMessage = messageList.get(i);
+                Label label = new Label(messageList.get(i).getMessage());
+                label.setWrapText(true);
+                Image playI=new Image("file:///E:/MAP/ReparareToySocialNetwork/Sources/replyIcon.jpeg");
+                ImageView iv1=new ImageView(playI);
+                iv1.setFitHeight(10);
+                iv1.setFitWidth(10);
+                Button reply = new Button("",iv1);
+                reply.setOnAction(event -> {
+                    try {
+                        if(Objects.equals(messageField.getText(), ""))
+                            MessageAlert.showErrorMessage(null, "No message written");
+                        else
+                            replyMessage(selectedUser.getId(), selectedMessage, messageField.getText());
+                    }
+                    catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    catch(NullPointerException e){
+                        MessageAlert.showErrorMessage(null, "No user selected");
+                    }
+                });
+                label.setId("send");
+                HBox hBox = new HBox();
+                if(messageList.get(i).getReplyMessage() != null)
+                    hBox.setBackground(new Background(new BackgroundFill(Color.AQUA, CornerRadii.EMPTY, Insets.EMPTY)));
+                hBox.getChildren().add(label);
+                hBox.getChildren().add(reply);
+                hBox.setAlignment(Pos.BASELINE_LEFT);
+                vBox.getChildren().add(hBox);
+                vBox.setSpacing(10);
+                hBox.setVisible(true);
+            }
+        }
+
+        /*TableView<Message> messageTableView = new TableView<>();
 
         TableColumn<Message, String> messageStringTableColumn = new TableColumn<>();
 
@@ -256,16 +299,17 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
                 MessageAlert.showErrorMessage(null, "No message selected");
             }
         });
-
+*/
+        modelMessage.setAll(messageList);
         ScrollPane scrlPane = new ScrollPane(vBox);
         scrlPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrlPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         scrlPane.setId("scrolPane");
         scrlPane.setPrefHeight(400);
-        scrlPane.setPrefWidth(600);
-        VBox chatBox = new VBox(new HBox(backToPublicChat, chatWindowInfo), scrlPane, new HBox(messageField, sendButton), messageTableView, new HBox(messageFieldReply, replyButton));
+        scrlPane.setPrefWidth(785);
+        VBox chatBox = new VBox(new HBox(backToPublicChat, chatWindowInfo), scrlPane, new HBox(messageField, sendButton));
         chatBox.setId("chatBox");
-        Scene scene = new Scene(chatBox, 600, 400);
+        Scene scene = new Scene(chatBox, 785, 400);
         detailStage.setScene(scene);
         detailStage.show();
 

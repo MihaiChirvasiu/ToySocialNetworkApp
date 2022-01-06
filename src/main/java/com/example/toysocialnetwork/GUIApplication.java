@@ -48,7 +48,7 @@ public class GUIApplication extends Application {
         primaryStage.setScene(new Scene(userTaskLayout));
 
         GUIController guiController = userLoader.getController();
-        guiController.setController(controller);
+        guiController.setController(controller,primaryStage);
     }
 
     public static void main(String[] args) {

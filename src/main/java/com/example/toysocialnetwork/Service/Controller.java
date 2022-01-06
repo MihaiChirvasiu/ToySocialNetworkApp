@@ -237,6 +237,7 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
         list.add((User) findOneServ(idUser2));
         messageRepository.addMessage((E3) reply, list);
         messageRepository.setReplyMessage((E3) reply, (E3) messageRepliedTo);
+        notifyObservers(new EntityChangeEvent(ChangeEventType.ADD, reply));
     }
 
     public void replyAllMessage(ID idUser1, ID idMessage, String message, LocalDateTime date) throws SQLException {

@@ -96,6 +96,9 @@ public class ControllerDetails implements Observer<EntityChangeEvent> {
     @FXML
     private Button ChatButton;
 
+    @FXML
+    private Button backButton;
+
     Controller<Long, User, Friendship, FriendRequest, Message> controller;
     ObservableList<User> model = FXCollections.observableArrayList();
     ObservableList<FriendRequestDTO> modelRequestSent = FXCollections.observableArrayList();
@@ -158,7 +161,7 @@ public class ControllerDetails implements Observer<EntityChangeEvent> {
 
     @FXML
     public void addFriend() throws SQLException, IOException {
-        FXMLLoader loader = new FXMLLoader();
+        /*FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("addfriend-view.fxml"));
 
         AnchorPane root = (AnchorPane) loader.load();
@@ -173,12 +176,34 @@ public class ControllerDetails implements Observer<EntityChangeEvent> {
         ControllerAddFriend controllerDetails = loader.getController();
         controllerDetails.setService(controller, dialogStage, this.friend);
 
-        dialogStage.show();
+        dialogStage.show();*/
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("addfriend-view.fxml"));
+
+        AnchorPane root = (AnchorPane) loader.load();
+        detailStage.setTitle("AddFriend");
+
+        Scene scene = new Scene(root);
+        detailStage.setScene(scene);
+
+        ControllerAddFriend controllerDetails = loader.getController();
+        controllerDetails.setService(controller, detailStage, this.friend);
+    }
+
+    @FXML
+    public void goBack() throws IOException, SQLException {
+        FXMLLoader userLoader = new FXMLLoader();
+        userLoader.setLocation(getClass().getResource("users-view.fxml"));
+        AnchorPane userTaskLayout = userLoader.load();
+        detailStage.setScene(new Scene(userTaskLayout));
+
+        GUIController guiController = userLoader.getController();
+        guiController.setController(controller,detailStage);
     }
 
     @FXML
     public void chat() throws IOException, SQLException {
-        FXMLLoader loader = new FXMLLoader();
+      /*  FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("chat-view.fxml"));
 
         AnchorPane root = (AnchorPane) loader.load();
@@ -193,7 +218,18 @@ public class ControllerDetails implements Observer<EntityChangeEvent> {
         ControllerChat controllerDetails = loader.getController();
         controllerDetails.setService(controller, dialogStage, this.friend);
 
-        dialogStage.show();
+        dialogStage.show();*/
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("chat-view.fxml"));
+
+        AnchorPane root = (AnchorPane) loader.load();
+        detailStage.setTitle("AddFriend");
+
+        Scene scene = new Scene(root);
+        detailStage.setScene(scene);
+
+        ControllerChat controllerDetails = loader.getController();
+        controllerDetails.setService(controller, detailStage, this.friend);
     }
 
     @FXML

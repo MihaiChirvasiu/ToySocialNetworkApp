@@ -11,13 +11,17 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -108,5 +112,20 @@ public class ControllerAddFriend {
                 MessageAlert.showErrorMessage(null, e.getErrorMessage());
             }
         }
+    }
+
+    @FXML
+    public void goBack() throws IOException, SQLException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("friendrequests-view.fxml"));
+
+        AnchorPane root = (AnchorPane) loader.load();
+        dialogStage.setTitle("FriendRequests");
+
+        Scene scene = new Scene(root);
+        dialogStage.setScene(scene);
+
+        ControllerDetails controllerDetails = loader.getController();
+        controllerDetails.setService(controller, dialogStage, this.friend);
     }
 }
