@@ -12,54 +12,71 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public class GUIController implements Observer<EntityChangeEvent> {
+public class GUIController {
 
     Controller<Long, User, Friendship, FriendRequest, Message> controller;
-    ObservableList<User> model = FXCollections.observableArrayList();
     Stage primaryStage;
-    @FXML
+    /*@FXML
     private TableView<User> tableView;
 
     @FXML
     private TableColumn<User, String> tableColumnFirstName;
 
     @FXML
-    private TableColumn<User, String> tableColumnLastName;
+    private TableColumn<User, String> tableColumnLastName;*/
+
+    @FXML
+    private Button cancelButton;
+
+    @FXML
+    private Label loginMessageLabel;
+
+    @FXML
+    private ImageView brandingImageView;
+
+    @FXML
+    private ImageView lockImageView;
+
+    @FXML
+    private TextField emailTextField;
+
+    @FXML
+    private PasswordField enterPasswordField;
 
     public void setController(Controller<Long, User, Friendship, FriendRequest, Message> controller, Stage stage) throws SQLException {
         this.controller = controller;
         this.primaryStage=stage;
-        controller.addObserver(this);
-        initModel();
+        //initModel();
     }
 
-    @Override
-    public void update(EntityChangeEvent entityChangeEvent) throws SQLException {
-        initModel();
-    }
-
-    @FXML
+    /*@FXML
     public void initialize(){
-        tableColumnFirstName.setCellValueFactory(new PropertyValueFactory<User, String>("FirstName"));
+        *//*tableColumnFirstName.setCellValueFactory(new PropertyValueFactory<User, String>("FirstName"));
         tableColumnLastName.setCellValueFactory(new PropertyValueFactory<User, String>("LastName"));
-        tableView.setItems(model);
-    }
+        tableView.setItems(model);*//*
+    }*/
 
     /**
      * Loads all the users
@@ -71,7 +88,6 @@ public class GUIController implements Observer<EntityChangeEvent> {
         for(Long k : keysSet){
             users.add(controller.findOneServ(k));
         }
-        model.setAll(users);
 
     }
 
@@ -83,9 +99,9 @@ public class GUIController implements Observer<EntityChangeEvent> {
      */
     @FXML
     public void handleFriendRequests(ActionEvent ev) throws IOException, SQLException {
-        User selectedUser = tableView.getSelectionModel().getSelectedItem();
+        /*User selectedUser = tableView.getSelectionModel().getSelectedItem();
         if(selectedUser != null)
-            showUserFriendRequest(selectedUser);
+            showUserFriendRequest(selectedUser);*/
     }
 
     public void showUserFriendRequest(User user) throws IOException, SQLException {
@@ -95,16 +111,55 @@ public class GUIController implements Observer<EntityChangeEvent> {
         AnchorPane root = (AnchorPane) loader.load();
 
         primaryStage.setTitle("FriendRequests");
-        /*primaryStage.initModality(Modality.WINDOW_MODAL);*/
-        //dialogStage.initOwner(primaryStage);
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
 
         ControllerDetails controllerDetails = loader.getController();
         controllerDetails.setService(controller, primaryStage, user);
 
-  /*      dialogStage.show();*/
 
+    }
+
+    public void loginButtonOnAction(ActionEvent event) throws SQLException, NoSuchAlgorithmException, IOException {
+        if(emailTextField.getText().isBlank() == false && enterPasswordField.getText().isBlank() == false)
+        {
+            validateLogin(emailTextField.getText(),enterPasswordField.getText());
+        }
+        else
+        {
+            loginMessageLabel.setText("Please enter username and password!");
+        }
+    }
+
+
+    public void validateLogin(String email, String password) throws SQLException, NoSuchAlgorithmException, IOException {
+        if(controller.login(email,password)!=null)
+        {
+            User user = controller.login(email,password);
+            showUserFriendRequest(user);
+        }
+        else
+            loginMessageLabel.setText("Email or password invalid!");
+    }
+
+    public void createAccountForm()
+    {
+        try{
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("register.fxml"));
+
+            AnchorPane root = (AnchorPane) loader.load();
+
+            Scene scene = new Scene(root);
+            primaryStage.setScene(scene);
+
+            ControllerRegister controllerDetails = loader.getController();
+            controllerDetails.setController(controller, primaryStage);
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            e.getCause();
+        }
     }
 
 }

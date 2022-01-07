@@ -36,14 +36,14 @@ public class GUIApplication extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         initView(primaryStage);
-        primaryStage.setWidth(800);
+        primaryStage.setWidth(600);
         primaryStage.show();
 
     }
 
     private void initView(Stage primaryStage) throws Exception{
         FXMLLoader userLoader = new FXMLLoader();
-        userLoader.setLocation(getClass().getResource("users-view.fxml"));
+        userLoader.setLocation(getClass().getResource("login.fxml"));
         AnchorPane userTaskLayout = userLoader.load();
         primaryStage.setScene(new Scene(userTaskLayout));
 

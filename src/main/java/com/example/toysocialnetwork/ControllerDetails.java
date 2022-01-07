@@ -193,7 +193,7 @@ public class ControllerDetails implements Observer<EntityChangeEvent> {
     @FXML
     public void goBack() throws IOException, SQLException {
         FXMLLoader userLoader = new FXMLLoader();
-        userLoader.setLocation(getClass().getResource("users-view.fxml"));
+        userLoader.setLocation(getClass().getResource("login.fxml"));
         AnchorPane userTaskLayout = userLoader.load();
         detailStage.setScene(new Scene(userTaskLayout));
 
