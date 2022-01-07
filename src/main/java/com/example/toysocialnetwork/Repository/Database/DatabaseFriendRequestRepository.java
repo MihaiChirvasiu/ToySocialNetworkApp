@@ -146,7 +146,9 @@ public class DatabaseFriendRequestRepository<ID, E extends Entity<ID>, E1 extend
             Long idUser=resultSet.getLong(2);
             String user2FirstName=((User)userRepository.findOne((ID)idUser)).getFirstName();
             String user2LastName=((User)userRepository.findOne((ID)idUser)).getLastName();
-            User user2 = new User(user2FirstName, user2LastName);
+            String user2Email = ((User)userRepository.findOne((ID)idUser)).getEmail();
+            String user2Password = ((User)userRepository.findOne((ID)idUser)).getPassword();
+            User user2 = new User(user2FirstName, user2LastName, user2Email, user2Password);
             user2.setId(resultSet.getLong(2));
             FriendRequest friendRequest = new FriendRequest(user, user2);
             friendRequest.setDate(LocalDateTime.parse(resultSet.getString(4)));
@@ -166,7 +168,9 @@ public class DatabaseFriendRequestRepository<ID, E extends Entity<ID>, E1 extend
             Long idUser=resultSet.getLong(1);
             String user2FirstName=((User)userRepository.findOne((ID)idUser)).getFirstName();
             String user2LastName=((User)userRepository.findOne((ID)idUser)).getLastName();
-            User user2 = new User(user2FirstName, user2LastName);
+            String user2Email=((User)userRepository.findOne((ID)idUser)).getEmail();
+            String user2Password =((User) userRepository.findOne((ID)idUser)).getPassword();
+            User user2 = new User(user2FirstName, user2LastName, user2Email, user2Password);
             user2.setId(resultSet.getLong(1));
             FriendRequest friendRequest = new FriendRequest(user, user2);
             friendRequest.setDate(LocalDateTime.parse(resultSet.getString(4)));

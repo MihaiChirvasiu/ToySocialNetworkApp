@@ -1,6 +1,7 @@
 package com.example.toysocialnetwork.Repository.Memory;
 
 import com.example.toysocialnetwork.Domain.Entity;
+import com.example.toysocialnetwork.Domain.User;
 import com.example.toysocialnetwork.Domain.Validators.Validator;
 import com.example.toysocialnetwork.Repository.RepoException;
 import com.example.toysocialnetwork.Repository.UserRepository;
@@ -114,5 +115,14 @@ public class InMemoryRepositoryUser<ID, E extends Entity<ID>> implements UserRep
         else{
             return entity;
         }
+    }
+    @Override
+    public String findEmail(String email) throws SQLException{
+        return null;
+    }
+
+    @Override
+    public User loginRepo(String email, String password) throws SQLException{
+        return null;
     }
 }

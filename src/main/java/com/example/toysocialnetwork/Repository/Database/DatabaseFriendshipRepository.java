@@ -6,6 +6,7 @@ import com.example.toysocialnetwork.Domain.User;
 import com.example.toysocialnetwork.Domain.Validators.Validator;
 import com.example.toysocialnetwork.Repository.FriendshipRepository;
 import com.example.toysocialnetwork.Repository.RepoException;
+import com.example.toysocialnetwork.Repository.UserRepository;
 
 import java.io.IOException;
 import java.sql.*;
@@ -13,18 +14,20 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DatabaseFriendshipRepository<ID, E extends Entity<ID>> implements FriendshipRepository<ID, E> {
+public class DatabaseFriendshipRepository<ID, E extends Entity<ID>, E1 extends Entity<ID>> implements FriendshipRepository<ID, E> {
 
     String url;
     String username;
     String password;
     private Validator<E> validator;
+    private UserRepository<ID, E1> userRepository;
 
-    public DatabaseFriendshipRepository(String url, String username, String password, Validator<E> validator){
+    public DatabaseFriendshipRepository(String url, String username, String password, Validator<E> validator, UserRepository<ID, E1> userRepository){
         this.url = url;
         this.password = password;
         this.username = username;
         this.validator = validator;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -120,9 +123,13 @@ public class DatabaseFriendshipRepository<ID, E extends Entity<ID>> implements F
 
         ResultSet resultSet = ps.executeQuery();
         while(resultSet.next()){
-            User user1 = new User(resultSet.getString(2), resultSet.getString(3));
+            Long idUser1 = resultSet.getLong(1);
+            User user1 = (User)userRepository.findOne((ID)idUser1);
+            //User user1 = new User(resultSet.getString(2), resultSet.getString(3));
             user1.setId(resultSet.getLong(1));
-            User user2 = new User(resultSet.getString(5), resultSet.getString(6));
+            Long idUser2 = resultSet.getLong(4);
+            User user2 = (User)userRepository.findOne((ID)idUser2);
+            //User user2 = new User(resultSet.getString(5), resultSet.getString(6));
             user2.setId(resultSet.getLong(4));
             Friendship friendship = new Friendship(user1, user2);
             friendshipsList.add((E) friendship);
@@ -143,9 +150,13 @@ public class DatabaseFriendshipRepository<ID, E extends Entity<ID>> implements F
 
         ResultSet resultSet = ps.executeQuery();
         while(resultSet.next()){
-            User user1 = new User(resultSet.getString(2), resultSet.getString(3));
+            Long idUser1 = resultSet.getLong(1);
+            User user1 = (User)userRepository.findOne((ID)idUser1);
+            //User user1 = new User(resultSet.getString(2), resultSet.getString(3));
             user1.setId(resultSet.getLong(1));
-            User user2 = new User(resultSet.getString(5), resultSet.getString(6));
+            Long idUser2 = resultSet.getLong(4);
+            User user2 = (User)userRepository.findOne((ID)idUser2);
+            //User user2 = new User(resultSet.getString(5), resultSet.getString(6));
             user2.setId(resultSet.getLong(4));
             Friendship friendship = new Friendship(user1, user2);
             friendship.setDate(LocalDateTime.parse(resultSet.getString(7)));

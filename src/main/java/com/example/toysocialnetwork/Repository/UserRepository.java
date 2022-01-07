@@ -1,10 +1,12 @@
 package com.example.toysocialnetwork.Repository;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.Set;
 
 import com.example.toysocialnetwork.Domain.Entity;
+import com.example.toysocialnetwork.Domain.User;
 import com.example.toysocialnetwork.Domain.Validators.ValidationException;
 
 public interface UserRepository<ID, E extends Entity<ID>> {
@@ -54,4 +56,8 @@ public interface UserRepository<ID, E extends Entity<ID>> {
     int getSize() throws SQLException;
 
     Set<ID> getKeys() throws SQLException;
+
+    String findEmail(String email) throws SQLException;
+
+    User loginRepo(String email, String password) throws SQLException;
 }

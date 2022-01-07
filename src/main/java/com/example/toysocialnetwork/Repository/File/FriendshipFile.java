@@ -76,9 +76,9 @@ public class FriendshipFile <ID, E extends Entity<ID>> extends InMemoryRepositor
      * @param attributes The attributes of the users
      */
     public void addFriendshipsFromFile(List<String> attributes) throws IOException {
-        User user1 = new User(attributes.get(1), attributes.get(2));
+        User user1 = new User(attributes.get(1), attributes.get(2), attributes.get(3), attributes.get(4));
         user1.setId(Long.parseLong(attributes.get(0)));
-        User user2 = new User(attributes.get(4), attributes.get(5));
+        User user2 = new User(attributes.get(5), attributes.get(6), attributes.get(7), attributes.get(8));
         user2.setId(Long.parseLong(attributes.get(3)));
         LocalDateTime date = LocalDateTime.parse(attributes.get(6));
         Friendship friendship = new Friendship(user1, user2);

@@ -5,10 +5,30 @@ import java.util.Objects;
 public class User extends Entity<Long>{
     private String firstName;
     private String lastName;
+    private String password;
+    private String email;
 
-    public User(String firstName, String lastName) {
+    public User(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+    }
+
+    public String getEmail(){
+        return email;
+    }
+
+    public String getPassword(){
+        return password;
+    }
+
+    public void setPassword(String newPassword){
+        this.password = newPassword;
+    }
+
+    public void setEmail(String newEmail){
+        this.email = email;
     }
 
     /**

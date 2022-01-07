@@ -13,6 +13,9 @@ import com.example.toysocialnetwork.Repository.UserRepository;
 import com.example.toysocialnetwork.Utils.STATUS;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -32,6 +35,33 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
         this.friendshipRepository = friendshipRepository;
         this.friendRequestRepository=friendRequestRepository;
         this.messageRepository = messageRepository;
+    }
+    private String hashPassword(String password) throws NoSuchAlgorithmException {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] encodedHash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+        StringBuilder hexString = new StringBuilder(2 * encodedHash.length);
+        for (int i = 0; i < encodedHash.length; i++) {
+            String hex = Integer.toHexString(0xff & encodedHash[i]);
+            if(hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
+        return hexString.toString();
+    }
+
+    public void addUser(String firstName, String lastName, String email, String password) throws NoSuchAlgorithmException, IOException, SQLException{
+        String hashedPassword = hashPassword(password);
+        User user = new User(firstName, lastName, email, hashedPassword);
+        saveServ((E) user);
+    }
+
+    public String searchEmail(String email) throws SQLException{
+        return repository.findEmail(email);
+    }
+
+    public User login(String email, String password) throws SQLException, NoSuchAlgorithmException{
+        return repository.loginRepo(email, hashPassword(password));
     }
 
     /**

@@ -25,7 +25,7 @@ public class GUIApplication extends Application {
     UserRepository<Long, User> repository = new DatabaseUserRepository<>("jdbc:postgresql://localhost:5432/Repository Lab5",
             "postgres", "Oana0910Andreea", new UserValidator());
     FriendshipRepository<Long, Friendship> friendshipRepository = new DatabaseFriendshipRepository<>("jdbc:postgresql://localhost:5432/Repository Lab5",
-            "postgres", "Oana0910Andreea", new FriendshipValidator());
+            "postgres", "Oana0910Andreea", new FriendshipValidator(), repository);
     DatabaseFriendRequestRepository<Long, FriendRequest, User> friendRequestRepository = new DatabaseFriendRequestRepository<>("jdbc:postgresql://localhost:5432/Repository Lab5",
             "postgres", "Oana0910Andreea", new FriendRequestValidator(), repository);
     DatabaseMessageRepository<Long, Message, User> messageRepository = new DatabaseMessageRepository<>("jdbc:postgresql://localhost:5432/Repository Lab5",

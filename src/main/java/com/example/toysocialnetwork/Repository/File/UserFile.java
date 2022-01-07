@@ -43,7 +43,7 @@ public class UserFile<ID, E extends Entity<ID>> extends InMemoryRepositoryUser<I
      */
     public E extractEntity(List<String> attributes) {
         try {
-            User user = new User(attributes.get(1), attributes.get(2));
+            User user = new User(attributes.get(1), attributes.get(2), attributes.get(3), attributes.get(4));
             user.setId(Long.parseLong(attributes.get(0)));
             return (E) user;
         }

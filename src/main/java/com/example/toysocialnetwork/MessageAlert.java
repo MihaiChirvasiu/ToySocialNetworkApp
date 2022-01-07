@@ -15,7 +15,7 @@ public class MessageAlert {
     public static void showErrorMessage(Stage owner, String text){
         Alert message=new Alert(Alert.AlertType.ERROR);
         message.initOwner(owner);
-        message.setTitle("Mesaj eroare");
+        message.setTitle("Error Message");
         message.setContentText(text);
         message.showAndWait();
     }
