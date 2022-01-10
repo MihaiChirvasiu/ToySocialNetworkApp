@@ -5,6 +5,7 @@ import com.example.toysocialnetwork.Events.ChangeEventType;
 import com.example.toysocialnetwork.Events.EntityChangeEvent;
 import com.example.toysocialnetwork.Observer.Observable;
 import com.example.toysocialnetwork.Observer.Observer;
+import com.example.toysocialnetwork.Repository.Database.DatabaseEventRepository;
 import com.example.toysocialnetwork.Repository.Database.DatabaseFriendRequestRepository;
 import com.example.toysocialnetwork.Repository.Database.DatabaseMessageRepository;
 import com.example.toysocialnetwork.Repository.FriendshipRepository;
@@ -17,24 +18,29 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Entity<ID>, E3 extends Entity<ID>> implements Observable<EntityChangeEvent> {
+public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Entity<ID>, E3 extends Entity<ID>, E4 extends Entity<ID>> implements Observable<EntityChangeEvent> {
     private UserRepository<ID, E> repository;
     private FriendshipRepository<ID, E1> friendshipRepository;
     private DatabaseFriendRequestRepository<ID,E2,E> friendRequestRepository;
     private DatabaseMessageRepository<ID, E3, E> messageRepository;
+    private DatabaseEventRepository<ID, E4, E> eventRepository;
     private Network network;
 
     public Controller(UserRepository<ID, E> repository, FriendshipRepository<ID, E1> friendshipRepository, DatabaseFriendRequestRepository<ID, E2, E> friendRequestRepository
-            , DatabaseMessageRepository<ID, E3, E> messageRepository){
+            , DatabaseMessageRepository<ID, E3, E> messageRepository, DatabaseEventRepository<ID, E4, E> eventRepository){
         this.repository = repository;
         this.friendshipRepository = friendshipRepository;
         this.friendRequestRepository=friendRequestRepository;
         this.messageRepository = messageRepository;
+        this.eventRepository = eventRepository;
     }
     private String hashPassword(String password) throws NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -216,6 +222,47 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
         }
         else
             throw new RepoException("Already Friends!");
+    }
+
+    public void addEventServ(String name, String date) throws SQLException {
+        LocalDateTime actualDate = LocalDateTime.parse(date);
+        PublicEvent event = new PublicEvent(name, actualDate);
+        eventRepository.addEvent(event);
+        notifyObservers(new EntityChangeEvent(ChangeEventType.ADD, event));
+    }
+
+    public void subscribeToEventServ(ID event, ID idUser) throws SQLException {
+        if(findOneServ(idUser) != null && eventRepository.getEventByIDEvent(event) != null){
+            eventRepository.subscribeToEvent((User)findOneServ(idUser), eventRepository.getEventByIDEvent(event));
+            notifyObservers(new EntityChangeEvent(ChangeEventType.ADD, eventRepository.getEventByIDEvent(event)));
+        }
+        if(findOneServ(idUser) == null)
+            throw new RepoException("User doesn't exist!");
+        if(eventRepository.getEventByIDEvent(event) == null)
+            throw new RepoException("Event doesn't exist!");
+    }
+
+    public void unsubscribeFromEventServ(ID event, ID idUser) throws SQLException {
+        if(findOneServ(idUser) != null && eventRepository.getEventByIDEvent(event) != null){
+            if(eventRepository.getUsersSubscribed(eventRepository.getEventByIDEvent(event)).contains(findOneServ(idUser))) {
+                eventRepository.unsubscribeFromEvent((User) findOneServ(idUser), eventRepository.getEventByIDEvent(event));
+                notifyObservers(new EntityChangeEvent(ChangeEventType.DELETE, eventRepository.getEventByIDEvent(event)));
+            }
+            else
+                throw new RepoException("User is not subscribed to this event!");
+        }
+        if(findOneServ(idUser) == null)
+            throw new RepoException("User doesn't exist!");
+        if(eventRepository.getEventByIDEvent(event) == null)
+            throw new RepoException("Event doesn't exist!");
+    }
+
+    public List<PublicEvent> getAllEvents() throws SQLException{
+        return eventRepository.getPublicEvents();
+    }
+
+    public List<PublicEvent> getSubscribedEventsForUser(ID idUser) throws SQLException {
+        return eventRepository.getEventByIDUser(idUser);
     }
 
     /**
