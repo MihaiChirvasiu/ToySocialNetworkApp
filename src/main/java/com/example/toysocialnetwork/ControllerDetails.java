@@ -9,11 +9,17 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -21,6 +27,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -97,16 +104,19 @@ public class ControllerDetails implements Observer<EntityChangeEvent> {
     private Button ChatButton;
 
     @FXML
+    private Button eventButton;
+
+    @FXML
     private Button backButton;
 
-    Controller<Long, User, Friendship, FriendRequest, Message> controller;
+    Controller<Long, User, Friendship, FriendRequest, Message, PublicEvent> controller;
     ObservableList<User> model = FXCollections.observableArrayList();
     ObservableList<FriendRequestDTO> modelRequestSent = FXCollections.observableArrayList();
     ObservableList<FriendRequestDTO> modelRequestReceived = FXCollections.observableArrayList();
     Stage detailStage;
     User friend;
 
-    public void setService(Controller<Long, User, Friendship, FriendRequest, Message> controller, Stage stage, User user) throws SQLException {
+    public void setService(Controller<Long, User, Friendship, FriendRequest, Message, PublicEvent> controller, Stage stage, User user) throws SQLException {
         this.controller = controller;
         this.detailStage = stage;
         this.friend = user;
@@ -161,22 +171,7 @@ public class ControllerDetails implements Observer<EntityChangeEvent> {
 
     @FXML
     public void addFriend() throws SQLException, IOException {
-        /*FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("addfriend-view.fxml"));
 
-        AnchorPane root = (AnchorPane) loader.load();
-
-        Stage dialogStage = new Stage();
-        dialogStage.setTitle("AddFriend");
-        dialogStage.initModality(Modality.WINDOW_MODAL);
-//        dialogStage.initOwner(primaryStage);
-        Scene scene = new Scene(root);
-        dialogStage.setScene(scene);
-
-        ControllerAddFriend controllerDetails = loader.getController();
-        controllerDetails.setService(controller, dialogStage, this.friend);
-
-        dialogStage.show();*/
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("addfriend-view.fxml"));
 
@@ -187,6 +182,22 @@ public class ControllerDetails implements Observer<EntityChangeEvent> {
         detailStage.setScene(scene);
 
         ControllerAddFriend controllerDetails = loader.getController();
+        controllerDetails.setService(controller, detailStage, this.friend);
+    }
+
+    @FXML
+    public void events() throws SQLException, IOException {
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("event.fxml"));
+
+        AnchorPane root = (AnchorPane) loader.load();
+        detailStage.setTitle("Events");
+
+        Scene scene = new Scene(root);
+        detailStage.setScene(scene);
+
+        ControllerEvent controllerDetails = loader.getController();
         controllerDetails.setService(controller, detailStage, this.friend);
     }
 
@@ -403,5 +414,7 @@ public class ControllerDetails implements Observer<EntityChangeEvent> {
                 .filter(p1.or(p2))
                 .collect(Collectors.toList()));
     }
+
+
 
 }

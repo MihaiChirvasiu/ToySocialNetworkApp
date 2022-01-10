@@ -1,9 +1,6 @@
 package com.example.toysocialnetwork;
 
-import com.example.toysocialnetwork.Domain.FriendRequest;
-import com.example.toysocialnetwork.Domain.Friendship;
-import com.example.toysocialnetwork.Domain.Message;
-import com.example.toysocialnetwork.Domain.User;
+import com.example.toysocialnetwork.Domain.*;
 import com.example.toysocialnetwork.Events.EntityChangeEvent;
 import com.example.toysocialnetwork.Observer.Observer;
 import com.example.toysocialnetwork.Service.Controller;
@@ -36,7 +33,7 @@ import java.util.stream.StreamSupport;
 
 public class GUIController {
 
-    Controller<Long, User, Friendship, FriendRequest, Message> controller;
+    Controller<Long, User, Friendship, FriendRequest, Message, PublicEvent> controller;
     Stage primaryStage;
     /*@FXML
     private TableView<User> tableView;
@@ -65,7 +62,7 @@ public class GUIController {
     @FXML
     private PasswordField enterPasswordField;
 
-    public void setController(Controller<Long, User, Friendship, FriendRequest, Message> controller, Stage stage) throws SQLException {
+    public void setController(Controller<Long, User, Friendship, FriendRequest, Message, PublicEvent> controller, Stage stage) throws SQLException {
         this.controller = controller;
         this.primaryStage=stage;
         //initModel();

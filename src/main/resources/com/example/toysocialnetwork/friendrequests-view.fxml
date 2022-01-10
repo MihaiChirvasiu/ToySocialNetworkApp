@@ -8,7 +8,7 @@
 <?import javafx.scene.effect.Blend?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="425.0" prefWidth="695.0" styleClass="bodybg2" stylesheets="file:/E:/MAP/ReparareToySocialNetwork/Sources/Background2.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toysocialnetwork.ControllerDetails">
+<AnchorPane prefHeight="497.0" prefWidth="695.0" styleClass="bodybg2" stylesheets="file:/E:/MAP/ReparareToySocialNetwork/Sources/Background2.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toysocialnetwork.ControllerDetails">
    <children>
       <TableView fx:id="tableViewFriends" layoutX="236.0" layoutY="27.0" prefHeight="305.0" prefWidth="254.0" visible="false">
         <columns>
@@ -86,6 +86,11 @@
          </effect>
       </Button>
       <Button fx:id="backButton" blendMode="MULTIPLY" layoutX="15.0" layoutY="7.0" mnemonicParsing="false" onAction="#goBack" prefHeight="26.0" prefWidth="36.0" styleClass="backbutton" stylesheets="file:/E:/MAP/ReparareToySocialNetwork/Sources/BackButton.css">
+         <effect>
+            <Blend mode="MULTIPLY" />
+         </effect>
+      </Button>
+      <Button fx:id="eventButton" alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="33.0" layoutY="428.0" mnemonicParsing="false" onAction="#events" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/E:/MAP/ReparareToySocialNetwork/Sources/Button2.css" text="Events" textAlignment="CENTER" textFill="WHITE">
          <effect>
             <Blend mode="MULTIPLY" />
          </effect>

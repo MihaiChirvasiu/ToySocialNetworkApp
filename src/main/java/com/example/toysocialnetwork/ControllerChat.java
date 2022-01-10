@@ -1,9 +1,6 @@
 package com.example.toysocialnetwork;
 
-import com.example.toysocialnetwork.Domain.FriendRequest;
-import com.example.toysocialnetwork.Domain.Friendship;
-import com.example.toysocialnetwork.Domain.Message;
-import com.example.toysocialnetwork.Domain.User;
+import com.example.toysocialnetwork.Domain.*;
 import com.example.toysocialnetwork.Events.EntityChangeEvent;
 import com.example.toysocialnetwork.Observer.Observer;
 import com.example.toysocialnetwork.Service.Controller;
@@ -64,7 +61,7 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
     @FXML
     private Button backButton;
 
-    Controller<Long, User, Friendship, FriendRequest, Message> controller;
+    Controller<Long, User, Friendship, FriendRequest, Message, PublicEvent> controller;
     ObservableList<Message> modelMessage = FXCollections.observableArrayList();
     ObservableList<User> model = FXCollections.observableArrayList();
     Stage detailStage;
@@ -76,7 +73,7 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
         buildChatBox();
     }
 
-    public void setService(Controller<Long, User, Friendship, FriendRequest, Message> controller, Stage stage, User user) throws SQLException {
+    public void setService(Controller<Long, User, Friendship, FriendRequest, Message, PublicEvent> controller, Stage stage, User user) throws SQLException {
         this.controller = controller;
         controller.addObserver(this);
         this.detailStage = stage;

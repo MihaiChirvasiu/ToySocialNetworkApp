@@ -1,9 +1,6 @@
 package com.example.toysocialnetwork;
 
-import com.example.toysocialnetwork.Domain.FriendRequest;
-import com.example.toysocialnetwork.Domain.Friendship;
-import com.example.toysocialnetwork.Domain.Message;
-import com.example.toysocialnetwork.Domain.User;
+import com.example.toysocialnetwork.Domain.*;
 import com.example.toysocialnetwork.Domain.Validators.ValidationException;
 import com.example.toysocialnetwork.Repository.RepoException;
 import com.example.toysocialnetwork.Service.Controller;
@@ -44,12 +41,12 @@ public class ControllerAddFriend {
     @FXML
     private TextField searchFriend;
 
-    Controller<Long, User, Friendship, FriendRequest, Message> controller;
+    Controller<Long, User, Friendship, FriendRequest, Message, PublicEvent> controller;
     ObservableList<User> model = FXCollections.observableArrayList();
     Stage dialogStage;
     User friend;
 
-    public void setService(Controller<Long, User, Friendship, FriendRequest, Message> controller, Stage stage, User friend) throws SQLException {
+    public void setService(Controller<Long, User, Friendship, FriendRequest, Message, PublicEvent> controller, Stage stage, User friend) throws SQLException {
         this.controller = controller;
         this.friend = friend;
         this.dialogStage = stage;
