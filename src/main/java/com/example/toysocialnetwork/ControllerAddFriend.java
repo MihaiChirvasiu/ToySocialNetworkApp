@@ -41,12 +41,12 @@ public class ControllerAddFriend {
     @FXML
     private TextField searchFriend;
 
-    Controller<Long, User, Friendship, FriendRequest, Message, PublicEvent> controller;
+    Controller<Long, User, Friendship, FriendRequest, Message, PublicEvent, GroupChat> controller;
     ObservableList<User> model = FXCollections.observableArrayList();
     Stage dialogStage;
     User friend;
 
-    public void setService(Controller<Long, User, Friendship, FriendRequest, Message, PublicEvent> controller, Stage stage, User friend) throws SQLException {
+    public void setService(Controller<Long, User, Friendship, FriendRequest, Message, PublicEvent, GroupChat> controller, Stage stage, User friend) throws SQLException {
         this.controller = controller;
         this.friend = friend;
         this.dialogStage = stage;

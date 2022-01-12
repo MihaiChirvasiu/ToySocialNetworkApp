@@ -21,5 +21,14 @@
             <Blend mode="MULTIPLY" />
          </effect>
       </Button>
+      <TableView fx:id="groupsView" layoutX="461.0" layoutY="56.0" onMouseClicked="#buildGroupChatBox" prefHeight="302.0" prefWidth="261.0">
+        <columns>
+          <TableColumn fx:id="groupName" prefWidth="258.0" text="GroupName" />
+        </columns>
+      </TableView>
+      <TextField fx:id="insertGroupName" layoutX="461.0" layoutY="376.0" />
+      <TextField fx:id="insertJoinCode" layoutX="461.0" layoutY="417.0" />
+      <Button fx:id="createGroup" layoutX="623.0" layoutY="376.0" mnemonicParsing="false" onAction="#createGroup" text="CreateGroup" />
+      <Button fx:id="joinGroup" layoutX="623.0" layoutY="417.0" mnemonicParsing="false" onAction="#joinGroup" prefHeight="25.0" prefWidth="84.0" text="JoinGroup" />
    </children>
 </AnchorPane>

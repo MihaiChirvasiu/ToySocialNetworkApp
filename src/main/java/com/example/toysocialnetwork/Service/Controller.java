@@ -7,6 +7,7 @@ import com.example.toysocialnetwork.Observer.Observable;
 import com.example.toysocialnetwork.Observer.Observer;
 import com.example.toysocialnetwork.Repository.Database.DatabaseEventRepository;
 import com.example.toysocialnetwork.Repository.Database.DatabaseFriendRequestRepository;
+import com.example.toysocialnetwork.Repository.Database.DatabaseGroupChatRepository;
 import com.example.toysocialnetwork.Repository.Database.DatabaseMessageRepository;
 import com.example.toysocialnetwork.Repository.FriendshipRepository;
 import com.example.toysocialnetwork.Repository.RepoException;
@@ -26,21 +27,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Entity<ID>, E3 extends Entity<ID>, E4 extends Entity<ID>> implements Observable<EntityChangeEvent> {
+public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Entity<ID>, E3 extends Entity<ID>, E4 extends Entity<ID>, E5 extends Entity<ID>> implements Observable<EntityChangeEvent> {
     private UserRepository<ID, E> repository;
     private FriendshipRepository<ID, E1> friendshipRepository;
     private DatabaseFriendRequestRepository<ID,E2,E> friendRequestRepository;
-    private DatabaseMessageRepository<ID, E3, E> messageRepository;
+    private DatabaseMessageRepository<ID, E3, E, E5> messageRepository;
     private DatabaseEventRepository<ID, E4, E> eventRepository;
+    private DatabaseGroupChatRepository<ID, E5, E> groupChatRepository;
     private Network network;
 
     public Controller(UserRepository<ID, E> repository, FriendshipRepository<ID, E1> friendshipRepository, DatabaseFriendRequestRepository<ID, E2, E> friendRequestRepository
-            , DatabaseMessageRepository<ID, E3, E> messageRepository, DatabaseEventRepository<ID, E4, E> eventRepository){
+            , DatabaseMessageRepository<ID, E3, E, E5> messageRepository, DatabaseEventRepository<ID, E4, E> eventRepository, DatabaseGroupChatRepository<ID, E5, E> groupChatRepository){
         this.repository = repository;
         this.friendshipRepository = friendshipRepository;
         this.friendRequestRepository=friendRequestRepository;
         this.messageRepository = messageRepository;
         this.eventRepository = eventRepository;
+        this.groupChatRepository = groupChatRepository;
     }
     private String hashPassword(String password) throws NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -265,6 +268,52 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
         return eventRepository.getEventByIDUser(idUser);
     }
 
+    public void addGroup(String name, ID idUser) throws SQLException {
+        GroupChat groupChat = new GroupChat(name);
+        groupChatRepository.addGroup(groupChat);
+        joinGroupServ((ID) groupChat.getId(), idUser, groupChat.getJoinCode());
+    }
+
+    public GroupChat getGroupByJoinCode(String joinCode) throws SQLException {
+        return groupChatRepository.getGroupByJoinCode(joinCode);
+    }
+
+    public void joinGroupServ(ID idGroup, ID idUser, String joinCode) throws SQLException {
+        if(findOneServ(idUser) != null && groupChatRepository.getGroupByIDGroup(idGroup) != null && getGroupByJoinCode(joinCode) != null){
+            groupChatRepository.joinGroup((User) findOneServ(idUser), groupChatRepository.getGroupByIDGroup(idGroup));
+            notifyObservers(new EntityChangeEvent(ChangeEventType.ADD, groupChatRepository.getGroupByIDGroup(idGroup)));
+        }
+        if(findOneServ(idUser) == null)
+            throw new RepoException("User doesn't exist!");
+        if(groupChatRepository.getGroupByIDGroup(idGroup) == null)
+            throw new RepoException("Group doesn't exist!");
+        if(getGroupByJoinCode(joinCode) == null)
+            throw new RepoException("Wrong join code!");
+    }
+
+    public void leaveGroupServ(ID idGroup, ID idUser) throws SQLException {
+        if(findOneServ(idUser) != null && groupChatRepository.getGroupByIDGroup(idGroup) != null){
+            if(groupChatRepository.getUsersFromGroup(groupChatRepository.getGroupByIDGroup(idGroup)).contains(findOneServ(idUser))) {
+                groupChatRepository.leaveGroup((User) findOneServ(idUser), groupChatRepository.getGroupByIDGroup(idGroup));
+                notifyObservers(new EntityChangeEvent(ChangeEventType.DELETE, groupChatRepository.getGroupByIDGroup(idGroup)));
+            }
+            else
+                throw new RepoException("User is not in this group!");
+        }
+        if(findOneServ(idUser) == null)
+            throw new RepoException("User doesn't exist!");
+        if(groupChatRepository.getGroupByIDGroup(idGroup) == null)
+            throw new RepoException("Group doesn't exist!");
+    }
+
+    public List<GroupChat> getGroupChatByIDUser(ID idUser) throws SQLException {
+        return groupChatRepository.getGroupChatByIDUser(idUser);
+    }
+
+    public List<User> getUsersFromGroupServ(ID idGroup) throws SQLException {
+        return groupChatRepository.getUsersFromGroup(groupChatRepository.getGroupByIDGroup(idGroup));
+    }
+
     /**
      * Saves a message in the database
      * @param idUser1 The id of user that sends the message
@@ -273,8 +322,10 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
      * @param date The date when the message was sent
      * @throws SQLException Database
      */
-    public void sendMessage(ID idUser1, List<ID> idToUsers, String message, LocalDateTime date) throws SQLException{
+    public void sendMessage(ID idUser1, List<ID> idToUsers, String message, LocalDateTime date, ID idGroup) throws SQLException{
         Message message1 = new Message((User) findOneServ(idUser1), message, date);
+        if(!idGroup.equals(-1))
+            messageRepository.setMessageGroup((E3) message1, (E5) groupChatRepository.getGroupByIDGroup(idGroup));
         List<User> list = new ArrayList<>();
         for(int i = 0; i < idToUsers.size(); i++){
             list.add((User) findOneServ(idToUsers.get(i)));
@@ -326,9 +377,15 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
             if(idUsersTo.get(i) != idUser1)
                 list.add((User) findOneServ(idUsersTo.get(i)));
         }
+        messageRepository.setMessageGroup((E3) reply, (E5) messageRepliedTo.getGroupChat());
         messageRepository.addMessage((E3) reply, list);
         messageRepository.setReplyMessage((E3) reply, (E3) messageRepliedTo);
     }
+
+    public List<E3> getConversationServAll(ID idUser1, ID idGroup) throws SQLException{
+        return messageRepository.getConversationGroup(findOneServ(idUser1), (E5) groupChatRepository.getGroupByIDGroup(idGroup));
+    }
+
 
     /**
      * Method that deletes a friend from a user

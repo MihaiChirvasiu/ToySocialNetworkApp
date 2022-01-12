@@ -1,6 +1,7 @@
 package com.example.toysocialnetwork.Repository.Database;
 
 import com.example.toysocialnetwork.Domain.Entity;
+import com.example.toysocialnetwork.Domain.GroupChat;
 import com.example.toysocialnetwork.Domain.Message;
 import com.example.toysocialnetwork.Domain.User;
 import com.example.toysocialnetwork.Domain.Validators.Validator;
@@ -9,25 +10,26 @@ import com.example.toysocialnetwork.Repository.UserRepository;
 import java.lang.reflect.Member;
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class DatabaseMessageRepository<ID, E extends Entity<ID>, E1 extends Entity<ID>> {
+public class DatabaseMessageRepository<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Entity<ID>> {
 
     String url;
     String username;
     String password;
     Validator<E> validator;
     private UserRepository<ID, E1> databaseUserRepository;
+    private DatabaseGroupChatRepository<ID, E2, E1> databaseGroupRepository;
 
-    public DatabaseMessageRepository(String url, String username, String password, Validator<E> validator, UserRepository<ID, E1> databaseUserRepository){
+    public DatabaseMessageRepository(String url, String username, String password, Validator<E> validator, UserRepository<ID, E1> databaseUserRepository,
+                                     DatabaseGroupChatRepository<ID, E2, E1>  databaseGroupRepository){
         this.url = url;
         this.username = username;
         this.password = password;
         this.validator = validator;
         this.databaseUserRepository = databaseUserRepository;
+        this.databaseGroupRepository = databaseGroupRepository;
     }
 
     /**
@@ -55,6 +57,11 @@ public class DatabaseMessageRepository<ID, E extends Entity<ID>, E1 extends Enti
         }
     }
 
+    public void setMessageGroup(E message, E2 group){
+        Message message1 = (Message) message;
+        message1.setGroupChat((GroupChat) group);
+    }
+
     /**
      *
      * @param message The message to be added in the database
@@ -64,7 +71,7 @@ public class DatabaseMessageRepository<ID, E extends Entity<ID>, E1 extends Enti
     public void addMessage(E message, List<User> toUser) throws SQLException{
 
         validator.validate(message);
-        String sql = "insert into messages (id_message, id_user_from, message, date, reply ) values(?, ?, ?, ?, ?)";
+        String sql = "insert into messages (id_message, id_user_from, message, date, reply, id_group ) values(?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = getStatement(sql);
 
         Message message1 = (Message) message;
@@ -78,6 +85,12 @@ public class DatabaseMessageRepository<ID, E extends Entity<ID>, E1 extends Enti
         }
         catch (NullPointerException e){
             ps.setLong(5, -1);
+        }
+        try {
+            ps.setLong(6, message1.getGroupChat().getId());
+        }
+        catch (NullPointerException e){
+            ps.setLong(6, -1);
         }
         ps.executeUpdate();
         addMessageUsersTo((E) message1, toUser);
@@ -135,6 +148,10 @@ public class DatabaseMessageRepository<ID, E extends Entity<ID>, E1 extends Enti
                 Long idUserTo = resultSet.getLong(5);
                 message.setReplyMessage((Message) findOneMessage((ID) idUserTo));
             }
+            if(!Objects.equals(resultSet.getLong(6), -1)) {
+                Long idGroup = resultSet.getLong(6);
+                message.setGroupChat(databaseGroupRepository.getGroupByIDGroup((ID)idGroup));
+            }
             for(int i = 0; i < idList.size(); i++){
                 Long idToUser = (Long) idList.get(i);
                 message.setToUsers((User) databaseUserRepository.findOne((ID) idToUser));
@@ -167,8 +184,8 @@ public class DatabaseMessageRepository<ID, E extends Entity<ID>, E1 extends Enti
     public List<E> getConversation(E1 idUser1, E1 idUser2) throws SQLException{
         List<ID> idMessageConv = idMessageConversation(idUser1, idUser2);
         List<E> messageList = new ArrayList<>();
-        String sql = "select * from messages where id_user_from = " + idUser1.getId() +
-                " or id_user_from = " + idUser2.getId() + " order by date";
+        String sql = "select * from messages where (id_user_from = " + idUser1.getId() + " and id_group = -1)" +
+                " or (id_user_from = " + idUser2.getId() +  " and id_group = -1) order by date";
 
         PreparedStatement ps = getStatement(sql);
 
@@ -186,6 +203,7 @@ public class DatabaseMessageRepository<ID, E extends Entity<ID>, E1 extends Enti
                             Long idUserTo = resultSet.getLong(5);
                             message.setReplyMessage((Message) findOneMessage((ID) idUserTo));
                         }
+
                         messageList.add((E) message);
                     }
                     else{
@@ -197,6 +215,47 @@ public class DatabaseMessageRepository<ID, E extends Entity<ID>, E1 extends Enti
                             message.setReplyMessage((Message) findOneMessage((ID) idUserTo));
                         }
                         messageList.add((E) message);
+                    }
+                }
+        }
+        return messageList;
+    }
+
+    public List<E> getConversationGroup(E1 idUser1, E2 groupChat) throws SQLException{
+        Map<E1, List<ID>> mapConv = new HashMap<>();
+        List<E1> idUsersTo = (List<E1>) databaseGroupRepository.getUsersFromGroup((GroupChat) groupChat);
+        if(idUsersTo == null)
+            return null;
+        for(int i = 0; i < idUsersTo.size(); i++){
+            mapConv.put(idUsersTo.get(i), idMessageConversation(idUser1, idUsersTo.get(i)));
+        }
+        List<E> messageList = new ArrayList<>();
+        String sql = "select * from messages where id_group = " + groupChat.getId()+ " order by date";
+
+        PreparedStatement ps = getStatement(sql);
+
+        ResultSet resultSet = ps.executeQuery();
+
+        while(resultSet.next()) {
+            for (var K : mapConv.keySet())
+                for (int j = 0; j < mapConv.get(K).size(); j++) {
+                    if (resultSet.getLong(1) == (Long) mapConv.get(K).get(j)) {
+                        List<E1> idUsersToCopy = idUsersTo;
+                        Long id = resultSet.getLong(2);
+                        if (databaseGroupRepository.getGroupChatByIDUser((ID)id) != null) {
+                            Message message = new Message((User) databaseUserRepository.findOne((ID) id), resultSet.getString(3), LocalDateTime.parse(resultSet.getString(4)));
+                            idUsersToCopy.remove(databaseUserRepository.findOne((ID) id));
+                            message.setToUsers((User) idUsersToCopy);
+                            message.setId(resultSet.getLong(1));
+                            if (!Objects.equals(resultSet.getLong(5), -1)) {
+                                Long idUserTo = resultSet.getLong(5);
+                                message.setReplyMessage((Message) findOneMessage((ID) idUserTo));
+                            }
+                            Long idGroup = resultSet.getLong(6);
+                            message.setGroupChat(databaseGroupRepository.getGroupByIDGroup((ID) idGroup));
+
+                            messageList.add((E) message);
+                        }
                     }
                 }
         }

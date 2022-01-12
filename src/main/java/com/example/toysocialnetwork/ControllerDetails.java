@@ -109,14 +109,14 @@ public class ControllerDetails implements Observer<EntityChangeEvent> {
     @FXML
     private Button backButton;
 
-    Controller<Long, User, Friendship, FriendRequest, Message, PublicEvent> controller;
+    Controller<Long, User, Friendship, FriendRequest, Message, PublicEvent, GroupChat> controller;
     ObservableList<User> model = FXCollections.observableArrayList();
     ObservableList<FriendRequestDTO> modelRequestSent = FXCollections.observableArrayList();
     ObservableList<FriendRequestDTO> modelRequestReceived = FXCollections.observableArrayList();
     Stage detailStage;
     User friend;
 
-    public void setService(Controller<Long, User, Friendship, FriendRequest, Message, PublicEvent> controller, Stage stage, User user) throws SQLException {
+    public void setService(Controller<Long, User, Friendship, FriendRequest, Message, PublicEvent, GroupChat> controller, Stage stage, User user) throws SQLException {
         this.controller = controller;
         this.detailStage = stage;
         this.friend = user;

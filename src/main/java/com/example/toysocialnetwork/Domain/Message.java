@@ -14,6 +14,7 @@ public class Message extends Entity<Long> {
     private String message;
     private LocalDateTime date;
     private Message replyMessage;
+    private GroupChat groupChat;
 
     public Message(User from, String message, LocalDateTime date){
         this.from = from;
@@ -21,6 +22,15 @@ public class Message extends Entity<Long> {
         this.to = new ArrayList<>();
         this.date = date;
         this.replyMessage = null;
+        this.groupChat = null;
+    }
+
+    public GroupChat getGroupChat() {
+        return groupChat;
+    }
+
+    public void setGroupChat(GroupChat groupChat) {
+        this.groupChat = groupChat;
     }
 
     /**

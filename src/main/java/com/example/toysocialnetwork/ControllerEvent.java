@@ -84,7 +84,7 @@ public class ControllerEvent implements Observer<EntityChangeEvent> {
     private ComboBox<String> comboBoxMinute;
 
 
-    Controller<Long, User, Friendship, FriendRequest, Message, PublicEvent> controller;
+    Controller<Long, User, Friendship, FriendRequest, Message, PublicEvent, GroupChat> controller;
     ObservableList<PublicEvent> model = FXCollections.observableArrayList();
     ObservableList<PublicEvent> modelSubscribed = FXCollections.observableArrayList();
     Stage detailStage;
@@ -92,7 +92,7 @@ public class ControllerEvent implements Observer<EntityChangeEvent> {
     User friend;
     String selectedMonth;
 
-    public void setService(Controller<Long, User, Friendship, FriendRequest, Message, PublicEvent> controller, Stage stage, User user) throws SQLException {
+    public void setService(Controller<Long, User, Friendship, FriendRequest, Message, PublicEvent, GroupChat> controller, Stage stage, User user) throws SQLException {
         this.controller = controller;
         controller.addObserver(this);
         this.detailStage = stage;

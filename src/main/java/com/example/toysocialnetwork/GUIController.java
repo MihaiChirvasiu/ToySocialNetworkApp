@@ -33,7 +33,7 @@ import java.util.stream.StreamSupport;
 
 public class GUIController {
 
-    Controller<Long, User, Friendship, FriendRequest, Message, PublicEvent> controller;
+    Controller<Long, User, Friendship, FriendRequest, Message, PublicEvent, GroupChat> controller;
     Stage primaryStage;
     /*@FXML
     private TableView<User> tableView;
@@ -62,7 +62,7 @@ public class GUIController {
     @FXML
     private PasswordField enterPasswordField;
 
-    public void setController(Controller<Long, User, Friendship, FriendRequest, Message, PublicEvent> controller, Stage stage) throws SQLException {
+    public void setController(Controller<Long, User, Friendship, FriendRequest, Message, PublicEvent, GroupChat> controller, Stage stage) throws SQLException {
         this.controller = controller;
         this.primaryStage=stage;
         //initModel();
