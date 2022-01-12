@@ -178,9 +178,9 @@ public class DatabaseMessageRepository<ID, E extends Entity<ID>, E1 extends Enti
             for(int i = 0; i < idMessageConv.size(); i++)
                 if(resultSet.getLong(1) == (Long) idMessageConv.get(i)) {
                     Long id = resultSet.getLong(2);
-                    if(id == idUser1.getId()) {
+                    if(idUser1.getId().equals(id)) {
                         Message message = new Message((User) idUser1, resultSet.getString(3), LocalDateTime.parse(resultSet.getString(4)));
-                        message.setToUsers((User) idUser2);
+                        message.setToUsers((User)idUser2);
                         message.setId(resultSet.getLong(1));
                         if (!Objects.equals(resultSet.getLong(5), -1)) {
                             Long idUserTo = resultSet.getLong(5);

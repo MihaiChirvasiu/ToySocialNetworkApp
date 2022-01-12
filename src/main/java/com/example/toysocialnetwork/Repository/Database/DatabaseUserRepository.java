@@ -95,11 +95,13 @@ public class DatabaseUserRepository<ID, E extends Entity<ID>> implements UserRep
         PreparedStatement ps = getStatement(sql);
 
         ResultSet resultSet = ps.executeQuery();
-        resultSet.next();
-        User user = new User(resultSet.getString("first_name"), resultSet.getString("last_name"),
-                resultSet.getString(4), resultSet.getString(5));
-        user.setId(resultSet.getLong("id"));
-        return (E) user;
+        if(resultSet.next()) {
+            User user = new User(resultSet.getString("first_name"), resultSet.getString("last_name"),
+                    resultSet.getString(4), resultSet.getString(5));
+            user.setId(resultSet.getLong("id"));
+            return (E) user;
+        }
+        return null;
     }
 
     /**

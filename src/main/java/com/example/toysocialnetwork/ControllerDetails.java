@@ -234,7 +234,7 @@ public class ControllerDetails implements Observer<EntityChangeEvent> {
         loader.setLocation(getClass().getResource("chat-view.fxml"));
 
         AnchorPane root = (AnchorPane) loader.load();
-        detailStage.setTitle("AddFriend");
+        detailStage.setTitle("Chat");
 
         Scene scene = new Scene(root);
         detailStage.setScene(scene);

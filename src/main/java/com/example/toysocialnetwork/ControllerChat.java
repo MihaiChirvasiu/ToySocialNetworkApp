@@ -67,6 +67,7 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
     Stage detailStage;
     Scene mainScene;
     User friend;
+    User selectedUser;
 
     @Override
     public void update(EntityChangeEvent entityChangeEvent) throws SQLException, IOException {
@@ -144,10 +145,9 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
         controllerDetails.setService(controller, detailStage, this.friend);
     }
 
-
     public void buildChatBox() throws SQLException, IOException {
-        User selectedUser = usersView.getSelectionModel().getSelectedItem();
 
+        selectedUser = usersView.getSelectionModel().getSelectedItem();
 
         Button backToPublicChat = new Button("<");
         backToPublicChat.setId("backToPublicChat");
@@ -194,7 +194,6 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
         List<Message> messageList = controller.getConversationServ(friend.getId(), selectedUser.getId());
         for(int i = 0; i < messageList.size(); i++) {
             if (Objects.equals(messageList.get(i).getFromUser().getId(), friend.getId())) {
-
                 Message selectedMessage = messageList.get(i);
                 Label label = new Label(messageList.get(i).getMessage());
                 label.setWrapText(true);
@@ -223,6 +222,7 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
                     hBox.setBackground(new Background(new BackgroundFill(Color.AQUA, CornerRadii.EMPTY, Insets.EMPTY)));
                 hBox.getChildren().add(label);
                 hBox.getChildren().add(reply);
+                hBox.setPrefWidth(770);
                 hBox.setAlignment(Pos.BASELINE_RIGHT);
                 vBox.getChildren().add(hBox);
                 vBox.setSpacing(10);
@@ -257,6 +257,7 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
                     hBox.setBackground(new Background(new BackgroundFill(Color.AQUA, CornerRadii.EMPTY, Insets.EMPTY)));
                 hBox.getChildren().add(label);
                 hBox.getChildren().add(reply);
+                hBox.setPrefWidth(770);
                 hBox.setAlignment(Pos.BASELINE_LEFT);
                 vBox.getChildren().add(hBox);
                 vBox.setSpacing(10);

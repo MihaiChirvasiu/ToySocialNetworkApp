@@ -53,35 +53,25 @@ public class DatabaseFriendshipRepository<ID, E extends Entity<ID>, E1 extends E
         validator.validate(friendship);
 
         if(findOneFriendship(friendship)==null) {
-            String sql = "insert into friendships (id_user1, first_name_user1, last_name_user1, id_user2 " +
-                    ",first_name_user2, last_name_user2, date ) values (?, ?, ?, ?, ?, ?, ?)";
+            String sql = "insert into friendships (id_user1, id_user2 , date ) values (?, ?, ?)";
 
             PreparedStatement ps = getStatement(sql);
             Friendship friendship1 = (Friendship) friendship;
             friendship1.setDate(LocalDateTime.now());
 
             ps.setLong(1, friendship1.getFirstUser().getId());
-            ps.setString(2, friendship1.getFirstUser().getFirstName());
-            ps.setString(3, friendship1.getFirstUser().getLastName());
-            ps.setLong(4, friendship1.getSecondUser().getId());
-            ps.setString(5, friendship1.getSecondUser().getFirstName());
-            ps.setString(6, friendship1.getSecondUser().getLastName());
-            ps.setString(7, friendship1.getDate().toString());
+            ps.setLong(2, friendship1.getSecondUser().getId());
+            ps.setString(3, friendship1.getDate().toString());
 
             ps.executeUpdate();
 
-            String sql2 = "insert into friendships (id_user1, first_name_user1, last_name_user1, id_user2 " +
-                    ",first_name_user2, last_name_user2, date ) values (?, ?, ?, ?, ?, ?, ?)";
+            String sql2 = "insert into friendships (id_user1, id_user2 , date ) values (?, ?, ?)";
 
             PreparedStatement ps2 = getStatement(sql2);
 
             ps2.setLong(1, friendship1.getSecondUser().getId());
-            ps2.setString(2, friendship1.getSecondUser().getFirstName());
-            ps2.setString(3, friendship1.getSecondUser().getLastName());
-            ps2.setLong(4, friendship1.getFirstUser().getId());
-            ps2.setString(5, friendship1.getFirstUser().getFirstName());
-            ps2.setString(6, friendship1.getFirstUser().getLastName());
-            ps2.setString(7, friendship1.getDate().toString());
+            ps2.setLong(2, friendship1.getFirstUser().getId());
+            ps2.setString(3, friendship1.getDate().toString());
 
             ps2.executeUpdate();
         }
@@ -125,12 +115,10 @@ public class DatabaseFriendshipRepository<ID, E extends Entity<ID>, E1 extends E
         while(resultSet.next()){
             Long idUser1 = resultSet.getLong(1);
             User user1 = (User)userRepository.findOne((ID)idUser1);
-            //User user1 = new User(resultSet.getString(2), resultSet.getString(3));
             user1.setId(resultSet.getLong(1));
-            Long idUser2 = resultSet.getLong(4);
+            Long idUser2 = resultSet.getLong(2);
             User user2 = (User)userRepository.findOne((ID)idUser2);
-            //User user2 = new User(resultSet.getString(5), resultSet.getString(6));
-            user2.setId(resultSet.getLong(4));
+            user2.setId(resultSet.getLong(2));
             Friendship friendship = new Friendship(user1, user2);
             friendshipsList.add((E) friendship);
         }
@@ -152,14 +140,12 @@ public class DatabaseFriendshipRepository<ID, E extends Entity<ID>, E1 extends E
         while(resultSet.next()){
             Long idUser1 = resultSet.getLong(1);
             User user1 = (User)userRepository.findOne((ID)idUser1);
-            //User user1 = new User(resultSet.getString(2), resultSet.getString(3));
             user1.setId(resultSet.getLong(1));
-            Long idUser2 = resultSet.getLong(4);
+            Long idUser2 = resultSet.getLong(2);
             User user2 = (User)userRepository.findOne((ID)idUser2);
-            //User user2 = new User(resultSet.getString(5), resultSet.getString(6));
-            user2.setId(resultSet.getLong(4));
+            user2.setId(resultSet.getLong(2));
             Friendship friendship = new Friendship(user1, user2);
-            friendship.setDate(LocalDateTime.parse(resultSet.getString(7)));
+            friendship.setDate(LocalDateTime.parse(resultSet.getString(3)));
             friendshipsList.add((E) friendship);
         }
         return friendshipsList;
