@@ -5,6 +5,9 @@ import com.example.toysocialnetwork.Events.ChangeEventType;
 import com.example.toysocialnetwork.Events.EntityChangeEvent;
 import com.example.toysocialnetwork.Observer.Observable;
 import com.example.toysocialnetwork.Observer.Observer;
+import com.example.toysocialnetwork.Paging.Page;
+import com.example.toysocialnetwork.Paging.Pageable;
+import com.example.toysocialnetwork.Paging.PageableImplementation;
 import com.example.toysocialnetwork.Repository.Database.DatabaseEventRepository;
 import com.example.toysocialnetwork.Repository.Database.DatabaseFriendRequestRepository;
 import com.example.toysocialnetwork.Repository.Database.DatabaseGroupChatRepository;
@@ -26,6 +29,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 extends Entity<ID>, E3 extends Entity<ID>, E4 extends Entity<ID>, E5 extends Entity<ID>> implements Observable<EntityChangeEvent> {
     private UserRepository<ID, E> repository;
@@ -539,4 +543,24 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
             }
         });
     }
+    private int page = 0;
+    private int size = 1;
+    private Pageable pageable;
+
+    public void setPageSize(int size) {
+        this.size = size;
+    }
+
+    public Set<User> getNextUsers() throws SQLException {
+        this.page++;
+        return getMessagesOnPage(this.page);
+    }
+
+    public Set<User> getMessagesOnPage(int page) throws SQLException {
+        this.page=page;
+        Pageable pageable = new PageableImplementation(page, this.size);
+        Page<User> studentPage = (Page<User>) repository.findAllPage(pageable);
+        return studentPage.getContent().collect(Collectors.toSet());
+    }
+
 }

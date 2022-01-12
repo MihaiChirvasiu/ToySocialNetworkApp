@@ -3,6 +3,9 @@ package com.example.toysocialnetwork.Repository.Memory;
 import com.example.toysocialnetwork.Domain.Entity;
 import com.example.toysocialnetwork.Domain.User;
 import com.example.toysocialnetwork.Domain.Validators.Validator;
+import com.example.toysocialnetwork.Paging.Page;
+import com.example.toysocialnetwork.Paging.Pageable;
+import com.example.toysocialnetwork.Paging.Paginator;
 import com.example.toysocialnetwork.Repository.RepoException;
 import com.example.toysocialnetwork.Repository.UserRepository;
 
@@ -124,5 +127,11 @@ public class InMemoryRepositoryUser<ID, E extends Entity<ID>> implements UserRep
     @Override
     public User loginRepo(String email, String password) throws SQLException{
         return null;
+    }
+
+    @Override
+    public Page<E> findAllPage(Pageable pageable) throws SQLException {
+        Paginator<E> paginator = new Paginator<E>(pageable, this.findAll());
+        return paginator.paginate();
     }
 }

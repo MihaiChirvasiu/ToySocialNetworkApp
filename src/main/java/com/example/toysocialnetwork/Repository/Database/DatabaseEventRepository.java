@@ -111,9 +111,8 @@ public class DatabaseEventRepository<ID, E extends Entity<ID>, E1 extends Entity
             Long idEvent = resultSet.getLong(1);
             var event = getEventByIDEvent((ID) idEvent);
             events.add(event);
-            return events;
         }
-        return null;
+        return events;
     }
 
     public List<PublicEvent> getPublicEvents() throws SQLException {

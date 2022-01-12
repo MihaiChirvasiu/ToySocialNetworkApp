@@ -198,6 +198,7 @@ public class ControllerDetails implements Observer<EntityChangeEvent> {
         detailStage.setScene(scene);
 
         ControllerEvent controllerDetails = loader.getController();
+        controllerDetails.start();
         controllerDetails.setService(controller, detailStage, this.friend);
     }
 

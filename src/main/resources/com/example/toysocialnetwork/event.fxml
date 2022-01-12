@@ -61,6 +61,6 @@
             <Font name="System Bold Italic" size="13.0" />
          </font>
       </Button>
-      <Button fx:id="motificationsButton" layoutX="747.0" layoutY="14.0" mnemonicParsing="false" onAction="#buildChatBox" prefHeight="26.0" prefWidth="22.0" text="Button" />
+      <Button fx:id="notificationsButton" layoutX="747.0" layoutY="14.0" mnemonicParsing="false" onAction="#buildChatBox" prefHeight="26.0" prefWidth="22.0" text="Button" />
    </children>
 </AnchorPane>

@@ -2,6 +2,7 @@ package com.example.toysocialnetwork;
 
 import com.example.toysocialnetwork.Domain.*;
 import com.example.toysocialnetwork.Events.EntityChangeEvent;
+import com.example.toysocialnetwork.Events.Event;
 import com.example.toysocialnetwork.Observer.Observer;
 import com.example.toysocialnetwork.Service.Controller;
 import com.example.toysocialnetwork.Utils.Months;
@@ -18,6 +19,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -30,7 +32,7 @@ import java.time.Month;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
-public class ControllerEvent implements Observer<EntityChangeEvent> {
+public class ControllerEvent extends Thread implements Observer<EntityChangeEvent>  {
 
     @FXML
     private TableView<PublicEvent> tableViewAllEvents;
@@ -91,6 +93,7 @@ public class ControllerEvent implements Observer<EntityChangeEvent> {
     Scene mainScene;
     User friend;
     String selectedMonth;
+    String timeRemaining;
 
     public void setService(Controller<Long, User, Friendship, FriendRequest, Message, PublicEvent, GroupChat> controller, Stage stage, User user) throws SQLException {
         this.controller = controller;
@@ -199,7 +202,40 @@ public class ControllerEvent implements Observer<EntityChangeEvent> {
         }
     }
 
-    public void saveEvent() throws SQLException {
+    @Override
+    public void run() {
+        try {
+            List<PublicEvent> eventList = controller.getSubscribedEventsForUser(friend.getId());
+            if(eventList != null) {
+                for(int i = 0; i < eventList.size(); i++) {
+                    LocalDateTime data1 = eventList.get(i).getEventDate();
+                    LocalDateTime data2 = LocalDateTime.now();
+                    long days = ChronoUnit.DAYS.between(data2, data1);
+                    long minutesD = ChronoUnit.MINUTES.between(data2, data1);
+                    if (minutesD > 0) {
+                        if (days > 366)
+                            notificationsButton.setBackground(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+                        if (days <= 366) {
+                            if (days <= 31)
+                                notificationsButton.setBackground(new Background(new BackgroundFill(Color.YELLOW, CornerRadii.EMPTY, Insets.EMPTY)));
+                            if (days <= 1) {
+                                notificationsButton.setBackground(new Background(new BackgroundFill(Color.ORANGE, CornerRadii.EMPTY, Insets.EMPTY)));
+                            }
+                            long minutes = ChronoUnit.MINUTES.between(data2, data1);
+                            if (minutes < 60)
+                                notificationsButton.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+                        }
+                    }
+                }
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+        public void saveEvent() throws SQLException {
         if(comboBoxYear.getSelectionModel().getSelectedItem() == null || comboBoxMonth.getSelectionModel().getSelectedItem() == null ||
                 comboBoxDay.getSelectionModel().getSelectedItem() == null || comboBoxHour.getSelectionModel().getSelectedItem() == null ||
                 comboBoxMinute.getSelectionModel().getSelectedItem() == null || nameEventTextField.getText() ==null)
@@ -267,9 +303,9 @@ public class ControllerEvent implements Observer<EntityChangeEvent> {
         initModel();
     }
 
+
     public void buildChatBox() throws SQLException, IOException {
-        if(tableViewEventsSubscribed != null)
-        {
+        if (tableViewEventsSubscribed != null) {
             Button backToPublicChat = new Button("<");
             backToPublicChat.setId("backToPublicChat");
             backToPublicChat.setVisible(true);
@@ -291,42 +327,67 @@ public class ControllerEvent implements Observer<EntityChangeEvent> {
 
             List<PublicEvent> eventList = controller.getSubscribedEventsForUser(friend.getId());
             for (int i = 0; i < eventList.size(); i++) {
-                Label label = new Label(eventList.get(i).getNameEvent());
-                label.setWrapText(true);
-                label.setId("name");
-                Label label2 = new Label(eventList.get(i).getEventDate().toString());
-                label.setWrapText(true);
-                label.setId("date");
                 LocalDateTime data1 = eventList.get(i).getEventDate();
                 LocalDateTime data2 = LocalDateTime.now();
-                Long days = ChronoUnit.DAYS.between(data2,data1);
-                Label label3 = new Label(String.valueOf(days));
-                label.setWrapText(true);
-                label.setId("name");
-                HBox hBox = new HBox();
-                hBox.getChildren().add(label);
-                hBox.setSpacing(10);
-                hBox.getChildren().add(label2);
-                hBox.setSpacing(10);
-                hBox.getChildren().add(label3);
-                hBox.setAlignment(Pos.BASELINE_LEFT);
-                vBox.getChildren().add(hBox);
-                vBox.setSpacing(10);
-                hBox.setVisible(true);
+                Long days = ChronoUnit.DAYS.between(data2, data1);
+                Long minutesD = ChronoUnit.MINUTES.between(data2, data1);
+                String timeRemainingActual = "";
+                if(minutesD > 0) {
+                    if (days > 366)
+                        timeRemainingActual = "over a year";
+                    if (days <= 366) {
+                        Long months = ChronoUnit.MONTHS.between(data2, data1);
+                        timeRemainingActual = months + " months remaining";
+                        if (days <= 31)
+                            timeRemainingActual = days + " days remaining";
+                        if (days <= 1) {
+                            Long hours = ChronoUnit.HOURS.between(data2, data1);
+                            timeRemainingActual = hours + " hours remaining";
+                        }
+                        long minutes = ChronoUnit.MINUTES.between(data2, data1);
+                        if (minutes < 60)
+                            timeRemainingActual = minutes + " minutes remaining";
+                    }
+                }
+                else
+                    timeRemainingActual = "Expired";
+                    Label label = new Label(eventList.get(i).getNameEvent());
+                    label.setWrapText(true);
+                    label.setId("name");
+                    Label label2 = new Label(eventList.get(i).getEventDate().toString());
+                    label.setWrapText(true);
+                    label.setId("date");
+                    //LocalDateTime data1 = eventList.get(i).getEventDate();
+                    //LocalDateTime data2 = LocalDateTime.now();
+                    //Long days = ChronoUnit.DAYS.between(data2,data1);
+                    Label label3 = new Label(timeRemainingActual);
+                    label.setWrapText(true);
+                    label.setId("name");
+                    HBox hBox = new HBox();
+                    hBox.getChildren().add(label);
+                    hBox.setSpacing(10);
+                    hBox.getChildren().add(label2);
+                    hBox.setSpacing(10);
+                    hBox.getChildren().add(label3);
+                    hBox.setAlignment(Pos.BASELINE_LEFT);
+                    vBox.getChildren().add(hBox);
+                    vBox.setSpacing(10);
+                    hBox.setVisible(true);
 
+                timeRemaining = timeRemainingActual;
             }
 
-            ScrollPane scrlPane = new ScrollPane(vBox);
-            scrlPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-            scrlPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-            scrlPane.setId("scrolPane");
-            scrlPane.setPrefHeight(400);
-            scrlPane.setPrefWidth(785);
-            VBox eventBox = new VBox(new HBox(backToPublicChat, eventWindowInfo), scrlPane);
-            eventBox.setId("eventBox");
-            Scene scene = new Scene(eventBox, 785, 400);
-            detailStage.setScene(scene);
-            detailStage.show();
+                ScrollPane scrlPane = new ScrollPane(vBox);
+                scrlPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+                scrlPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+                scrlPane.setId("scrolPane");
+                scrlPane.setPrefHeight(400);
+                scrlPane.setPrefWidth(785);
+                VBox eventBox = new VBox(new HBox(backToPublicChat, eventWindowInfo), scrlPane);
+                eventBox.setId("eventBox");
+                Scene scene = new Scene(eventBox, 785, 400);
+                detailStage.setScene(scene);
+                detailStage.show();
 
         }
 

@@ -8,6 +8,8 @@ import java.util.Set;
 import com.example.toysocialnetwork.Domain.Entity;
 import com.example.toysocialnetwork.Domain.User;
 import com.example.toysocialnetwork.Domain.Validators.ValidationException;
+import com.example.toysocialnetwork.Paging.Page;
+import com.example.toysocialnetwork.Paging.Pageable;
 
 public interface UserRepository<ID, E extends Entity<ID>> {
 
@@ -60,4 +62,6 @@ public interface UserRepository<ID, E extends Entity<ID>> {
     String findEmail(String email) throws SQLException;
 
     User loginRepo(String email, String password) throws SQLException;
+
+    Page<E> findAllPage(Pageable pageable) throws SQLException;
 }
