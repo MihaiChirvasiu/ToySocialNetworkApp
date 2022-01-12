@@ -11,14 +11,13 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="520.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toysocialnetwork.GUIController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="543.0" prefWidth="785.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toysocialnetwork.GUIController">
    <children>
       <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="520.0" style="-fx-background-color: #ECECE7;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
             <AnchorPane prefHeight="407.0" prefWidth="228.0" BorderPane.alignment="CENTER">
                <children>
-                  <ImageView fx:id="brandingImageView" fitHeight="400.0" fitWidth="230.0" pickOnBounds="true">
+                  <ImageView fx:id="brandingImageView" fitHeight="543.0" fitWidth="350.0" pickOnBounds="true">
                      <image>
                         <Image url="@Sources/LoginImage.jpeg" />
                      </image>
@@ -27,9 +26,9 @@
             </AnchorPane>
          </left>
          <right>
-            <AnchorPane prefHeight="400.0" prefWidth="332.0" style="-fx-background-color: #ECECE7;" BorderPane.alignment="CENTER">
+            <AnchorPane prefHeight="543.0" prefWidth="437.0" style="-fx-background-color: #ECECE7;" BorderPane.alignment="CENTER">
                <children>
-                  <ImageView fx:id="lockImageView" blendMode="DARKEN" fitHeight="32.0" fitWidth="46.0" layoutX="119.0" layoutY="51.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="lockImageView" blendMode="DARKEN" fitHeight="52.0" fitWidth="70.0" layoutX="183.0" layoutY="63.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@Sources/lock.jpeg" />
                      </image>
@@ -37,24 +36,24 @@
                         <Blend />
                      </effect>
                   </ImageView>
-                  <Label layoutX="14.0" layoutY="123.0" text="Email">
+                  <Label layoutX="93.0" layoutY="161.0" text="Email">
                      <font>
                         <Font size="13.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="emailTextField" layoutX="90.0" layoutY="120.0" prefHeight="26.0" prefWidth="173.0" promptText="Email" />
-                  <Label layoutX="14.0" layoutY="176.0" text="Password">
+                  <TextField fx:id="emailTextField" layoutX="169.0" layoutY="158.0" prefHeight="26.0" prefWidth="173.0" promptText="Email" />
+                  <Label layoutX="93.0" layoutY="219.0" text="Password">
                      <font>
                         <Font size="13.0" />
                      </font>
                   </Label>
-                  <PasswordField fx:id="enterPasswordField" layoutX="90.0" layoutY="173.0" prefHeight="26.0" prefWidth="173.0" promptText="Password" />
-                  <Button fx:id="loginButton" layoutX="14.0" layoutY="263.0" mnemonicParsing="false" onAction="#loginButtonOnAction" prefHeight="26.0" prefWidth="249.0" style="-fx-background-color: Aqua;" text="Login">
+                  <PasswordField fx:id="enterPasswordField" layoutX="169.0" layoutY="215.0" prefHeight="26.0" prefWidth="173.0" promptText="Password" />
+                  <Button fx:id="loginButton" layoutX="93.0" layoutY="314.0" mnemonicParsing="false" onAction="#loginButtonOnAction" prefHeight="26.0" prefWidth="249.0" style="-fx-background-color: Aqua;" text="Login">
                      <font>
                         <Font size="13.0" />
                      </font>
                   </Button>
-                  <Button fx:id="registerButton" layoutX="14.0" layoutY="303.0" mnemonicParsing="false" onAction="#createAccountForm" prefHeight="26.0" prefWidth="249.0" style="-fx-background-color: Aqua;" text="Register">
+                  <Button fx:id="registerButton" layoutX="93.0" layoutY="366.0" mnemonicParsing="false" onAction="#createAccountForm" prefHeight="26.0" prefWidth="249.0" style="-fx-background-color: Aqua;" text="Register">
                      <font>
                         <Font size="13.0" />
                      </font>
@@ -64,7 +63,7 @@
                         <Font size="13.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER" layoutX="14.0" layoutY="234.0" prefHeight="18.0" prefWidth="249.0" text="You don't have an account yet? Click Register!" underline="true">
+                  <Label alignment="CENTER" layoutX="93.0" layoutY="262.0" prefHeight="18.0" prefWidth="249.0" text="You don't have an account yet? Click Register!" underline="true">
                      <font>
                         <Font size="9.0" />
                      </font>

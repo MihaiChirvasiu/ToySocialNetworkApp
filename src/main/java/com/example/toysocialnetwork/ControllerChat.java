@@ -303,11 +303,11 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
         scrlPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrlPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         scrlPane.setId("scrolPane");
-        scrlPane.setPrefHeight(400);
+        scrlPane.setPrefHeight(543);
         scrlPane.setPrefWidth(785);
         VBox chatBox = new VBox(new HBox(backToPublicChat, chatWindowInfo), scrlPane, new HBox(messageField, sendButton));
         chatBox.setId("chatBox");
-        Scene scene = new Scene(chatBox, 785, 400);
+        Scene scene = new Scene(chatBox, 785, 543);
         detailStage.setScene(scene);
         detailStage.show();
 
