@@ -399,8 +399,9 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
         LocalDateTime endDate = LocalDateTime.parse(endString);
         List<Message> messagesFromPeriod = new ArrayList<>();
         for(int i = 0; i < messageList.size(); i++){
-           if(messageList.get(i).getDate().isAfter(startDate) && messageList.get(i).getDate().isBefore(endDate))
-                messagesFromPeriod.add(messageList.get(i));
+            if(!messageList.get(i).getFromUser().getId().equals(idUser1))
+                if(messageList.get(i).getDate().isAfter(startDate) && messageList.get(i).getDate().isBefore(endDate))
+                    messagesFromPeriod.add(messageList.get(i));
         }
         PDFReport report = new PDFReport("QueryMessages");
         report.writeToFile("Messages", messagesFromPeriod);

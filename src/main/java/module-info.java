@@ -5,6 +5,8 @@ module com.example.toysocialnetwork {
     requires com.dlsc.formsfx;
     requires org.kordamp.bootstrapfx.core;
     requires org.apache.pdfbox;
+    requires org.jfree.jfreechart;
+    requires java.desktop;
 
     opens com.example.toysocialnetwork.Domain to javafx.base;
     opens com.example.toysocialnetwork to javafx.fxml;

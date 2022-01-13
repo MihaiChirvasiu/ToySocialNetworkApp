@@ -153,7 +153,10 @@ public class ControllerDetails implements Observer<EntityChangeEvent> {
     public void queryActivities() throws SQLException, IOException {
         LocalDate start = startDate.getSelectionModel().getSelectedItem();
         LocalDate end = endDate.getSelectionModel().getSelectedItem();
-        controller.queryFriend(friend.getId(), start, end);
+        if(startDate == null || endDate == null)
+            MessageAlert.showErrorMessage(null, "No date selected!");
+        else
+            controller.queryFriend(friend.getId(), start, end);
     }
 
 
