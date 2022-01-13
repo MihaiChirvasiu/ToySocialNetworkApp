@@ -25,6 +25,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -109,6 +110,15 @@ public class ControllerDetails implements Observer<EntityChangeEvent> {
     @FXML
     private Button backButton;
 
+    @FXML
+    private ComboBox<LocalDate> startDate;
+
+    @FXML
+    private ComboBox<LocalDate> endDate;
+
+    @FXML
+    private Button reportActivities;
+
     Controller<Long, User, Friendship, FriendRequest, Message, PublicEvent, GroupChat> controller;
     ObservableList<User> model = FXCollections.observableArrayList();
     ObservableList<FriendRequestDTO> modelRequestSent = FXCollections.observableArrayList();
@@ -123,7 +133,30 @@ public class ControllerDetails implements Observer<EntityChangeEvent> {
         initModel(user);
         initModelRequestSent(user);
         initModelRequestReceived(user);
+        loadCombos();
     }
+
+    private void loadCombos(){
+        ObservableList<LocalDate> dates = FXCollections.observableArrayList();
+        LocalDate start = LocalDate.parse("2021-01-01");
+        LocalDate end = LocalDate.now();
+        do{
+            dates.add(start);
+            start = start.plusMonths(1);
+        }while (start.isBefore(end));
+        dates.add(start);
+        startDate.setItems(dates);
+        endDate.setItems(dates);
+    }
+
+    @FXML
+    public void queryActivities() throws SQLException, IOException {
+        LocalDate start = startDate.getSelectionModel().getSelectedItem();
+        LocalDate end = endDate.getSelectionModel().getSelectedItem();
+        controller.queryFriend(friend.getId(), start, end);
+    }
+
+
 
     /**
      * Accepts a friendRequest, or shows an error message if no User is selected

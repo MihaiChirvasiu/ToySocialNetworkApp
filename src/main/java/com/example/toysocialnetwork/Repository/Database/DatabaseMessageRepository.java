@@ -273,9 +273,41 @@ public class DatabaseMessageRepository<ID, E extends Entity<ID>, E1 extends Enti
         ResultSet resultSet = ps.executeQuery();
         while(resultSet.next()){
             Message message = new Message((User) idUser1, resultSet.getString(3), LocalDateTime.parse(resultSet.getString(4)));
+            message.setId(resultSet.getLong(1));
             messageList.add((E) message);
         }
         return messageList;
+    }
+
+    public List<E> getAllReceivedMessages(E1 idUser1) throws SQLException {
+        List<ID> idMessageConv = getAllMessagesForActivity(idUser1);
+        List<E> messageList = new ArrayList<>();
+        String sql = "select * from messages";
+        PreparedStatement ps = getStatement(sql);
+        ResultSet resultSet = ps.executeQuery();
+        while(resultSet.next()) {
+            for (int i = 0; i < idMessageConv.size(); i++) {
+                if (idMessageConv.get(i).equals(resultSet.getLong(1))) {
+                    Long idUser = resultSet.getLong(2);
+                    Message message = new Message((User) databaseUserRepository.findOne((ID) idUser), resultSet.getString(3), LocalDateTime.parse(resultSet.getString(4)));
+                    message.setId(resultSet.getLong(1));
+                    messageList.add((E) message);
+                }
+            }
+        }
+        return messageList;
+    }
+
+    public List<ID> getAllMessagesForActivity(E1 idUser1) throws SQLException{
+        List<Long> idList = new ArrayList<>();
+        String sql = "select id_message from message_to_users where id_to = " + idUser1.getId();
+        PreparedStatement ps = getStatement(sql);
+
+        ResultSet resultSet = ps.executeQuery();
+        while(resultSet.next()){
+            idList.add(resultSet.getLong(1));
+        }
+        return (List<ID>) idList;
     }
 
     /**

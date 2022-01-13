@@ -6,6 +6,7 @@ import com.example.toysocialnetwork.Observer.Observer;
 import com.example.toysocialnetwork.Service.Controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -24,6 +25,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -79,6 +81,24 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
     @FXML
     private TextField insertJoinCode;
 
+    @FXML
+    private TableView<User> usersViewQuery;
+
+    @FXML
+    private TableColumn<User, String> userFirstNameQuery;
+
+    @FXML
+    private TableColumn<User, String> userLastNameQuery;
+
+    @FXML
+    private ComboBox<LocalDate> start;
+
+    @FXML
+    private ComboBox<LocalDate> end;
+
+    @FXML
+    private Button generatePDFButton;
+
 
     Controller<Long, User, Friendship, FriendRequest, Message, PublicEvent, GroupChat> controller;
     ObservableList<Message> modelMessage = FXCollections.observableArrayList();
@@ -88,6 +108,7 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
     Scene mainScene;
     User friend;
     User selectedUser;
+    User selectedUserReport;
     GroupChat selectedGroup;
 
     @Override
@@ -110,6 +131,8 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
 
     @FXML
     public void initialize(){
+        userFirstNameQuery.setCellValueFactory(new PropertyValueFactory<User, String>("FirstName"));
+        userLastNameQuery.setCellValueFactory(new PropertyValueFactory<User, String>("LastName"));
         userFirstName.setCellValueFactory(new PropertyValueFactory<User, String>("FirstName"));
         userLastName.setCellValueFactory(new PropertyValueFactory<User, String>("LastName"));
         groupName.setCellValueFactory(new PropertyValueFactory<GroupChat, String>("name"));
@@ -122,6 +145,7 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
         });
         usersView.setItems(model);
         groupsView.setItems(modelGroups);
+        usersViewQuery.setItems(model);
     }
 
     private void handleFilter() throws SQLException {
@@ -145,6 +169,7 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
             users.add(controller.findOneServ(k));
         }
         model.setAll(users);
+
     }
 
     private void initModelGroups() throws SQLException {
@@ -326,7 +351,17 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
             }
         }
 
-
+        Button refreshButton = new Button("Refresh");
+        refreshButton.setId("refresh");
+        refreshButton.setVisible(true);
+        refreshButton.setOnAction(event -> {
+            try {
+                buildChatBox();
+            }
+            catch (SQLException | IOException e) {
+                MessageAlert.showErrorMessage(null, "An error has occurred!");
+            }
+        });
         modelMessage.setAll(messageList);
         ScrollPane scrlPane = new ScrollPane(vBox);
         scrlPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -334,7 +369,7 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
         scrlPane.setId("scrolPane");
         scrlPane.setPrefHeight(543);
         scrlPane.setPrefWidth(785);
-        VBox chatBox = new VBox(new HBox(backToPublicChat, chatWindowInfo), scrlPane, new HBox(messageField, sendButton));
+        VBox chatBox = new VBox(new HBox(backToPublicChat, chatWindowInfo), scrlPane, new HBox(messageField, sendButton, refreshButton));
         chatBox.setId("chatBox");
         Scene scene = new Scene(chatBox, 785, 543);
         detailStage.setScene(scene);
@@ -464,7 +499,17 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
             }
         }
 
-
+        Button refreshButton = new Button("Refresh");
+        refreshButton.setId("refresh");
+        refreshButton.setVisible(true);
+        refreshButton.setOnAction(event -> {
+            try {
+                buildGroupChatBox();
+            }
+            catch (SQLException | IOException e) {
+                MessageAlert.showErrorMessage(null, "An error has occurred!");
+            }
+        });
         modelMessage.setAll(messageList);
         ScrollPane scrlPane = new ScrollPane(vBox);
         scrlPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -472,7 +517,7 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
         scrlPane.setId("scrolPane");
         scrlPane.setPrefHeight(543);
         scrlPane.setPrefWidth(785);
-        VBox chatBox = new VBox(new HBox(backToPublicChat, chatWindowInfo), scrlPane, new HBox(messageField, sendButton));
+        VBox chatBox = new VBox(new HBox(backToPublicChat, chatWindowInfo), scrlPane, new HBox(messageField, sendButton, refreshButton));
         chatBox.setId("chatBox");
         Scene scene = new Scene(chatBox, 785, 543);
         detailStage.setScene(scene);
@@ -480,6 +525,41 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
 
 
 
+    }
+
+    @FXML
+    private void messageQuery() throws SQLException {
+        ObservableList<LocalDate> dates = FXCollections.observableArrayList();
+        selectedUserReport = usersViewQuery.getSelectionModel().getSelectedItem();
+        if(selectedUserReport != null) {
+            var startDate = controller.getFirstMessage(friend.getId(), selectedUserReport.getId());
+            var endDate = controller.getLastMessage(friend.getId(), selectedUserReport.getId());
+            do{
+                dates.add(startDate);
+                startDate = startDate.plusMonths(1);
+            }while (startDate.isBefore(endDate));
+            start.setItems(dates);
+            end.setItems(dates);
+        }
+    }
+
+    private void generateQueryMessages(LocalDate dateStart, LocalDate dateEnd) throws SQLException, IOException {
+        if(selectedUserReport == null){
+            MessageAlert.showErrorMessage(null, "No user selected");
+        }
+        else {
+            controller.queryMessages(friend.getId(), selectedUserReport.getId(), dateStart, dateEnd);
+        }
+    }
+
+    public void generatePDF(ActionEvent event) throws SQLException, IOException {
+        LocalDate dateStart = start.getSelectionModel().getSelectedItem();
+        LocalDate dateEnd = end.getSelectionModel().getSelectedItem();
+        if(dateStart == null || dateEnd == null)
+            MessageAlert.showErrorMessage(null, "No date selected");
+        else{
+            generateQueryMessages(dateStart, dateEnd);
+        }
     }
 
 }

@@ -4,9 +4,10 @@ module com.example.toysocialnetwork {
     requires java.sql;
     requires com.dlsc.formsfx;
     requires org.kordamp.bootstrapfx.core;
+    requires org.apache.pdfbox;
 
+    opens com.example.toysocialnetwork.Domain to javafx.base;
     opens com.example.toysocialnetwork to javafx.fxml;
     exports com.example.toysocialnetwork;
-    opens com.example.toysocialnetwork.Domain to javafx.base;
     exports com.example.toysocialnetwork.Service;
 }

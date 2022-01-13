@@ -24,6 +24,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDate;
 import java.time.chrono.ChronoLocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -388,6 +389,62 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
 
     public List<E3> getConversationServAll(ID idUser1, ID idGroup) throws SQLException{
         return messageRepository.getConversationGroup(findOneServ(idUser1), (E5) groupChatRepository.getGroupByIDGroup(idGroup));
+    }
+
+    public void queryMessages(ID idUser1, ID idUser2, LocalDate start, LocalDate end) throws SQLException, IOException {
+        List<Message> messageList = (List<Message>) messageRepository.getConversation(findOneServ(idUser1), findOneServ(idUser2));
+        String startString = start.toString() + "T00:00:00.0";
+        String endString = end.toString() + "T23:59:59.9";
+        LocalDateTime startDate = LocalDateTime.parse(startString);
+        LocalDateTime endDate = LocalDateTime.parse(endString);
+        List<Message> messagesFromPeriod = new ArrayList<>();
+        for(int i = 0; i < messageList.size(); i++){
+           if(messageList.get(i).getDate().isAfter(startDate) && messageList.get(i).getDate().isBefore(endDate))
+                messagesFromPeriod.add(messageList.get(i));
+        }
+        PDFReport report = new PDFReport("QueryMessages");
+        report.writeToFile("Messages", messagesFromPeriod);
+    }
+
+    public LocalDate getFirstMessage(ID idUser1, ID idUser2) throws SQLException {
+        List<Message> messageList = (List<Message>) messageRepository.getConversation(findOneServ(idUser1), findOneServ(idUser2));
+        LocalDate start = messageList.get(0).getDate().toLocalDate();
+        for(int i = 1; i < messageList.size(); i++){
+            if(messageList.get(i).getDate().toLocalDate().isBefore(ChronoLocalDate.from(start)) || messageList.get(i).getDate().toLocalDate().equals(ChronoLocalDate.from(start)))
+                start = messageList.get(i).getDate().toLocalDate();
+        }
+        return start;
+    }
+
+    public LocalDate getLastMessage(ID idUser1, ID idUser2) throws SQLException {
+        List<Message> messageList = (List<Message>) messageRepository.getConversation(findOneServ(idUser1), findOneServ(idUser2));
+        LocalDate end = messageList.get(0).getDate().toLocalDate();
+        for(int i = 1; i < messageList.size(); i++){
+            if(messageList.get(i).getDate().toLocalDate().isAfter(ChronoLocalDate.from(end)) || messageList.get(i).getDate().toLocalDate().equals(ChronoLocalDate.from(end)))
+                end = messageList.get(i).getDate().toLocalDate();
+        }
+        return end;
+    }
+
+    public void queryFriend(ID idUser1, LocalDate start, LocalDate end) throws SQLException, IOException {
+        String startString = start.toString() + "T00:00:00.0";
+        String endString = end.toString() + "T23:59:59.9";
+        LocalDateTime startDate = LocalDateTime.parse(startString);
+        LocalDateTime endDate = LocalDateTime.parse(endString);
+        List<Friendship> friends = (List<Friendship>) friendshipRepository.findAllFriendshipsForUser(idUser1);
+        List<Friendship> friendFromPeriod = new ArrayList<>();
+        for(int i = 0; i < friends.size(); i++){
+            if(friends.get(i).getDate().isAfter(startDate) && friends.get(i).getDate().isBefore(endDate))
+            friendFromPeriod.add(friends.get(i));
+        }
+        List<Message> messageList = (List<Message>) messageRepository.getAllReceivedMessages(findOneServ(idUser1));
+        List<Message> messages = new ArrayList<>();
+        for(int i = 0; i < messageList.size(); i++){
+                if(messageList.get(i).getDate().isAfter(startDate) && messageList.get(i).getDate().isBefore(endDate))
+                    messages.add(messageList.get(i));
+        }
+        PDFReport report = new PDFReport("ActivityQuery");
+        report.writeToFileFriends("Activity", messages, friendFromPeriod);
     }
 
 
