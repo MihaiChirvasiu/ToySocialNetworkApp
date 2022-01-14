@@ -258,13 +258,14 @@ public class DatabaseMessageRepository<ID, E extends Entity<ID>, E1 extends Enti
      */
     public List<E> getConversationGroup(E1 idUser1, E2 groupChat) throws SQLException{
         Map<E1, List<ID>> mapConv = new HashMap<>();
-        List<E1> idUsersTo = (List<E1>) databaseGroupRepository.getUsersFromGroup((GroupChat) groupChat);
+        List<User> idUsersTo =  databaseGroupRepository.getUsersFromGroup((GroupChat) groupChat);
         if(idUsersTo == null)
             return null;
         for(int i = 0; i < idUsersTo.size(); i++){
-            mapConv.put(idUsersTo.get(i), idMessageConversation(idUser1, idUsersTo.get(i)));
+            mapConv.put((E1) idUsersTo.get(i), idMessageConversation(idUser1, (E1) idUsersTo.get(i)));
         }
         List<E> messageList = new ArrayList<>();
+        List<Long> messagesIdList = new ArrayList<>();
         String sql = "select * from messages where id_group = " + groupChat.getId()+ " order by date";
 
         PreparedStatement ps = getStatement(sql);
@@ -275,12 +276,13 @@ public class DatabaseMessageRepository<ID, E extends Entity<ID>, E1 extends Enti
             for (var K : mapConv.keySet())
                 for (int j = 0; j < mapConv.get(K).size(); j++) {
                     if (resultSet.getLong(1) == (Long) mapConv.get(K).get(j)) {
-                        List<E1> idUsersToCopy = idUsersTo;
+                        List<User> idUsersToCopy = idUsersTo;
                         Long id = resultSet.getLong(2);
                         if (databaseGroupRepository.getGroupChatByIDUser((ID)id) != null) {
                             Message message = new Message((User) databaseUserRepository.findOne((ID) id), resultSet.getString(3), LocalDateTime.parse(resultSet.getString(4)));
                             idUsersToCopy.remove(databaseUserRepository.findOne((ID) id));
-                            message.setToUsers((User) idUsersToCopy);
+                            for(var user : idUsersToCopy)
+                                message.setToUsers(user);
                             message.setId(resultSet.getLong(1));
                             if (!Objects.equals(resultSet.getLong(5), -1)) {
                                 Long idUserTo = resultSet.getLong(5);
@@ -288,8 +290,10 @@ public class DatabaseMessageRepository<ID, E extends Entity<ID>, E1 extends Enti
                             }
                             Long idGroup = resultSet.getLong(6);
                             message.setGroupChat(databaseGroupRepository.getGroupByIDGroup((ID) idGroup));
-
-                            messageList.add((E) message);
+                            if(!messagesIdList.contains(message.getId())) {
+                                messageList.add((E) message);
+                                messagesIdList.add(resultSet.getLong(1));
+                            }
                         }
                     }
                 }

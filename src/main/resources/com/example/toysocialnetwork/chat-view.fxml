@@ -8,6 +8,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.Blend?>
+<?import javafx.scene.effect.ColorAdjust?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
@@ -33,7 +34,10 @@
       </TableView>
       <TextField fx:id="insertGroupName" layoutX="14.0" layoutY="411.0" prefHeight="26.0" prefWidth="262.0" promptText="Enter Group Name" />
       <TextField fx:id="insertJoinCode" layoutX="14.0" layoutY="472.0" prefHeight="26.0" prefWidth="262.0" promptText="Enter Join Code" />
-      <Button fx:id="createGroup" blendMode="MULTIPLY" layoutX="254.0" layoutY="405.0" mnemonicParsing="false" onAction="#createGroup" prefHeight="38.0" prefWidth="150.0" styleClass="button4" stylesheets="@Sources/Button4.css" text="CreateGroup" textFill="WHITE" />
+      <Button fx:id="createGroup" blendMode="MULTIPLY" layoutX="254.0" layoutY="405.0" mnemonicParsing="false" onAction="#createGroup" prefHeight="38.0" prefWidth="150.0" styleClass="button4" stylesheets="@Sources/Button4.css" text="CreateGroup" textFill="WHITE">
+         <effect>
+            <ColorAdjust contrast="1.0" />
+         </effect></Button>
       <TableView fx:id="usersViewQuery" layoutX="437.0" layoutY="74.0" onMouseClicked="#messageQuery" prefHeight="305.0" prefWidth="322.0">
         <columns>
           <TableColumn fx:id="userFirstNameQuery" prefWidth="162.4000244140625" text="FirstName" />
@@ -58,7 +62,13 @@
          </font>
       </Label>
       <Separator layoutX="389.0" layoutY="-2.0" orientation="VERTICAL" prefHeight="548.0" prefWidth="10.0" />
-      <Button fx:id="joinGroup" blendMode="MULTIPLY" layoutX="254.0" layoutY="466.0" mnemonicParsing="false" onAction="#joinGroup" prefHeight="38.0" prefWidth="150.0" styleClass="button4" stylesheets="@Sources/Button4.css" text="JoinGroup" textFill="WHITE" />
-      <Button fx:id="generatePDFButton" blendMode="MULTIPLY" layoutX="512.0" layoutY="466.0" mnemonicParsing="false" onAction="#generatePDF" prefHeight="38.0" prefWidth="150.0" styleClass="button4" stylesheets="@Sources/Button4.css" text="CreatePDF" textFill="WHITE" />
+      <Button fx:id="joinGroup" blendMode="MULTIPLY" layoutX="254.0" layoutY="466.0" mnemonicParsing="false" onAction="#joinGroup" prefHeight="38.0" prefWidth="150.0" styleClass="button4" stylesheets="@Sources/Button4.css" text="JoinGroup" textFill="WHITE">
+         <effect>
+            <ColorAdjust contrast="1.0" />
+         </effect></Button>
+      <Button fx:id="generatePDFButton" blendMode="MULTIPLY" layoutX="512.0" layoutY="466.0" mnemonicParsing="false" onAction="#generatePDF" prefHeight="38.0" prefWidth="150.0" styleClass="button4" stylesheets="@Sources/Button4.css" text="CreatePDF" textFill="WHITE">
+         <effect>
+            <ColorAdjust contrast="1.0" />
+         </effect></Button>
    </children>
 </AnchorPane>

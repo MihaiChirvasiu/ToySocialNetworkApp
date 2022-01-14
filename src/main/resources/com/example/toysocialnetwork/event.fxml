@@ -67,6 +67,6 @@
             <Blend />
          </effect>
       </Button>
-      <Button fx:id="notificationsButton" blendMode="MULTIPLY" layoutX="711.0" layoutY="10.0" mnemonicParsing="false" onAction="#buildChatBox" prefHeight="34.0" prefWidth="36.0" text="Button" />
+      <Button fx:id="notificationsButton" blendMode="MULTIPLY" layoutX="711.0" layoutY="10.0" mnemonicParsing="false" onAction="#buildChatBox" prefHeight="34.0" prefWidth="36.0" />
    </children>
 </AnchorPane>

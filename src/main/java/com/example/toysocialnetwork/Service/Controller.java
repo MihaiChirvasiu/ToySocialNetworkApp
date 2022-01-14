@@ -346,7 +346,7 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
      * @throws SQLException database
      */
     public List<PublicEvent> getSubscribedEventsForUserOrdered(ID idUser) throws SQLException {
-        return eventRepository.getEventByIDUserOrderByDate(idUser);
+        return eventRepository.getEventByIDUserOrderByDate(idUser,LocalDateTime.now());
     }
 
     /**
@@ -553,12 +553,16 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
      */
     public LocalDate getFirstMessage(ID idUser1, ID idUser2) throws SQLException {
         List<Message> messageList = (List<Message>) messageRepository.getConversation(findOneServ(idUser1), findOneServ(idUser2));
-        LocalDate start = messageList.get(0).getDate().toLocalDate();
-        for(int i = 1; i < messageList.size(); i++){
-            if(messageList.get(i).getDate().toLocalDate().isBefore(ChronoLocalDate.from(start)) || messageList.get(i).getDate().toLocalDate().equals(ChronoLocalDate.from(start)))
-                start = messageList.get(i).getDate().toLocalDate();
+        if(messageList != null)
+        {
+            LocalDate start = messageList.get(0).getDate().toLocalDate();
+            for (int i = 1; i < messageList.size(); i++) {
+                if (messageList.get(i).getDate().toLocalDate().isBefore(ChronoLocalDate.from(start)) || messageList.get(i).getDate().toLocalDate().equals(ChronoLocalDate.from(start)))
+                    start = messageList.get(i).getDate().toLocalDate();
+            }
+            return start;
         }
-        return start;
+        throw new RepoException("You have not exchanged messages with this person yet!");
     }
 
     /**

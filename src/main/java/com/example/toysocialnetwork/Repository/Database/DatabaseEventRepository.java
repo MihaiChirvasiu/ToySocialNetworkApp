@@ -163,7 +163,7 @@ public class DatabaseEventRepository<ID, E extends Entity<ID>, E1 extends Entity
      * @return a list of all public events the user is subscribed to order by date
      * @throws SQLException database
      */
-    public List<PublicEvent> getEventByIDUserOrderByDate(ID idUser) throws SQLException{
+    public List<PublicEvent> getEventByIDUserOrderByDate(ID idUser, LocalDateTime time) throws SQLException{
         List<PublicEvent> events = new ArrayList<>();
         List<PublicEvent> eventsByDate = new ArrayList<>();
         String sql = "select id_event from users_subscribed where id_user = " + idUser;
@@ -175,10 +175,10 @@ public class DatabaseEventRepository<ID, E extends Entity<ID>, E1 extends Entity
             events.add(event);
         }
         for(int i=0;i<events.size();i++)
-            if(events.get(i).getEventDate().isBefore(LocalDateTime.now()))
-                events.remove(i);
-        Collections.sort(events, new ComparatorForDate());
-        return events;
+            if(events.get(i).getEventDate().isAfter(time))
+                eventsByDate.add(events.get(i));
+        Collections.sort(eventsByDate, new ComparatorForDate());
+        return eventsByDate;
     }
 
     /**

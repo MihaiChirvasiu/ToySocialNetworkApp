@@ -21,6 +21,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -126,7 +127,11 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
         if(selectedUser != null)
             buildChatBox();
         else
-            initModelGroups();
+            if(selectedGroup != null)
+                buildGroupChatBox();
+            else
+                initModelGroups();
+
     }
 
     public void setService(Controller<Long, User, Friendship, FriendRequest, Message, PublicEvent, GroupChat> controller, Stage stage, User user) throws SQLException {
@@ -327,7 +332,7 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
 
         VBox vBox = new VBox();
         vBox.setId("chatHistory");
-        vBox.setPrefWidth(770);
+        vBox.setPrefWidth(750);
         vBox.setPrefHeight(200);
 
         vBox.setVisible(true);
@@ -337,10 +342,14 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
 
         TextField messageField = new TextField();
         messageField.setId("messageField");
-        messageField.setPrefHeight(30);
-        messageField.setPrefWidth(740);
+        messageField.setPrefHeight(25);
+        messageField.setPrefWidth(700);
 
-        Button sendButton = new Button("send");
+        Image playImage=new Image("file:///E:/MAP/ReparareToySocialNetwork/src/main/resources/com/example/toysocialnetwork/Sources/Send.jpeg");
+        ImageView iv=new ImageView(playImage);
+        iv.setFitHeight(18);
+        iv.setFitWidth(18);
+        Button sendButton = new Button("",iv);
         sendButton.setId("sendMessage");
         sendButton.setVisible(true);
         sendButton.setOnAction(event -> {
@@ -365,7 +374,7 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
                 Message selectedMessage = messageList.get(i);
                 Label label = new Label(messageList.get(i).getMessage());
                 label.setWrapText(true);
-                Image playI=new Image("file:///E:/MAP/ReparareToySocialNetwork/Sources/replyIcon.jpeg");
+                Image playI=new Image("file:///E:/MAP/ReparareToySocialNetwork/src/main/resources/com/example/toysocialnetwork/Sources/replyIcon.jpeg");
                 ImageView iv1=new ImageView(playI);
                 iv1.setFitHeight(10);
                 iv1.setFitWidth(10);
@@ -390,7 +399,7 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
                     hBox.setBackground(new Background(new BackgroundFill(Color.AQUA, CornerRadii.EMPTY, Insets.EMPTY)));
                 hBox.getChildren().add(label);
                 hBox.getChildren().add(reply);
-                hBox.setPrefWidth(770);
+                hBox.setPrefWidth(740);
                 hBox.setAlignment(Pos.BASELINE_RIGHT);
                 vBox.getChildren().add(hBox);
                 vBox.setSpacing(10);
@@ -400,7 +409,7 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
                 Message selectedMessage = messageList.get(i);
                 Label label = new Label(messageList.get(i).getMessage());
                 label.setWrapText(true);
-                Image playI=new Image("file:///E:/MAP/ReparareToySocialNetwork/Sources/replyIcon.jpeg");
+                Image playI=new Image("file:///E:/MAP/ReparareToySocialNetwork/src/main/resources/com/example/toysocialnetwork/Sources/replyIcon.jpeg");
                 ImageView iv1=new ImageView(playI);
                 iv1.setFitHeight(10);
                 iv1.setFitWidth(10);
@@ -425,7 +434,7 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
                     hBox.setBackground(new Background(new BackgroundFill(Color.AQUA, CornerRadii.EMPTY, Insets.EMPTY)));
                 hBox.getChildren().add(label);
                 hBox.getChildren().add(reply);
-                hBox.setPrefWidth(770);
+                hBox.setPrefWidth(740);
                 hBox.setAlignment(Pos.BASELINE_LEFT);
                 vBox.getChildren().add(hBox);
                 vBox.setSpacing(10);
@@ -433,7 +442,11 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
             }
         }
 
-        Button refreshButton = new Button("Refresh");
+        Image playI=new Image("file:///E:/MAP/ReparareToySocialNetwork/src/main/resources/com/example/toysocialnetwork/Sources/Refresh.jpeg");
+        ImageView iv1=new ImageView(playI);
+        iv1.setFitHeight(18);
+        iv1.setFitWidth(18);
+        Button refreshButton = new Button("",iv1);
         refreshButton.setId("refresh");
         refreshButton.setVisible(true);
         refreshButton.setOnAction(event -> {
@@ -449,8 +462,8 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
         scrlPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrlPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         scrlPane.setId("scrolPane");
-        scrlPane.setPrefHeight(543);
-        scrlPane.setPrefWidth(785);
+        scrlPane.setPrefHeight(480);
+        scrlPane.setPrefWidth(740);
         VBox chatBox = new VBox(new HBox(backToPublicChat, chatWindowInfo), scrlPane, new HBox(messageField, sendButton, refreshButton));
         chatBox.setId("chatBox");
         Scene scene = new Scene(chatBox, 785, 543);
@@ -480,20 +493,24 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
 
         VBox vBox = new VBox();
         vBox.setId("chatHistory");
-        vBox.setPrefWidth(770);
+        vBox.setPrefWidth(750);
         vBox.setPrefHeight(200);
 
         vBox.setVisible(true);
 
-        Text chatWindowInfo = new Text("public chat room");
+        Text chatWindowInfo = new Text(selectedGroup.getName());
         chatWindowInfo.setId("chatWindowInfo");
 
         TextField messageField = new TextField();
         messageField.setId("messageField");
-        messageField.setPrefHeight(30);
-        messageField.setPrefWidth(740);
+        messageField.setPrefHeight(25);
+        messageField.setPrefWidth(700);
 
-        Button sendButton = new Button("send");
+        Image playImage=new Image("file:///E:/MAP/ReparareToySocialNetwork/src/main/resources/com/example/toysocialnetwork/Sources/Send.jpeg");
+        ImageView iv=new ImageView(playImage);
+        iv.setFitHeight(18);
+        iv.setFitWidth(18);
+        Button sendButton = new Button("",iv);
         sendButton.setId("sendMessage");
         sendButton.setVisible(true);
         sendButton.setOnAction(event -> {
@@ -516,9 +533,9 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
         for(int i = 0; i < messageList.size(); i++) {
             if (Objects.equals(messageList.get(i).getFromUser().getId(), friend.getId())) {
                 Message selectedMessage = messageList.get(i);
-                Label label = new Label(messageList.get(i).getMessage());
-                label.setWrapText(true);
-                Image playI=new Image("file:///E:/MAP/ReparareToySocialNetwork/Sources/replyIcon.jpeg");
+                Label label1 = new Label(messageList.get(i).getMessage());
+                label1.setWrapText(true);
+                Image playI=new Image("file:///E:/MAP/ReparareToySocialNetwork/src/main/resources/com/example/toysocialnetwork/Sources/replyIcon.jpeg");
                 ImageView iv1=new ImageView(playI);
                 iv1.setFitHeight(10);
                 iv1.setFitWidth(10);
@@ -537,23 +554,25 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
                         MessageAlert.showErrorMessage(null, "No user selected");
                     }
                 });
-                label.setId("receive");
+                label1.setId("receive");
                 HBox hBox = new HBox();
                 if(messageList.get(i).getReplyMessage() != null)
                     hBox.setBackground(new Background(new BackgroundFill(Color.AQUA, CornerRadii.EMPTY, Insets.EMPTY)));
-                hBox.getChildren().add(label);
+                hBox.getChildren().add(label1);
                 hBox.getChildren().add(reply);
-                hBox.setPrefWidth(770);
+                hBox.setPrefWidth(740);
                 hBox.setAlignment(Pos.BASELINE_RIGHT);
                 vBox.getChildren().add(hBox);
                 vBox.setSpacing(10);
                 hBox.setVisible(true);
             }
             else {
+                Label label = new Label(messageList.get(i).getFromUser().getEmail());
+                label.setPrefWidth(75);
                 Message selectedMessage = messageList.get(i);
-                Label label = new Label(messageList.get(i).getMessage());
-                label.setWrapText(true);
-                Image playI=new Image("file:///E:/MAP/ReparareToySocialNetwork/Sources/replyIcon.jpeg");
+                Label label1 = new Label(messageList.get(i).getMessage());
+                label1.setWrapText(true);
+                Image playI=new Image("file:///E:/MAP/ReparareToySocialNetwork/src/main/resources/com/example/toysocialnetwork/Sources/replyIcon.jpeg");
                 ImageView iv1=new ImageView(playI);
                 iv1.setFitHeight(10);
                 iv1.setFitWidth(10);
@@ -572,13 +591,14 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
                         MessageAlert.showErrorMessage(null, "No user selected");
                     }
                 });
-                label.setId("send");
+                label1.setId("send");
                 HBox hBox = new HBox();
                 if(messageList.get(i).getReplyMessage() != null)
                     hBox.setBackground(new Background(new BackgroundFill(Color.AQUA, CornerRadii.EMPTY, Insets.EMPTY)));
                 hBox.getChildren().add(label);
+                hBox.getChildren().add(label1);
                 hBox.getChildren().add(reply);
-                hBox.setPrefWidth(770);
+                hBox.setPrefWidth(740);
                 hBox.setAlignment(Pos.BASELINE_LEFT);
                 vBox.getChildren().add(hBox);
                 vBox.setSpacing(10);
@@ -586,7 +606,11 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
             }
         }
 
-        Button refreshButton = new Button("Refresh");
+        Image playI=new Image("file:///E:/MAP/ReparareToySocialNetwork/src/main/resources/com/example/toysocialnetwork/Sources/Refresh.jpeg");
+        ImageView iv1=new ImageView(playI);
+        iv1.setFitHeight(18);
+        iv1.setFitWidth(18);
+        Button refreshButton = new Button("",iv1);
         refreshButton.setId("refresh");
         refreshButton.setVisible(true);
         refreshButton.setOnAction(event -> {
@@ -602,8 +626,8 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
         scrlPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrlPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         scrlPane.setId("scrolPane");
-        scrlPane.setPrefHeight(543);
-        scrlPane.setPrefWidth(785);
+        scrlPane.setPrefHeight(480);
+        scrlPane.setPrefWidth(740);
         VBox chatBox = new VBox(new HBox(backToPublicChat, chatWindowInfo), scrlPane, new HBox(messageField, sendButton, refreshButton));
         chatBox.setId("chatBox");
         Scene scene = new Scene(chatBox, 785, 543);
@@ -623,14 +647,19 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
         ObservableList<LocalDate> dates = FXCollections.observableArrayList();
         selectedUserReport = usersViewQuery.getSelectionModel().getSelectedItem();
         if(selectedUserReport != null) {
-            var startDate = controller.getFirstMessage(friend.getId(), selectedUserReport.getId());
-            var endDate = controller.getLastMessage(friend.getId(), selectedUserReport.getId());
-            do{
-                dates.add(startDate);
-                startDate = startDate.plusMonths(1);
-            }while (startDate.isBefore(endDate));
-            start.setItems(dates);
-            end.setItems(dates);
+            try{
+                var startDate = controller.getFirstMessage(friend.getId(), selectedUserReport.getId());
+                var endDate = controller.getLastMessage(friend.getId(), selectedUserReport.getId());
+                do {
+                    dates.add(startDate);
+                    startDate = startDate.plusMonths(1);
+                } while (startDate.isBefore(endDate));
+                start.setItems(dates);
+                end.setItems(dates);
+            }catch (RepoException e)
+            {
+                MessageAlert.showErrorMessage(null,e.getErrorMessage());
+            }
         }
     }
 

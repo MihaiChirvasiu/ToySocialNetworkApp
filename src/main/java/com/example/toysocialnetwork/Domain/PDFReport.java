@@ -44,7 +44,8 @@ public class PDFReport {
         content.beginText();
         content.setFont(PDType1Font.HELVETICA, 30);
         content.setLeading(15);
-        content.newLineAtOffset(25, 725);
+        content.newLineAtOffset(200, 725);
+        tile = tile + " Report";
         content.showText(tile);
         content.endText();
 
@@ -58,7 +59,7 @@ public class PDFReport {
         final float colWidthM = tableWidthM /(float) colM;
         final float cellMarginM = 5f;
 
-        float nextyM = 700 ;
+        float nextyM = 650 ;
         for (int i = 0; i <= rowsM; i++) {
             content.drawLine(50 ,nextyM,50 + tableWidthM,nextyM);
             nextyM-= rowHeightM;
@@ -66,14 +67,14 @@ public class PDFReport {
 
         float nextxM = 50;
         for (int i = 0; i <= colM; i++) {
-            content.drawLine(nextxM,700,nextxM,700-tableHeightM);
+            content.drawLine(nextxM,650,nextxM,650-tableHeightM);
             nextxM += colWidthM;
         }
 
         content.setFont(PDType1Font.HELVETICA_BOLD,16);
 
         float textxM = 50+cellMarginM;
-        float textyM = 700-15;
+        float textyM = 650-15;
         String headerTextM = "FirstName";
         content.beginText();
         content.moveTextPositionByAmount(textxM,textyM);
@@ -107,13 +108,22 @@ public class PDFReport {
 
 
         if(messageList.size() > 0) {
-            content.setFont(PDType1Font.HELVETICA,16);
+            content.setFont(PDType1Font.HELVETICA,8);
             for (int i = 0; i < messageList.size(); i++) {
                 List<String> text = new ArrayList<>();
                 text.add(messageList.get(i).getFromUser().getFirstName());
                 text.add(messageList.get(i).getFromUser().getLastName());
                 text.add(messageList.get(i).getMessage());
-                text.add(messageList.get(i).getDate().toLocalDate().toString());
+                if(messageList.get(i).getDate().toLocalTime().getHour() > 9 && messageList.get(i).getDate().toLocalTime().getMinute() > 9)
+                    text.add(messageList.get(i).getDate().toLocalDate().toString()+ "  " +messageList.get(i).getDate().toLocalTime().getHour()+ ":" +messageList.get(i).getDate().toLocalTime().getMinute());
+                else
+                    if(messageList.get(i).getDate().toLocalTime().getHour() > 9)
+                        text.add(messageList.get(i).getDate().toLocalDate().toString()+ "  " +messageList.get(i).getDate().toLocalTime().getHour()+ ":0" +messageList.get(i).getDate().toLocalTime().getMinute());
+                    else
+                        if(messageList.get(i).getDate().toLocalTime().getMinute() > 9)
+                            text.add(messageList.get(i).getDate().toLocalDate().toString()+ "  0" +messageList.get(i).getDate().toLocalTime().getHour()+ ":" +messageList.get(i).getDate().toLocalTime().getMinute());
+                        else
+                            text.add(messageList.get(i).getDate().toLocalDate().toString()+ "  0" +messageList.get(i).getDate().toLocalTime().getHour()+ ":0" +messageList.get(i).getDate().toLocalTime().getMinute());
                 for (int j = 0; j < colM; j++) {
                     content.beginText();
                     content.moveTextPositionByAmount(textxM, textyM);
@@ -151,7 +161,8 @@ public class PDFReport {
         content.beginText();
         content.setFont(PDType1Font.HELVETICA, 30);
         content.setLeading(15);
-        content.newLineAtOffset(250, 725);
+        content.newLineAtOffset(210, 725);
+        title = title + " Report";
         content.showText(title);
         content.newLine();
         content.endText();
@@ -165,6 +176,13 @@ public class PDFReport {
         document.addPage(page2);
         content = new PDPageContentStream(document, page2);
         //PDPageContentStream contentTable = new PDPageContentStream(document, page);
+        content.beginText();
+        content.setFont(PDType1Font.HELVETICA, 30);
+        content.setLeading(15);
+        content.newLineAtOffset(180, 725);
+        content.showText("New Friends Log");
+        content.newLine();
+        content.endText();
 
         final int rows = friends.size() + 1;
         final int cols = 3;
@@ -174,7 +192,7 @@ public class PDFReport {
         final float colWidth = tableWidth /(float) cols;
         final float cellMargin = 5f;
 
-        float nexty = 700 ;
+        float nexty = 650 ;
         for (int i = 0; i <= rows; i++) {
             content.drawLine(50 ,nexty,50 + tableWidth,nexty);
             nexty-= rowHeight;
@@ -182,14 +200,14 @@ public class PDFReport {
 
         float nextx = 50;
         for (int i = 0; i <= cols; i++) {
-            content.drawLine(nextx,700,nextx,700-tableHeight);
+            content.drawLine(nextx,650,nextx,650-tableHeight);
             nextx += colWidth;
         }
 
         content.setFont(PDType1Font.HELVETICA_BOLD,16);
 
         float textx = 50+cellMargin;
-        float texty = 700-15;
+        float texty = 650-15;
         String headerText = "FirstName";
         content.beginText();
         content.moveTextPositionByAmount(textx,texty);
@@ -216,12 +234,21 @@ public class PDFReport {
 
 
         if(friends.size() > 0) {
-            content.setFont(PDType1Font.HELVETICA,16);
+            content.setFont(PDType1Font.HELVETICA,8);
             for (int i = 0; i < friends.size(); i++) {
                 List<String> text = new ArrayList<>();
                 text.add(friends.get(i).getSecondUser().getFirstName());
                 text.add(friends.get(i).getSecondUser().getLastName());
-                text.add(friends.get(i).getDate().toString());
+                if(friends.get(i).getDate().toLocalTime().getHour() > 9 && friends.get(i).getDate().toLocalTime().getMinute() > 9)
+                    text.add(friends.get(i).getDate().toLocalDate().toString()+ "  " +friends.get(i).getDate().toLocalTime().getHour()+ ":" +friends.get(i).getDate().toLocalTime().getMinute());
+                else
+                if(friends.get(i).getDate().toLocalTime().getHour() > 9)
+                    text.add(friends.get(i).getDate().toLocalDate().toString()+ "  " +friends.get(i).getDate().toLocalTime().getHour()+ ":0" +friends.get(i).getDate().toLocalTime().getMinute());
+                else
+                if(friends.get(i).getDate().toLocalTime().getMinute() > 9)
+                    text.add(friends.get(i).getDate().toLocalDate().toString()+ "  0" +friends.get(i).getDate().toLocalTime().getHour()+ ":" +friends.get(i).getDate().toLocalTime().getMinute());
+                else
+                    text.add(friends.get(i).getDate().toLocalDate().toString()+ "  0" +friends.get(i).getDate().toLocalTime().getHour()+ ":0" +friends.get(i).getDate().toLocalTime().getMinute());
                 for (int j = 0; j < cols; j++) {
                     content.beginText();
                     content.moveTextPositionByAmount(textx, texty);
@@ -241,7 +268,13 @@ public class PDFReport {
         PDPage page3 = new PDPage();
         document.addPage(page3);
         content = new PDPageContentStream(document, page3);
-        //PDPageContentStream contentTable = new PDPageContentStream(document, page);
+        content.beginText();
+        content.setFont(PDType1Font.HELVETICA, 30);
+        content.setLeading(15);
+        content.newLineAtOffset(150, 725);
+        content.showText("Received Messages Log");
+        content.newLine();
+        content.endText();
 
         final int rowsM = messageList.size() + 1;
         final int colM = 4;
@@ -251,7 +284,7 @@ public class PDFReport {
         final float colWidthM = tableWidthM /(float) colM;
         final float cellMarginM = 5f;
 
-        float nextyM = 700 ;
+        float nextyM = 650 ;
         for (int i = 0; i <= rowsM; i++) {
             content.drawLine(50 ,nextyM,50 + tableWidthM,nextyM);
             nextyM-= rowHeightM;
@@ -259,14 +292,14 @@ public class PDFReport {
 
         float nextxM = 50;
         for (int i = 0; i <= colM; i++) {
-            content.drawLine(nextxM,700,nextxM,700-tableHeightM);
+            content.drawLine(nextxM,650,nextxM,650-tableHeightM);
             nextxM += colWidthM;
         }
 
         content.setFont(PDType1Font.HELVETICA_BOLD,16);
 
         float textxM = 50+cellMarginM;
-        float textyM = 700-15;
+        float textyM = 650-15;
         String headerTextM = "FirstName";
         content.beginText();
         content.moveTextPositionByAmount(textxM,textyM);
@@ -300,13 +333,22 @@ public class PDFReport {
 
 
         if(messageList.size() > 0) {
-            content.setFont(PDType1Font.HELVETICA,16);
+            content.setFont(PDType1Font.HELVETICA,8);
             for (int i = 0; i < messageList.size(); i++) {
                 List<String> text = new ArrayList<>();
                 text.add(messageList.get(i).getFromUser().getFirstName());
                 text.add(messageList.get(i).getFromUser().getLastName());
                 text.add(messageList.get(i).getMessage());
-                text.add(messageList.get(i).getDate().toLocalDate().toString());
+                if(messageList.get(i).getDate().toLocalTime().getHour() > 9 && messageList.get(i).getDate().toLocalTime().getMinute() > 9)
+                    text.add(messageList.get(i).getDate().toLocalDate().toString()+ "  " +messageList.get(i).getDate().toLocalTime().getHour()+ ":" +messageList.get(i).getDate().toLocalTime().getMinute());
+                else
+                if(messageList.get(i).getDate().toLocalTime().getHour() > 9)
+                    text.add(messageList.get(i).getDate().toLocalDate().toString()+ "  " +messageList.get(i).getDate().toLocalTime().getHour()+ ":0" +messageList.get(i).getDate().toLocalTime().getMinute());
+                else
+                if(messageList.get(i).getDate().toLocalTime().getMinute() > 9)
+                    text.add(messageList.get(i).getDate().toLocalDate().toString()+ "  0" +messageList.get(i).getDate().toLocalTime().getHour()+ ":" +messageList.get(i).getDate().toLocalTime().getMinute());
+                else
+                    text.add(messageList.get(i).getDate().toLocalDate().toString()+ "  0" +messageList.get(i).getDate().toLocalTime().getHour()+ ":0" +messageList.get(i).getDate().toLocalTime().getMinute());
                 for (int j = 0; j < colM; j++) {
                     content.beginText();
                     content.moveTextPositionByAmount(textxM, textyM);
@@ -319,14 +361,6 @@ public class PDFReport {
             }
         }
 
-        /*content.beginText();
-        content.setFont(PDType1Font.HELVETICA, 22);
-        for (int i = 0; i < messageList.size(); i++) {
-            content.showText(messageList.get(i).getFromUser().getEmail() + ": " + messageList.get(i).getMessage());
-            content.newLine();
-        }*/
-
-        //contentTable.endText();
         content.close();
         document.save(name);
         document.close();
