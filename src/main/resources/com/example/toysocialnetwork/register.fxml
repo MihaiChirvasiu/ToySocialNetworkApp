@@ -69,7 +69,7 @@
             <Font size="13.0" />
          </font>
       </Button>
-      <Label fx:id="registrationMessageLabel" alignment="CENTER" layoutY="98.0" prefHeight="18.0" prefWidth="520.0" textFill="#006bf7">
+      <Label fx:id="registrationMessageLabel" alignment="CENTER" layoutX="132.0" layoutY="97.0" prefHeight="18.0" prefWidth="520.0" textFill="#006bf7">
          <font>
             <Font size="13.0" />
          </font>
