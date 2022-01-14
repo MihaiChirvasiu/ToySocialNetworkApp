@@ -50,6 +50,13 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
         this.eventRepository = eventRepository;
         this.groupChatRepository = groupChatRepository;
     }
+
+    /**
+     * Hashing the password
+     * @param password the password to be hashed
+     * @return the hashed password
+     * @throws NoSuchAlgorithmException hash
+     */
     private String hashPassword(String password) throws NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] encodedHash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
@@ -64,16 +71,40 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
         return hexString.toString();
     }
 
+    /**
+     * Adds the user to the database
+     * @param firstName of the user
+     * @param lastName of the user
+     * @param email of the user
+     * @param password of the user
+     * @throws NoSuchAlgorithmException hash
+     * @throws IOException file
+     * @throws SQLException database
+     */
     public void addUser(String firstName, String lastName, String email, String password) throws NoSuchAlgorithmException, IOException, SQLException{
         String hashedPassword = hashPassword(password);
         User user = new User(firstName, lastName, email, hashedPassword);
         saveServ((E) user);
     }
 
+    /**
+     *
+     * @param email the email to be searched
+     * @return the email
+     * @throws SQLException database
+     */
     public String searchEmail(String email) throws SQLException{
         return repository.findEmail(email);
     }
 
+    /**
+     *
+     * @param email the email to be verified
+     * @param password the password to be verified
+     * @return a user with the given credentials
+     * @throws SQLException database
+     * @throws NoSuchAlgorithmException hash
+     */
     public User login(String email, String password) throws SQLException, NoSuchAlgorithmException{
         return repository.loginRepo(email, hashPassword(password));
     }
@@ -223,6 +254,12 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
             throw new RepoException("Already Friends!");
     }
 
+    /**
+     * Deletes a friendRequest
+     * @param idUser1 the first user
+     * @param idUser2 the second user
+     * @throws SQLException database
+     */
     public void deleteFriendRequest(ID idUser1, ID idUser2) throws SQLException {
         if(findFriendshipServ(idUser1,idUser2)==null) {
             FriendRequest friendRequest = new FriendRequest((User) findOneServ(idUser1), (User) findOneServ(idUser2));
@@ -232,6 +269,12 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
             throw new RepoException("Already Friends!");
     }
 
+    /**
+     * Adds an event to the database
+     * @param name the name of the event
+     * @param date the date of the event
+     * @throws SQLException database
+     */
     public void addEventServ(String name, String date) throws SQLException {
         LocalDateTime actualDate = LocalDateTime.parse(date);
         PublicEvent event = new PublicEvent(name, actualDate);
@@ -239,6 +282,12 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
         notifyObservers(new EntityChangeEvent(ChangeEventType.ADD, event));
     }
 
+    /**
+     *
+     * @param event the ID of the event
+     * @param idUser the ID of the user that will subscribe to the event
+     * @throws SQLException database
+     */
     public void subscribeToEventServ(ID event, ID idUser) throws SQLException {
         if(findOneServ(idUser) != null && eventRepository.getEventByIDEvent(event) != null){
             eventRepository.subscribeToEvent((User)findOneServ(idUser), eventRepository.getEventByIDEvent(event));
@@ -250,6 +299,12 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
             throw new RepoException("Event doesn't exist!");
     }
 
+    /**
+     *
+     * @param event the ID of the event
+     * @param idUser the ID of the user that will unsubscribe from the event
+     * @throws SQLException database
+     */
     public void unsubscribeFromEventServ(ID event, ID idUser) throws SQLException {
         if(findOneServ(idUser) != null && eventRepository.getEventByIDEvent(event) != null){
             if(eventRepository.getUsersSubscribed(eventRepository.getEventByIDEvent(event)).contains(findOneServ(idUser))) {
@@ -265,28 +320,64 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
             throw new RepoException("Event doesn't exist!");
     }
 
+    /**
+     *
+     * @return a list of all events from the database
+     * @throws SQLException database
+     */
     public List<PublicEvent> getAllEvents() throws SQLException{
         return eventRepository.getPublicEvents();
     }
 
+    /**
+     *
+     * @param idUser the id of the user
+     * @return a list of public events the user is subscribed to
+     * @throws SQLException database
+     */
     public List<PublicEvent> getSubscribedEventsForUser(ID idUser) throws SQLException {
         return eventRepository.getEventByIDUser(idUser);
     }
 
+    /**
+     *
+     * @param idUser the id of the User
+     * @return a list of ordered events the user is subscribed to
+     * @throws SQLException database
+     */
     public List<PublicEvent> getSubscribedEventsForUserOrdered(ID idUser) throws SQLException {
         return eventRepository.getEventByIDUserOrderByDate(idUser);
     }
 
+    /**
+     *
+     * @param name of the group to be added
+     * @param idUser the user that creates the group
+     * @throws SQLException database
+     */
     public void addGroup(String name, ID idUser) throws SQLException {
         GroupChat groupChat = new GroupChat(name);
         groupChatRepository.addGroup(groupChat);
         joinGroupServ((ID) groupChat.getId(), idUser, groupChat.getJoinCode());
     }
 
+    /**
+     *
+     * @param joinCode the joinCode that will be searched
+     * @return the group with the given joinCode
+     * @throws SQLException database
+     */
     public GroupChat getGroupByJoinCode(String joinCode) throws SQLException {
         return groupChatRepository.getGroupByJoinCode(joinCode);
     }
 
+    /**
+     *
+     * @param idGroup the id of the group
+     * @param idUser the id of the user that wants to join a group
+     * @param joinCode the joinCode
+     * @throws SQLException database
+     */
     public void joinGroupServ(ID idGroup, ID idUser, String joinCode) throws SQLException {
         if(getGroupByJoinCode(joinCode) != null){
             groupChatRepository.joinGroup((User) findOneServ(idUser), groupChatRepository.getGroupByIDGroup(idGroup));
@@ -294,6 +385,12 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
         }
     }
 
+    /**
+     *
+     * @param idGroup the group the user will leave
+     * @param idUser the id of the user that will leave
+     * @throws SQLException database
+     */
     public void leaveGroupServ(ID idGroup, ID idUser) throws SQLException {
         if(findOneServ(idUser) != null && groupChatRepository.getGroupByIDGroup(idGroup) != null){
             if(groupChatRepository.getUsersFromGroup(groupChatRepository.getGroupByIDGroup(idGroup)).contains(findOneServ(idUser))) {
@@ -309,10 +406,22 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
             throw new RepoException("Group doesn't exist!");
     }
 
+    /**
+     *
+     * @param idUser the id of the user
+     * @return a list of all groups the user is in
+     * @throws SQLException database
+     */
     public List<GroupChat> getGroupChatByIDUser(ID idUser) throws SQLException {
         return groupChatRepository.getGroupChatByIDUser(idUser);
     }
 
+    /**
+     *
+     * @param idGroup of the group
+     * @return a list of all users from that group
+     * @throws SQLException database
+     */
     public List<User> getUsersFromGroupServ(ID idGroup) throws SQLException {
         return groupChatRepository.getUsersFromGroup(groupChatRepository.getGroupByIDGroup(idGroup));
     }
@@ -348,6 +457,12 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
         return messageRepository.getConversation(findOneServ(idUser1), findOneServ(idUser2));
     }
 
+    /**
+     *
+     * @param idUser1 of a user
+     * @return a list of all messages sent
+     * @throws SQLException database
+     */
     public List<E3> getAllConversationServ(ID idUser1) throws SQLException{
         return messageRepository.getAllConversation(findOneServ(idUser1));
     }
@@ -371,6 +486,14 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
         notifyObservers(new EntityChangeEvent(ChangeEventType.ADD, reply));
     }
 
+    /**
+     *
+     * @param idUser1 the id of the user that replies
+     * @param idMessage the message replied to
+     * @param message the reply message
+     * @param date the data of the reply
+     * @throws SQLException database
+     */
     public void replyAllMessage(ID idUser1, ID idMessage, String message, LocalDateTime date) throws SQLException {
         Message messageRepliedTo = (Message) messageRepository.findOneMessage(idMessage);
         Message reply = new Message((User) findOneServ(idUser1), message, date);
@@ -385,10 +508,26 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
         messageRepository.setReplyMessage((E3) reply, (E3) messageRepliedTo);
     }
 
+    /**
+     *
+     * @param idUser1 the id of the user
+     * @param idGroup the id of the group
+     * @return a list of all messages sent by the user in the group
+     * @throws SQLException database
+     */
     public List<E3> getConversationServAll(ID idUser1, ID idGroup) throws SQLException{
         return messageRepository.getConversationGroup(findOneServ(idUser1), (E5) groupChatRepository.getGroupByIDGroup(idGroup));
     }
 
+    /**
+     * Gets all messages between the two users from the given period
+     * @param idUser1 the first user
+     * @param idUser2 the second user
+     * @param start the start date
+     * @param end the end date
+     * @throws SQLException database
+     * @throws IOException file
+     */
     public void queryMessages(ID idUser1, ID idUser2, LocalDate start, LocalDate end) throws SQLException, IOException {
         List<Message> messageList = (List<Message>) messageRepository.getConversation(findOneServ(idUser1), findOneServ(idUser2));
         String startString = start.toString() + "T00:00:00.0";
@@ -405,6 +544,13 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
         report.writeToFile("Messages", messagesFromPeriod);
     }
 
+    /**
+     *
+     * @param idUser1 the first user
+     * @param idUser2 the second user
+     * @return the first message sent between the two users
+     * @throws SQLException database
+     */
     public LocalDate getFirstMessage(ID idUser1, ID idUser2) throws SQLException {
         List<Message> messageList = (List<Message>) messageRepository.getConversation(findOneServ(idUser1), findOneServ(idUser2));
         LocalDate start = messageList.get(0).getDate().toLocalDate();
@@ -415,6 +561,13 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
         return start;
     }
 
+    /**
+     *
+     * @param idUser1 the first user
+     * @param idUser2 the second user
+     * @return the last message sent between the two users
+     * @throws SQLException database
+     */
     public LocalDate getLastMessage(ID idUser1, ID idUser2) throws SQLException {
         List<Message> messageList = (List<Message>) messageRepository.getConversation(findOneServ(idUser1), findOneServ(idUser2));
         LocalDate end = messageList.get(0).getDate().toLocalDate();
@@ -425,6 +578,14 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
         return end;
     }
 
+    /**
+     *
+     * @param idUser1 the user for whom th report to be created
+     * @param start the start date
+     * @param end the end date
+     * @throws SQLException database
+     * @throws IOException file
+     */
     public void queryFriend(ID idUser1, LocalDate start, LocalDate end) throws SQLException, IOException {
         String startString = start.toString() + "T00:00:00.0";
         String endString = end.toString() + "T23:59:59.9";

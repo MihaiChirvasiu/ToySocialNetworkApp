@@ -35,6 +35,11 @@ public class DatabaseEventRepository<ID, E extends Entity<ID>, E1 extends Entity
         return ps;
     }
 
+    /**
+     * Generates a random ID for the event
+     * @param event the event for which to generate an ID
+     * @throws SQLException database
+     */
     private void generateID(PublicEvent event) throws SQLException {
         while(true){
             long randomID = ThreadLocalRandom.current().nextInt(0, 10001);
@@ -48,6 +53,11 @@ public class DatabaseEventRepository<ID, E extends Entity<ID>, E1 extends Entity
         }
     }
 
+    /**
+     * Adds an event to the database
+     * @param event the event to be added in the database
+     * @throws SQLException database
+     */
     public void addEvent(PublicEvent event) throws SQLException {
 
         generateID(event);
@@ -59,6 +69,12 @@ public class DatabaseEventRepository<ID, E extends Entity<ID>, E1 extends Entity
         ps.executeUpdate();
     }
 
+    /**
+     * Gets all the users subscribed to an event
+     * @param event The event given
+     * @return a list of all users subscribed to th event
+     * @throws SQLException database
+     */
     public List<User> getUsersSubscribed(PublicEvent event) throws SQLException {
         List<User> users = new ArrayList<>();
         String sql = "select id_user from users_subscribed where id_event = " + event.getId();
@@ -71,6 +87,12 @@ public class DatabaseEventRepository<ID, E extends Entity<ID>, E1 extends Entity
         return users;
     }
 
+    /**
+     *
+     * @param user the user that wants to subscribe to an event
+     * @param event the event the user will subscribe to
+     * @throws SQLException database
+     */
     public void subscribeToEvent(User user,PublicEvent event) throws SQLException {
         List<User> users = getUsersSubscribed(event);
         if(users.contains(user))
@@ -82,6 +104,12 @@ public class DatabaseEventRepository<ID, E extends Entity<ID>, E1 extends Entity
         ps.executeUpdate();
     }
 
+    /**
+     *
+     * @param user The user that wants to unsubscribe
+     * @param event the event the user will unsubscribe from
+     * @throws SQLException database
+     */
     public void unsubscribeFromEvent(User user,PublicEvent event) throws SQLException {
         List<User> users = getUsersSubscribed(event);
         if(!users.contains(user))
@@ -91,6 +119,12 @@ public class DatabaseEventRepository<ID, E extends Entity<ID>, E1 extends Entity
         ps.executeUpdate();
     }
 
+    /**
+     *
+     * @param idEvent the ID of the event
+     * @return the PublicEvent with the given ID
+     * @throws SQLException database
+     */
     public PublicEvent getEventByIDEvent(ID idEvent) throws SQLException{
         String sql = "select * from events where id_event = " + idEvent;
         PreparedStatement ps = getStatement(sql);
@@ -104,6 +138,12 @@ public class DatabaseEventRepository<ID, E extends Entity<ID>, E1 extends Entity
         return null;
     }
 
+    /**
+     *
+     * @param idUser the ID of the user
+     * @return a list with all the events the user is subscribed to
+     * @throws SQLException database
+     */
     public List<PublicEvent> getEventByIDUser(ID idUser) throws SQLException{
         List<PublicEvent> events = new ArrayList<>();
         String sql = "select id_event from users_subscribed where id_user = " + idUser;
@@ -117,6 +157,12 @@ public class DatabaseEventRepository<ID, E extends Entity<ID>, E1 extends Entity
         return events;
     }
 
+    /**
+     *
+     * @param idUser the id of the user
+     * @return a list of all public events the user is subscribed to order by date
+     * @throws SQLException database
+     */
     public List<PublicEvent> getEventByIDUserOrderByDate(ID idUser) throws SQLException{
         List<PublicEvent> events = new ArrayList<>();
         List<PublicEvent> eventsByDate = new ArrayList<>();
@@ -135,6 +181,11 @@ public class DatabaseEventRepository<ID, E extends Entity<ID>, E1 extends Entity
         return events;
     }
 
+    /**
+     *
+     * @return a list of all public Events
+     * @throws SQLException database
+     */
     public List<PublicEvent> getPublicEvents() throws SQLException {
         List<PublicEvent> events = new ArrayList<>();
         String sql = "select * from events ";
