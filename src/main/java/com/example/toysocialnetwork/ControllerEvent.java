@@ -227,7 +227,6 @@ public class ControllerEvent extends Thread implements Observer<EntityChangeEven
      * Initialises the months comboBox with the months
      */
     public void setMonths(){
-        //String year = comboBoxYear.getSelectionModel().getSelectedItem();
         if(comboBoxMonth.getItems().isEmpty()) {
             ObservableList<String> months = FXCollections.observableArrayList();
             for (int i = 0; i < Months.values().length; i++) {
@@ -457,9 +456,6 @@ public class ControllerEvent extends Thread implements Observer<EntityChangeEven
                     Label label2 = new Label(eventList.get(i).getEventDate().toString());
                     label.setWrapText(true);
                     label.setId("date");
-                    //LocalDateTime data1 = eventList.get(i).getEventDate();
-                    //LocalDateTime data2 = LocalDateTime.now();
-                    //Long days = ChronoUnit.DAYS.between(data2,data1);
                     Label label3 = new Label(timeRemainingActual);
                     label.setWrapText(true);
                     label.setId("name");

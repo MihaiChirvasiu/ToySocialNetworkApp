@@ -35,14 +35,6 @@ public class GUIController {
 
     Controller<Long, User, Friendship, FriendRequest, Message, PublicEvent, GroupChat> controller;
     Stage primaryStage;
-    /*@FXML
-    private TableView<User> tableView;
-
-    @FXML
-    private TableColumn<User, String> tableColumnFirstName;
-
-    @FXML
-    private TableColumn<User, String> tableColumnLastName;*/
 
     @FXML
     private Button cancelButton;
@@ -65,41 +57,8 @@ public class GUIController {
     public void setController(Controller<Long, User, Friendship, FriendRequest, Message, PublicEvent, GroupChat> controller, Stage stage) throws SQLException {
         this.controller = controller;
         this.primaryStage=stage;
-        //initModel();
     }
 
-    /*@FXML
-    public void initialize(){
-        *//*tableColumnFirstName.setCellValueFactory(new PropertyValueFactory<User, String>("FirstName"));
-        tableColumnLastName.setCellValueFactory(new PropertyValueFactory<User, String>("LastName"));
-        tableView.setItems(model);*//*
-    }*/
-
-    /**
-     * Loads all the users
-     * @throws SQLException
-     */
-    private void initModel() throws SQLException {
-        Set<Long> keysSet = controller.getKeysServ();
-        List<User> users = new ArrayList<User>();
-        for(Long k : keysSet){
-            users.add(controller.findOneServ(k));
-        }
-
-    }
-
-    /**
-     * Loads another window with details if a User is selected
-     * @param ev
-     * @throws IOException
-     * @throws SQLException
-     */
-    @FXML
-    public void handleFriendRequests(ActionEvent ev) throws IOException, SQLException {
-        /*User selectedUser = tableView.getSelectionModel().getSelectedItem();
-        if(selectedUser != null)
-            showUserFriendRequest(selectedUser);*/
-    }
 
     /**
      * Initialises the controllerDetails
