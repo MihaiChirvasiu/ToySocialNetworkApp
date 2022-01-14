@@ -2,16 +2,16 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.Blend?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="543.0" prefWidth="785.0" styleClass="bodybg2" stylesheets="file:/E:/MAP/ReparareToySocialNetwork/Sources/Background2.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toysocialnetwork.ControllerDetails">
+<AnchorPane prefHeight="543.0" prefWidth="785.0" styleClass="bodybg2" stylesheets="@Sources/Background2.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toysocialnetwork.ControllerDetails">
    <children>
-      <TableView fx:id="tableViewFriends" layoutX="327.0" layoutY="74.0" prefHeight="306.0" prefWidth="254.0" visible="false">
+      <TableView fx:id="tableViewFriends" layoutX="348.0" layoutY="74.0" prefHeight="306.0" prefWidth="254.0" visible="false">
         <columns>
           <TableColumn fx:id="tableColumnFirstName" prefWidth="126.40003967285156" text="FirstName" />
           <TableColumn fx:id="tableColumnLastName" prefWidth="124.0" text="LastName" />
@@ -25,24 +25,24 @@
             <TableColumn fx:id="tableColumnDateSent" minWidth="4.79998779296875" prefWidth="164.00006103515625" text="Date" />
         </columns>
       </TableView>
-      <Button fx:id="addFriend" alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="33.0" layoutY="20.0" mnemonicParsing="false" onAction="#addFriend" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/E:/MAP/ReparareToySocialNetwork/Sources/Button2.css" text="AddFriend" textAlignment="CENTER" textFill="WHITE">
+      <Button fx:id="addFriend" alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="33.0" layoutY="20.0" mnemonicParsing="false" onAction="#addFriend" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="@Sources/Button2.css" text="AddFriend" textAlignment="CENTER" textFill="WHITE">
          <effect>
             <Blend mode="MULTIPLY" />
          </effect></Button>
-      <Button fx:id="deleteFriend" alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="493.0" layoutY="107.0" mnemonicParsing="false" onAction="#deleteFriend" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/E:/MAP/ReparareToySocialNetwork/Sources/Button2.css" text="DeleteFriend" textAlignment="CENTER" textFill="WHITE" visible="false">
+      <Button fx:id="deleteFriend" alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="387.0" layoutY="403.0" mnemonicParsing="false" onAction="#deleteFriend" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="@Sources/Button2.css" text="DeleteFriend" textAlignment="CENTER" textFill="WHITE" visible="false">
          <effect>
             <Blend mode="MULTIPLY" />
          </effect></Button>
-      <Button fx:id="acceptFriendRequest" alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="250.0" layoutY="354.0" mnemonicParsing="false" onAction="#acceptFriendRequest" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/E:/MAP/ReparareToySocialNetwork/Sources/Button2.css" text="AcceptRequest" textFill="WHITE" visible="false">
+      <Button fx:id="acceptFriendRequest" alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="291.0" layoutY="387.0" mnemonicParsing="false" onAction="#acceptFriendRequest" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="@Sources/Button2.css" text="AcceptRequest" textFill="WHITE" visible="false">
          <effect>
             <Blend mode="MULTIPLY" />
          </effect></Button>
-      <Button fx:id="rejectFriendRequest" alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="546.0" layoutY="357.0" mnemonicParsing="false" onAction="#rejectFriendRequest" prefHeight="45.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/E:/MAP/ReparareToySocialNetwork/Sources/Button2.css" text="RejectRequest" textFill="WHITE" visible="false">
+      <Button fx:id="rejectFriendRequest" alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="507.0" layoutY="392.0" mnemonicParsing="false" onAction="#rejectFriendRequest" prefHeight="45.0" prefWidth="175.0" styleClass="button2" stylesheets="@Sources/Button2.css" text="RejectRequest" textFill="WHITE" visible="false">
          <effect>
             <Blend mode="MULTIPLY" />
          </effect></Button>
-      <TextField fx:id="searchFriend" layoutX="500.0" layoutY="34.0" visible="false" />
-      <TableView fx:id="tableViewRequestsReceived" layoutX="290.0" layoutY="40.0" prefHeight="298.0" prefWidth="394.0" visible="false">
+      <TextField fx:id="searchFriend" layoutX="350.0" layoutY="27.0" prefHeight="26.0" prefWidth="254.0" promptText="Search Friend" visible="false" />
+      <TableView fx:id="tableViewRequestsReceived" layoutX="291.0" layoutY="66.0" prefHeight="298.0" prefWidth="394.0" visible="false">
         <columns>
           <TableColumn fx:id="tableColumnFirstNameRequestReceived" prefWidth="103.20001220703125" text="FirstName" />
           <TableColumn fx:id="tableColumnLastNameRequestReceived" prefWidth="89.60003662109375" text="LastName" />
@@ -50,54 +50,55 @@
             <TableColumn fx:id="tableColumnDateReceived" prefWidth="135.20001220703125" text="Date" />
         </columns>
       </TableView>
-      <TextField fx:id="searchRequestReceived" layoutX="443.0" layoutY="14.0" prefHeight="26.0" prefWidth="206.0" visible="false" />
-      <Label fx:id="searchFriends" alignment="CENTER" blendMode="MULTIPLY" layoutX="507.0" layoutY="18.0" prefHeight="18.0" prefWidth="135.0" text="Search friend" textAlignment="CENTER" visible="false">
-         <effect>
-            <Blend mode="LIGHTEN" />
-         </effect>
-      </Label>
-      <Label fx:id="searchFriendRequestReceived" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="264.0" layoutY="18.0" prefHeight="18.0" prefWidth="168.0" text="Search friend request received" visible="false">
-         <effect>
-            <Blend mode="MULTIPLY" />
-         </effect>
-      </Label>
-      <Button alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="33.0" layoutY="97.0" mnemonicParsing="false" onAction="#showSentRequests" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/E:/MAP/ReparareToySocialNetwork/Sources/Button2.css" text="ShowSentRequests" textAlignment="CENTER" textFill="WHITE">
+      <TextField fx:id="searchRequestReceived" layoutX="292.0" layoutY="14.0" prefHeight="26.0" prefWidth="394.0" promptText="Search Request Received" visible="false" />
+      <Button alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="33.0" layoutY="83.0" mnemonicParsing="false" onAction="#showSentRequests" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="@Sources/Button2.css" text="ShowSentRequests" textAlignment="CENTER" textFill="WHITE">
          <effect>
             <Blend mode="MULTIPLY" />
          </effect>
       </Button>
-      <Button alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="33.0" layoutY="173.0" mnemonicParsing="false" onAction="#showReceivedRequests" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/E:/MAP/ReparareToySocialNetwork/Sources/Button2.css" text="ShowReceivedRequests" textAlignment="CENTER" textFill="WHITE">
+      <Button alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="33.0" layoutY="150.0" mnemonicParsing="false" onAction="#showReceivedRequests" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="@Sources/Button2.css" text="ShowReceivedRequests" textAlignment="CENTER" textFill="WHITE">
          <effect>
             <Blend mode="MULTIPLY" />
          </effect>
       </Button>
-      <Button alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="33.0" layoutY="260.0" mnemonicParsing="false" onAction="#showFriends" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/E:/MAP/ReparareToySocialNetwork/Sources/Button2.css" text="ShowFriends" textAlignment="CENTER" textFill="WHITE">
+      <Button alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="33.0" layoutY="227.0" mnemonicParsing="false" onAction="#showFriends" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="@Sources/Button2.css" text="ShowFriends" textAlignment="CENTER" textFill="WHITE">
          <effect>
             <Blend mode="MULTIPLY" />
          </effect>
       </Button>
-      <Button fx:id="cancelRequest" alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="401.0" layoutY="353.0" mnemonicParsing="false" onAction="#cancelRequest" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/E:/MAP/ReparareToySocialNetwork/Sources/Button2.css" text="CancelRequest" textAlignment="CENTER" textFill="WHITE" visible="false">
+      <Button fx:id="cancelRequest" alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="401.0" layoutY="353.0" mnemonicParsing="false" onAction="#cancelRequest" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="@Sources/Button2.css" text="CancelRequest" textAlignment="CENTER" textFill="WHITE" visible="false">
          <effect>
             <Blend mode="MULTIPLY" />
          </effect>
       </Button>
-      <Button fx:id="ChatButton" alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="33.0" layoutY="338.0" mnemonicParsing="false" onAction="#chat" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/E:/MAP/ReparareToySocialNetwork/Sources/Button2.css" text="Chat" textAlignment="CENTER" textFill="WHITE">
+      <Button fx:id="ChatButton" alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="33.0" layoutY="298.0" mnemonicParsing="false" onAction="#chat" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="@Sources/Button2.css" text="Chat" textAlignment="CENTER" textFill="WHITE">
          <effect>
             <Blend mode="MULTIPLY" />
          </effect>
       </Button>
-      <Button fx:id="backButton" blendMode="MULTIPLY" layoutX="15.0" layoutY="7.0" mnemonicParsing="false" onAction="#goBack" prefHeight="26.0" prefWidth="36.0" styleClass="backbutton" stylesheets="file:/E:/MAP/ReparareToySocialNetwork/Sources/BackButton.css">
+      <Button fx:id="backButton" blendMode="MULTIPLY" layoutX="15.0" layoutY="7.0" mnemonicParsing="false" onAction="#goBack" prefHeight="26.0" prefWidth="36.0" styleClass="backbutton" stylesheets="@Sources/BackButton.css">
          <effect>
             <Blend mode="MULTIPLY" />
          </effect>
       </Button>
-      <Button fx:id="eventButton" alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="33.0" layoutY="415.0" mnemonicParsing="false" onAction="#events" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="file:/E:/MAP/ReparareToySocialNetwork/Sources/Button2.css" text="Events" textAlignment="CENTER" textFill="WHITE">
+      <Button fx:id="eventButton" alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="33.0" layoutY="365.0" mnemonicParsing="false" onAction="#events" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="@Sources/Button2.css" text="Events" textAlignment="CENTER" textFill="WHITE">
          <effect>
             <Blend mode="MULTIPLY" />
          </effect>
       </Button>
-      <ComboBox fx:id="startDate" layoutX="252.0" layoutY="478.0" prefWidth="150.0" />
-      <ComboBox fx:id="endDate" layoutX="432.0" layoutY="478.0" prefWidth="150.0" />
-      <Button fx:id="reportActivities" layoutX="623.0" layoutY="478.0" mnemonicParsing="false" onAction="#queryActivities" text="Button" />
+      <ComboBox fx:id="startDate" layoutX="356.0" layoutY="137.0" prefHeight="26.0" prefWidth="254.0" promptText="Start" visible="false" />
+      <ComboBox fx:id="endDate" layoutX="356.0" layoutY="202.0" prefHeight="26.0" prefWidth="254.0" promptText="End" visible="false" />
+      <Button fx:id="reportActivities" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="356.0" layoutY="275.0" mnemonicParsing="false" onAction="#queryActivities" prefHeight="121.0" prefWidth="254.0" styleClass="button2" stylesheets="@Sources/Button2.css" text="Export PDF" textFill="WHITE" visible="false">
+         <effect>
+            <Blend mode="MULTIPLY" />
+         </effect>
+         <font>
+            <Font size="13.0" />
+         </font></Button>
+      <Button fx:id="report" alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="33.0" layoutY="439.0" mnemonicParsing="false" onAction="#showReport" prefHeight="54.0" prefWidth="175.0" styleClass="button2" stylesheets="@Sources/Button2.css" text="ActivityReport" textAlignment="CENTER" textFill="WHITE">
+         <effect>
+            <Blend mode="MULTIPLY" />
+         </effect>
+      </Button>
    </children>
 </AnchorPane>

@@ -10,9 +10,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="543.0" prefWidth="785.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toysocialnetwork.ControllerEvent">
+<AnchorPane prefHeight="543.0" prefWidth="785.0" styleClass="bodybgEvents" stylesheets="@Sources/BackgroundEvents.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toysocialnetwork.ControllerEvent">
    <children>
-      <Button fx:id="backButton" blendMode="MULTIPLY" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#goBack" prefHeight="26.0" prefWidth="36.0" styleClass="backbutton" stylesheets="file:/E:/MAP/ReparareToySocialNetwork/Sources/BackButton.css">
+      <Button fx:id="backButton" blendMode="MULTIPLY" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#goBack" prefHeight="26.0" prefWidth="36.0" styleClass="backbutton" stylesheets="@Sources/BackButton.css">
          <effect>
             <Blend mode="MULTIPLY" />
          </effect>
@@ -29,38 +29,44 @@
           <TableColumn fx:id="tableColumnDateSubscribed" prefWidth="187.9998779296875" text="Date" />
         </columns>
       </TableView>
-      <Label alignment="CENTER" layoutX="32.0" layoutY="39.0" prefHeight="19.0" prefWidth="334.0" text="All events">
+      <Label alignment="CENTER" layoutX="32.0" layoutY="30.0" prefHeight="19.0" prefWidth="334.0" text="All events" textFill="#05f1ff">
          <font>
-            <Font name="System Bold Italic" size="13.0" />
+            <Font name="System Bold Italic" size="18.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" layoutX="412.0" layoutY="39.0" prefHeight="19.0" prefWidth="334.0" text="Subscribed events">
+      <Label alignment="CENTER" layoutX="412.0" layoutY="30.0" prefHeight="19.0" prefWidth="334.0" text="Subscribed events" textFill="#00e8ff">
          <font>
-            <Font name="System Bold Italic" size="13.0" />
+            <Font name="System Bold Italic" size="18.0" />
          </font>
       </Label>
-      <ComboBox fx:id="comboBoxYear" layoutX="32.0" layoutY="347.0" onAction="#setMonths" prefHeight="26.0" prefWidth="334.0" promptText="Year" />
-      <ComboBox fx:id="comboBoxDay" layoutX="32.0" layoutY="390.0" prefHeight="26.0" prefWidth="334.0" promptText="Day" />
-      <ComboBox fx:id="comboBoxMinute" layoutX="32.0" layoutY="433.0" prefHeight="26.0" prefWidth="334.0" promptText="Minute" />
-      <ComboBox fx:id="comboBoxMonth" layoutX="412.0" layoutY="347.0" onAction="#setDays" prefHeight="26.0" prefWidth="334.0" promptText="Month" />
-      <ComboBox fx:id="comboBoxHour" layoutX="412.0" layoutY="390.0" prefHeight="26.0" prefWidth="334.0" promptText="Hour" />
+      <ComboBox fx:id="comboBoxYear" layoutX="32.0" layoutY="347.0" onAction="#setMonths" prefHeight="26.0" prefWidth="334.0" promptText="Year" style="-fx-background-color: skyblue;" />
+      <ComboBox fx:id="comboBoxDay" layoutX="32.0" layoutY="390.0" prefHeight="26.0" prefWidth="334.0" promptText="Day" style="-fx-background-color: skyblue;" />
+      <ComboBox fx:id="comboBoxMinute" layoutX="32.0" layoutY="433.0" prefHeight="26.0" prefWidth="334.0" promptText="Minute" style="-fx-background-color: skyblue;" />
+      <ComboBox fx:id="comboBoxMonth" layoutX="412.0" layoutY="347.0" onAction="#setDays" prefHeight="26.0" prefWidth="334.0" promptText="Month" style="-fx-background-color: skyblue;" />
+      <ComboBox fx:id="comboBoxHour" layoutX="412.0" layoutY="390.0" prefHeight="26.0" prefWidth="334.0" promptText="Hour" style="-fx-background-color: skyblue;" />
       <TextField fx:id="nameEventTextField" layoutX="412.0" layoutY="433.0" prefHeight="26.0" prefWidth="241.0" promptText="Enter event name" />
-      <Button fx:id="saveButton" layoutX="655.0" layoutY="433.0" mnemonicParsing="false" onAction="#saveEvent" prefHeight="26.0" prefWidth="92.0" text="Save" />
-      <Label alignment="CENTER" layoutX="114.0" layoutY="307.0" prefHeight="18.0" prefWidth="539.0" text="Create a new event">
+      <Button fx:id="saveButton" layoutX="655.0" layoutY="433.0" mnemonicParsing="false" onAction="#saveEvent" prefHeight="26.0" prefWidth="92.0" style="-fx-background-color: skyblue;" text="Save" />
+      <Label alignment="CENTER" layoutX="122.0" layoutY="311.0" prefHeight="18.0" prefWidth="539.0" text="Create a new event" textFill="#00c9ff">
          <font>
-            <Font name="System Bold" size="12.0" />
+            <Font name="System Bold" size="24.0" />
          </font>
       </Label>
-      <Button fx:id="subscribeButton" layoutX="32.0" layoutY="272.0" mnemonicParsing="false" onAction="#subscribe" prefHeight="27.0" prefWidth="334.0" text="Subscribe" textFill="#0051e3">
+      <Button fx:id="subscribeButton" layoutX="32.0" layoutY="273.0" mnemonicParsing="false" onAction="#subscribe" prefHeight="26.0" prefWidth="334.0" style="-fx-background-color: skyblue;" text="Subscribe" textFill="#0051e3">
          <font>
             <Font name="System Bold Italic" size="13.0" />
          </font>
+         <effect>
+            <Blend mode="HARD_LIGHT" />
+         </effect>
       </Button>
-      <Button fx:id="unsubscribeButton" layoutX="412.0" layoutY="272.0" mnemonicParsing="false" onAction="#unsubscribe" prefHeight="27.0" prefWidth="334.0" text="Unsubscribe" textFill="RED">
+      <Button fx:id="unsubscribeButton" layoutX="412.0" layoutY="272.0" mnemonicParsing="false" onAction="#unsubscribe" prefHeight="27.0" prefWidth="334.0" style="-fx-background-color: skyblue;" text="Unsubscribe" textFill="RED">
          <font>
             <Font name="System Bold Italic" size="13.0" />
          </font>
+         <effect>
+            <Blend />
+         </effect>
       </Button>
-      <Button fx:id="notificationsButton" layoutX="747.0" layoutY="14.0" mnemonicParsing="false" onAction="#buildChatBox" prefHeight="26.0" prefWidth="22.0" text="Button" />
+      <Button fx:id="notificationsButton" blendMode="MULTIPLY" layoutX="711.0" layoutY="10.0" mnemonicParsing="false" onAction="#buildChatBox" prefHeight="34.0" prefWidth="36.0" text="Button" />
    </children>
 </AnchorPane>
