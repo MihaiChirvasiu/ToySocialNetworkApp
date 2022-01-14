@@ -4,6 +4,7 @@ import com.example.toysocialnetwork.Domain.*;
 import com.example.toysocialnetwork.Events.EntityChangeEvent;
 import com.example.toysocialnetwork.Events.Event;
 import com.example.toysocialnetwork.Observer.Observer;
+import com.example.toysocialnetwork.Repository.RepoException;
 import com.example.toysocialnetwork.Service.Controller;
 import com.example.toysocialnetwork.Utils.Months;
 import javafx.collections.FXCollections;
@@ -94,6 +95,7 @@ public class ControllerEvent extends Thread implements Observer<EntityChangeEven
     User friend;
     String selectedMonth;
     String timeRemaining;
+    ImageView imageView;
 
     public void setService(Controller<Long, User, Friendship, FriendRequest, Message, PublicEvent, GroupChat> controller, Stage stage, User user) throws SQLException {
         this.controller = controller;
@@ -128,6 +130,12 @@ public class ControllerEvent extends Thread implements Observer<EntityChangeEven
         tableColumnNameSubscribed.setCellValueFactory(new PropertyValueFactory<PublicEvent, String>("nameEvent"));
         tableColumnDateSubscribed.setCellValueFactory(new PropertyValueFactory<PublicEvent, String>("eventDate"));
         tableViewEventsSubscribed.setItems(modelSubscribed);
+        Image image = new Image("File:/E:/MAP/ReparareToySocialNetwork/src/main/resources/com/example/toysocialnetwork/Sources/NotificationBell.jpeg");
+        ImageView imageView2 = new ImageView(image);
+        imageView2.setFitHeight(34);
+        imageView2.setFitWidth(36);
+        imageView=imageView2;
+        notificationsButton.setGraphic(imageView);
     }
 
     /**
@@ -191,10 +199,16 @@ public class ControllerEvent extends Thread implements Observer<EntityChangeEven
      * @throws SQLException database
      */
     public void subscribe() throws SQLException {
-        PublicEvent event = tableViewAllEvents.getSelectionModel().getSelectedItem();
-        if(event == null)
-            MessageAlert.showErrorMessage(null,"No selected event!");
-        controller.subscribeToEventServ(event.getId(), friend.getId());
+        try{
+            PublicEvent event = tableViewAllEvents.getSelectionModel().getSelectedItem();
+            if (event == null)
+                MessageAlert.showErrorMessage(null, "No selected event!");
+            else
+                controller.subscribeToEventServ(event.getId(), friend.getId());
+        }catch (RepoException e)
+        {
+            MessageAlert.showErrorMessage(null,"Already subscribed to this event!");
+        }
     }
 
     /**
@@ -205,7 +219,8 @@ public class ControllerEvent extends Thread implements Observer<EntityChangeEven
         PublicEvent event = tableViewEventsSubscribed.getSelectionModel().getSelectedItem();
         if(event == null)
             MessageAlert.showErrorMessage(null,"No selected event!");
-        controller.unsubscribeFromEventServ(event.getId(), friend.getId());
+        else
+            controller.unsubscribeFromEventServ(event.getId(), friend.getId());
     }
 
     /**
@@ -232,7 +247,7 @@ public class ControllerEvent extends Thread implements Observer<EntityChangeEven
     @Override
     public void run() {
         try {
-            List<PublicEvent> eventList = controller.getSubscribedEventsForUser(friend.getId());
+            List<PublicEvent> eventList = controller.getSubscribedEventsForUserOrdered(friend.getId());
             if(eventList != null) {
                 for(int i = 0; i < eventList.size(); i++) {
                     LocalDateTime data1 = eventList.get(i).getEventDate();
@@ -240,21 +255,60 @@ public class ControllerEvent extends Thread implements Observer<EntityChangeEven
                     long days = ChronoUnit.DAYS.between(data2, data1);
                     long minutesD = ChronoUnit.MINUTES.between(data2, data1);
                     if (minutesD > 0) {
-                        if (days > 366)
-                            notificationsButton.setBackground(new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+                        if (days > 366) {
+                            Image image = new Image("File:/E:/MAP/ReparareToySocialNetwork/src/main/resources/com/example/toysocialnetwork/Sources/NotificationBellOverYear.jpeg");
+                            ImageView imageView2 = new ImageView(image);
+                            imageView2.setFitHeight(34);
+                            imageView2.setFitWidth(36);
+                            imageView=imageView2;
+                        }
                         if (days <= 366) {
-                            if (days <= 31)
-                                notificationsButton.setBackground(new Background(new BackgroundFill(Color.YELLOW, CornerRadii.EMPTY, Insets.EMPTY)));
+                            if (days <= 31) {
+                                Image image = new Image("File:/E:/MAP/ReparareToySocialNetwork/src/main/resources/com/example/toysocialnetwork/Sources/NotificationBellLessThanMonth.jpeg");
+                                ImageView imageView2 = new ImageView(image);
+                                imageView2.setFitHeight(34);
+                                imageView2.setFitWidth(36);
+                                imageView=imageView2;
+                            }
                             if (days <= 1) {
-                                notificationsButton.setBackground(new Background(new BackgroundFill(Color.ORANGE, CornerRadii.EMPTY, Insets.EMPTY)));
+                                {
+                                    Image image = new Image("File:/E:/MAP/ReparareToySocialNetwork/src/main/resources/com/example/toysocialnetwork/Sources/NotificationBellLessThanDay.jpeg");
+                                    ImageView imageView2 = new ImageView(image);
+                                    imageView2.setFitHeight(34);
+                                    imageView2.setFitWidth(36);
+                                    imageView=imageView2;
+                                }
                             }
                             long minutes = ChronoUnit.MINUTES.between(data2, data1);
-                            if (minutes < 60)
-                                notificationsButton.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+                            if (minutes < 60) {
+                                Image image = new Image("File:/E:/MAP/ReparareToySocialNetwork/src/main/resources/com/example/toysocialnetwork/Sources/NotificationBellLessThanHour.jpeg");
+                                ImageView imageView2 = new ImageView(image);
+                                imageView2.setFitHeight(34);
+                                imageView2.setFitWidth(36);
+                                imageView=imageView2;
+                            }
                         }
+                    }
+                    else
+                    {
+                        Image image = new Image("File:/E:/MAP/ReparareToySocialNetwork/src/main/resources/com/example/toysocialnetwork/Sources/NotificationBell.jpeg");
+                        ImageView imageView2 = new ImageView(image);
+                        imageView2.setFitHeight(34);
+                        imageView2.setFitWidth(36);
+                        imageView=imageView2;
+
                     }
                 }
             }
+            else
+            {
+                Image image = new Image("File:/E:/MAP/ReparareToySocialNetwork/src/main/resources/com/example/toysocialnetwork/Sources/NotificationBell.jpeg");
+                ImageView imageView2 = new ImageView(image);
+                imageView2.setFitHeight(34);
+                imageView2.setFitWidth(36);
+                imageView=imageView2;
+            }
+            notificationsButton.setGraphic(imageView);
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -269,7 +323,7 @@ public class ControllerEvent extends Thread implements Observer<EntityChangeEven
     public void saveEvent() throws SQLException {
         if(comboBoxYear.getSelectionModel().getSelectedItem() == null || comboBoxMonth.getSelectionModel().getSelectedItem() == null ||
                 comboBoxDay.getSelectionModel().getSelectedItem() == null || comboBoxHour.getSelectionModel().getSelectedItem() == null ||
-                comboBoxMinute.getSelectionModel().getSelectedItem() == null || nameEventTextField.getText() ==null)
+                comboBoxMinute.getSelectionModel().getSelectedItem() == null || nameEventTextField.getText() == "")
             MessageAlert.showErrorMessage(null,"Incomplete details!");
         else
         {

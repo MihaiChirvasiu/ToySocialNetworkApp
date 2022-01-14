@@ -93,12 +93,6 @@ public class ControllerDetails implements Observer<EntityChangeEvent> {
     private Button rejectFriendRequest;
 
     @FXML
-    private Label searchFriends;
-
-    @FXML
-    private Label searchFriendRequestReceived;
-
-    @FXML
     private Button cancelRequest;
 
     @FXML
@@ -118,6 +112,9 @@ public class ControllerDetails implements Observer<EntityChangeEvent> {
 
     @FXML
     private Button reportActivities;
+
+    @FXML
+    private Button report;
 
     Controller<Long, User, Friendship, FriendRequest, Message, PublicEvent, GroupChat> controller;
     ObservableList<User> model = FXCollections.observableArrayList();
@@ -353,12 +350,13 @@ public class ControllerDetails implements Observer<EntityChangeEvent> {
         deleteFriend.setVisible(true);
         acceptFriendRequest.setVisible(false);
         rejectFriendRequest.setVisible(false);
-        searchFriends.setVisible(true);
         searchFriend.setVisible(true);
-        searchFriendRequestReceived.setVisible(false);
         searchRequestReceived.setVisible(false);
         tableViewFriends.setVisible(true);
         cancelRequest.setVisible(false);
+        endDate.setVisible(false);
+        startDate.setVisible(false);
+        reportActivities.setVisible(false);
     }
 
     /**
@@ -372,12 +370,13 @@ public class ControllerDetails implements Observer<EntityChangeEvent> {
         deleteFriend.setVisible(false);
         acceptFriendRequest.setVisible(false);
         rejectFriendRequest.setVisible(false);
-        searchFriends.setVisible(false);
         searchFriend.setVisible(false);
-        searchFriendRequestReceived.setVisible(false);
         searchRequestReceived.setVisible(false);
         tableViewFriends.setVisible(false);
         cancelRequest.setVisible(true);
+        endDate.setVisible(false);
+        startDate.setVisible(false);
+        reportActivities.setVisible(false);
     }
 
     /**
@@ -391,12 +390,29 @@ public class ControllerDetails implements Observer<EntityChangeEvent> {
         deleteFriend.setVisible(false);
         acceptFriendRequest.setVisible(true);
         rejectFriendRequest.setVisible(true);
-        searchFriends.setVisible(false);
         searchFriend.setVisible(false);
-        searchFriendRequestReceived.setVisible(true);
         searchRequestReceived.setVisible(true);
         tableViewFriends.setVisible(false);
         cancelRequest.setVisible(false);
+        endDate.setVisible(false);
+        startDate.setVisible(false);
+        reportActivities.setVisible(false);
+    }
+
+    public void showReport(ActionEvent event)
+    {
+        tableViewRequestsReceived.setVisible(false);
+        tableViewRequestsSent.setVisible(false);
+        deleteFriend.setVisible(false);
+        acceptFriendRequest.setVisible(false);
+        rejectFriendRequest.setVisible(false);
+        searchFriend.setVisible(false);
+        searchRequestReceived.setVisible(false);
+        tableViewFriends.setVisible(false);
+        cancelRequest.setVisible(false);
+        endDate.setVisible(true);
+        startDate.setVisible(true);
+        reportActivities.setVisible(true);
     }
 
     /**
