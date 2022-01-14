@@ -105,6 +105,10 @@ public class ControllerEvent extends Thread implements Observer<EntityChangeEven
         this.mainScene = detailStage.getScene();
     }
 
+    /**
+     * Initialises the models
+     * @throws SQLException database
+     */
     public void initModel() throws SQLException {
         List<PublicEvent> publicEvents = controller.getAllEvents();
         model.setAll(publicEvents);
@@ -113,6 +117,9 @@ public class ControllerEvent extends Thread implements Observer<EntityChangeEven
             modelSubscribed.setAll(subscribedEvents);
     }
 
+    /**
+     * Initialises the tableViews
+     */
     @FXML
     public void initialize(){
         tableColumnNameAllEvents.setCellValueFactory(new PropertyValueFactory<PublicEvent, String>("nameEvent"));
@@ -123,6 +130,9 @@ public class ControllerEvent extends Thread implements Observer<EntityChangeEven
         tableViewEventsSubscribed.setItems(modelSubscribed);
     }
 
+    /**
+     * Initialises the comboBoxes with the dates
+     */
     public void loadCombos() {
         ObservableList<String> years = FXCollections.observableArrayList();
         for (int i = LocalDateTime.now().getYear(); i < 2049; i++) {
@@ -146,6 +156,9 @@ public class ControllerEvent extends Thread implements Observer<EntityChangeEven
         comboBoxMinute.setItems(minutes);
     }
 
+    /**
+     * Initialises the combo with the days
+     */
     public void setDays(){
         String year = comboBoxYear.getSelectionModel().getSelectedItem();
         selectedMonth = comboBoxMonth.getSelectionModel().getSelectedItem();
@@ -173,6 +186,10 @@ public class ControllerEvent extends Thread implements Observer<EntityChangeEven
 
     }
 
+    /**
+     * Handler for subscribing to an event
+     * @throws SQLException database
+     */
     public void subscribe() throws SQLException {
         PublicEvent event = tableViewAllEvents.getSelectionModel().getSelectedItem();
         if(event == null)
@@ -180,6 +197,10 @@ public class ControllerEvent extends Thread implements Observer<EntityChangeEven
         controller.subscribeToEventServ(event.getId(), friend.getId());
     }
 
+    /**
+     * Handler for unsubscribing from an event
+     * @throws SQLException database
+     */
     public void unsubscribe() throws SQLException {
         PublicEvent event = tableViewEventsSubscribed.getSelectionModel().getSelectedItem();
         if(event == null)
@@ -187,6 +208,9 @@ public class ControllerEvent extends Thread implements Observer<EntityChangeEven
         controller.unsubscribeFromEventServ(event.getId(), friend.getId());
     }
 
+    /**
+     * Initialises the months comboBox with the months
+     */
     public void setMonths(){
         //String year = comboBoxYear.getSelectionModel().getSelectedItem();
         if(comboBoxMonth.getItems().isEmpty()) {
@@ -202,6 +226,9 @@ public class ControllerEvent extends Thread implements Observer<EntityChangeEven
         }
     }
 
+    /**
+     * The thread run function that verifies the time remaining until the events
+     */
     @Override
     public void run() {
         try {
@@ -235,7 +262,11 @@ public class ControllerEvent extends Thread implements Observer<EntityChangeEven
 
     }
 
-        public void saveEvent() throws SQLException {
+    /**
+     * Collects all the data from the combos and save the events
+     * @throws SQLException database
+     */
+    public void saveEvent() throws SQLException {
         if(comboBoxYear.getSelectionModel().getSelectedItem() == null || comboBoxMonth.getSelectionModel().getSelectedItem() == null ||
                 comboBoxDay.getSelectionModel().getSelectedItem() == null || comboBoxHour.getSelectionModel().getSelectedItem() == null ||
                 comboBoxMinute.getSelectionModel().getSelectedItem() == null || nameEventTextField.getText() ==null)
@@ -283,6 +314,11 @@ public class ControllerEvent extends Thread implements Observer<EntityChangeEven
         }
     }
 
+    /**
+     * Button handler for going back a page
+     * @throws IOException file
+     * @throws SQLException database
+     */
     @FXML
     public void goBack() throws IOException, SQLException {
         FXMLLoader loader = new FXMLLoader();
@@ -298,12 +334,22 @@ public class ControllerEvent extends Thread implements Observer<EntityChangeEven
         controllerDetails.setService(controller, detailStage, this.friend);
     }
 
+    /**
+     * We need to update the models(observer is notified)
+     * @param entityChangeEvent the event that occurred
+     * @throws SQLException database
+     * @throws IOException file
+     */
     @Override
     public void update(EntityChangeEvent entityChangeEvent) throws SQLException, IOException {
         initModel();
     }
 
-
+    /**
+     * The event notification window
+     * @throws SQLException database
+     * @throws IOException file
+     */
     public void buildChatBox() throws SQLException, IOException {
         if (tableViewEventsSubscribed != null) {
             Button backToPublicChat = new Button("<");

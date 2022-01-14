@@ -15,18 +15,34 @@ public class User extends Entity<Long>{
         this.password = password;
     }
 
+    /**
+     * Getter for the email of the user
+     * @return the email of the user
+     */
     public String getEmail(){
         return email;
     }
 
+    /**
+     * Getter for the password of the user
+     * @return the password of the user
+     */
     public String getPassword(){
         return password;
     }
 
+    /**
+     * Setter for a new password
+     * @param newPassword the new password
+     */
     public void setPassword(String newPassword){
         this.password = newPassword;
     }
 
+    /**
+     * Setter for the email
+     * @param newEmail the new email to be set
+     */
     public void setEmail(String newEmail){
         this.email = email;
     }

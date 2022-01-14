@@ -129,6 +129,9 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
         initModelGroups();
     }
 
+    /**
+     * Initialises the used tables
+     */
     @FXML
     public void initialize(){
         userFirstNameQuery.setCellValueFactory(new PropertyValueFactory<User, String>("FirstName"));
@@ -148,6 +151,10 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
         usersViewQuery.setItems(model);
     }
 
+    /**
+     * Filter function for showing only the wanted entity
+     * @throws SQLException database
+     */
     private void handleFilter() throws SQLException {
         Set<Long> keysSet = controller.getKeysServ();
         List<User> users = new ArrayList<User>();
@@ -161,7 +168,10 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
                 .collect(Collectors.toList()));
     }
 
-
+    /**
+     * Loads all the users
+     * @throws SQLException database
+     */
     private void initModel() throws SQLException {
         Set<Long> keysSet = controller.getKeysServ();
         List<User> users = new ArrayList<User>();
@@ -172,18 +182,33 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
 
     }
 
+    /**
+     * Loads all the groups
+     * @throws SQLException database
+     */
     private void initModelGroups() throws SQLException {
         List<GroupChat> groups = controller.getGroupChatByIDUser(friend.getId());
         if(groups != null)
             modelGroups.setAll(groups);
     }
 
+    /**
+     *
+     * @param senderID The id of the user that sends the message
+     * @param text The message written
+     * @throws SQLException database
+     */
     private void addMsg(Long senderID, String text) throws SQLException {
         List<Long> receiverID = new ArrayList<>();
         receiverID.add(senderID);
         controller.sendMessage(friend.getId(), receiverID, text, LocalDateTime.now(), (long) -1);
     }
 
+    /**
+     *
+     * @param text The message sent in the group
+     * @throws SQLException database
+     */
     private void sendMessageAll(String text) throws SQLException {
         List<User> usersTo = controller.getUsersFromGroupServ(groupsView.getSelectionModel().getSelectedItem().getId());
         usersTo.remove(friend);
@@ -194,13 +219,31 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
         controller.sendMessage(friend.getId(), idList, text, LocalDateTime.now(), selectedGroup.getId());
     }
 
+    /**
+     *
+     * @param receiverID the id of the receiver
+     * @param selectedMessage the message to be replied to
+     * @param text The reply message
+     * @throws SQLException database
+     */
     private void replyMessage(Long receiverID, Message selectedMessage, String text) throws SQLException {
         controller.replyMessage(friend.getId(), receiverID, selectedMessage.getId(), text, LocalDateTime.now());
     }
+
+    /**
+     * Replies to all messages in the group
+     * @param selectedMessage the message to be replied to
+     * @param text The reply message
+     * @throws SQLException dataabase
+     */
     private void replyMessageAll(Message selectedMessage, String text) throws SQLException {
         controller.replyAllMessage(friend.getId(), selectedMessage.getId(), text, LocalDateTime.now());
     }
 
+    /**
+     * Creates a group with the details
+     * @throws SQLException database
+     */
     public void createGroup() throws SQLException {
         String groupName = insertGroupName.getText();
         if(!groupName.isEmpty()){
@@ -209,6 +252,10 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
         //TODO add label for no text input
     }
 
+    /**
+     * Function for joining a group
+     * @throws SQLException database
+     */
     public void joinGroup() throws SQLException {
         String joinCode = insertJoinCode.getText();
         if(!joinCode.isEmpty()){
@@ -216,6 +263,11 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
         }
     }
 
+    /**
+     * Button for going back a page
+     * @throws IOException file
+     * @throws SQLException database
+     */
     @FXML
     public void goBack() throws IOException, SQLException {
         FXMLLoader loader = new FXMLLoader();
@@ -231,6 +283,11 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
         controllerDetails.setService(controller, detailStage, this.friend);
     }
 
+    /**
+     * Function for building the chat between two users
+     * @throws SQLException database
+     * @throws IOException file
+     */
     public void buildChatBox() throws SQLException, IOException {
 
         selectedUser = usersView.getSelectionModel().getSelectedItem();
@@ -379,6 +436,11 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
 
     }
 
+    /**
+     * Builds the chat for the group
+     * @throws SQLException database
+     * @throws IOException file
+     */
     public void buildGroupChatBox() throws SQLException, IOException {
 
         selectedGroup = groupsView.getSelectionModel().getSelectedItem();
@@ -527,6 +589,10 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
 
     }
 
+    /**
+     * Report for messages received
+     * @throws SQLException database
+     */
     @FXML
     private void messageQuery() throws SQLException {
         ObservableList<LocalDate> dates = FXCollections.observableArrayList();
@@ -543,6 +609,13 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
         }
     }
 
+    /**
+     * Gets all the message from the given period
+     * @param dateStart the start date
+     * @param dateEnd the end date
+     * @throws SQLException database
+     * @throws IOException file
+     */
     private void generateQueryMessages(LocalDate dateStart, LocalDate dateEnd) throws SQLException, IOException {
         if(selectedUserReport == null){
             MessageAlert.showErrorMessage(null, "No user selected");
@@ -552,6 +625,12 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
         }
     }
 
+    /**
+     * Button handler for generating the pdf with the messages
+     * @param event
+     * @throws SQLException database
+     * @throws IOException file
+     */
     public void generatePDF(ActionEvent event) throws SQLException, IOException {
         LocalDate dateStart = start.getSelectionModel().getSelectedItem();
         LocalDate dateEnd = end.getSelectionModel().getSelectedItem();

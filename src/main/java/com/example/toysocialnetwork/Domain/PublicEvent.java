@@ -14,10 +14,18 @@ public class PublicEvent extends Entity<Long> {
         this.eventDate=date;
     }
 
+    /**
+     * Getter for the name of the event
+     * @return the name of the event
+     */
     public String getNameEvent() {
         return nameEvent;
     }
 
+    /**
+     * Getter for the date of the event
+     * @return the date of the event
+     */
     public LocalDateTime getEventDate() {
         return eventDate;
     }

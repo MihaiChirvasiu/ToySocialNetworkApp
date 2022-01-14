@@ -12,6 +12,11 @@ public class MessageAlert {
         message.showAndWait();
     }
 
+    /**
+     * Creates a window with a message if an error occurred
+     * @param owner the scene
+     * @param text the message to be shown
+     */
     public static void showErrorMessage(Stage owner, String text){
         Alert message=new Alert(Alert.AlertType.ERROR);
         message.initOwner(owner);

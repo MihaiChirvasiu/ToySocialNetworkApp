@@ -67,6 +67,11 @@ public class DatabaseFriendRequestRepository<ID, E extends Entity<ID>, E1 extend
         return null;
     }
 
+    /**
+     * Deletes a friendRequest from the database
+     * @param friendRequest the friendRequest to be removed
+     * @throws SQLException database
+     */
     public void deleteFriendRequest(E friendRequest) throws SQLException {
         validator.validate(friendRequest);
         FriendRequest friendRequest1 = (FriendRequest) friendRequest;
@@ -157,6 +162,12 @@ public class DatabaseFriendRequestRepository<ID, E extends Entity<ID>, E1 extend
         return friendRequestList;
     }
 
+    /**
+     *
+     * @param user The user we want to search received friendRequests
+     * @return the list of received FriendRequests
+     * @throws SQLException database
+     */
     public List<E> findAllFriendRequestsForUserReceived(User user) throws SQLException {
         List<E> friendRequestList = new ArrayList<>();
         String sql = "select * from friendrequests where id_user2 = " + user.getId() + " and status = 'pending' " ;

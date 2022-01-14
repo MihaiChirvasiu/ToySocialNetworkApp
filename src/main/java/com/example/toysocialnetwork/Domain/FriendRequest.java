@@ -41,16 +41,27 @@ public class FriendRequest extends Entity<Long> {
         return status;
     }
 
+    /**
+     * Setter for the date
+     * @param date The date to be set
+     */
     public void setDate(LocalDateTime date)
     {
         this.date=date;
     }
 
+    /**
+     * Getter for the date
+     * @return The date
+     */
     public LocalDateTime getDate()
     {
         return this.date;
     }
 
+    /**
+     * Setter to status
+     */
     public void setStatus()
     {
         status=STATUS.pending;

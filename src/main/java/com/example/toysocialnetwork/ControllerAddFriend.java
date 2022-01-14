@@ -53,6 +53,9 @@ public class ControllerAddFriend {
         initModel();
     }
 
+    /**
+     * Initialises the tableViewAddFriend
+     */
     @FXML
     public void initialize(){
         tableColumnFirstName.setCellValueFactory(new PropertyValueFactory<User, String>("FirstName"));
@@ -67,6 +70,10 @@ public class ControllerAddFriend {
         tableViewAddFriend.setItems(model);
     }
 
+    /**
+     * Loads all the users
+     * @throws SQLException database
+     */
     private void initModel() throws SQLException {
         Set<Long> keysSet = controller.getKeysServ();
         List<User> users = new ArrayList<User>();
@@ -94,6 +101,9 @@ public class ControllerAddFriend {
                 .collect(Collectors.toList()));
     }
 
+    /**
+     * Button for the add request
+     */
     public void handleAdd() {
         User selectedUser = tableViewAddFriend.getSelectionModel().getSelectedItem();
         if (selectedUser == null)
@@ -111,6 +121,11 @@ public class ControllerAddFriend {
         }
     }
 
+    /**
+     * Button for going back a page
+     * @throws IOException file
+     * @throws SQLException database
+     */
     @FXML
     public void goBack() throws IOException, SQLException {
         FXMLLoader loader = new FXMLLoader();

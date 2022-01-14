@@ -30,6 +30,11 @@ public class GUIApplication extends Application {
             "postgres", "1234", repository);
     Controller<Long, User, Friendship, FriendRequest, Message, PublicEvent, GroupChat> controller = new Controller<>(repository, friendshipRepository, friendRequestRepository, messageRepository, eventRepository, groupChatRepository);
 
+    /**
+     * Start function for the GUI application
+     * @param primaryStage the main stage
+     * @throws Exception if it can't be shown
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
 
@@ -40,6 +45,11 @@ public class GUIApplication extends Application {
 
     }
 
+    /**
+     * Loads the stage
+     * @param primaryStage the stage to be shown
+     * @throws Exception
+     */
     private void initView(Stage primaryStage) throws Exception{
         FXMLLoader userLoader = new FXMLLoader();
         userLoader.setLocation(getClass().getResource("login.fxml"));

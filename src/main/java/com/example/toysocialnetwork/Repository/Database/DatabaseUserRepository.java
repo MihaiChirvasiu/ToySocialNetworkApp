@@ -44,6 +44,11 @@ public class DatabaseUserRepository<ID, E extends Entity<ID>> implements UserRep
         return ps;
     }
 
+    /**
+     * Generates a random ID
+     * @param user the user for whom to generate the ID
+     * @throws SQLException database
+     */
     private void generateID(User user) throws SQLException{
         while(true){
             long randomID = ThreadLocalRandom.current().nextInt(0, 10001);
@@ -57,6 +62,12 @@ public class DatabaseUserRepository<ID, E extends Entity<ID>> implements UserRep
         }
     }
 
+    /**
+     *
+     * @param email the email to be searched for
+     * @return the email
+     * @throws SQLException database
+     */
     @Override
     public String findEmail(String email) throws SQLException{
         String sql = "select email from users where email = '" + email + "'";
@@ -69,6 +80,13 @@ public class DatabaseUserRepository<ID, E extends Entity<ID>> implements UserRep
             return null;
     }
 
+    /**
+     *
+     * @param email the email used to log in
+     * @param password the password used to log in
+     * @return the user
+     * @throws SQLException database
+     */
     @Override
     public User loginRepo(String email, String password) throws SQLException{
         String sql = "select * from users where email = '" + email + "' and password = '" + password + "'";
@@ -84,6 +102,12 @@ public class DatabaseUserRepository<ID, E extends Entity<ID>> implements UserRep
             return null;
     }
 
+    /**
+     *
+     * @param pageable a page
+     * @return pages
+     * @throws SQLException database
+     */
     @Override
     public Page<E> findAllPage(Pageable pageable) throws SQLException {
         Paginator<E> paginator = new Paginator<E>(pageable, this.findAll());

@@ -136,6 +136,9 @@ public class ControllerDetails implements Observer<EntityChangeEvent> {
         loadCombos();
     }
 
+    /**
+     * Function for loading the comboBoxes used
+     */
     private void loadCombos(){
         ObservableList<LocalDate> dates = FXCollections.observableArrayList();
         LocalDate start = LocalDate.parse("2021-01-01");
@@ -149,6 +152,11 @@ public class ControllerDetails implements Observer<EntityChangeEvent> {
         endDate.setItems(dates);
     }
 
+    /**
+     * Function handler for choosing the period for the activities report
+     * @throws SQLException database
+     * @throws IOException file
+     */
     @FXML
     public void queryActivities() throws SQLException, IOException {
         LocalDate start = startDate.getSelectionModel().getSelectedItem();
@@ -205,6 +213,11 @@ public class ControllerDetails implements Observer<EntityChangeEvent> {
         }
     }
 
+    /**
+     * Initialises the addFriend Controller
+     * @throws SQLException database
+     * @throws IOException file
+     */
     @FXML
     public void addFriend() throws SQLException, IOException {
 
@@ -221,6 +234,11 @@ public class ControllerDetails implements Observer<EntityChangeEvent> {
         controllerDetails.setService(controller, detailStage, this.friend);
     }
 
+    /**
+     * Initialises the eventController
+     * @throws SQLException database
+     * @throws IOException file
+     */
     @FXML
     public void events() throws SQLException, IOException {
 
@@ -238,6 +256,11 @@ public class ControllerDetails implements Observer<EntityChangeEvent> {
         controllerDetails.setService(controller, detailStage, this.friend);
     }
 
+    /**
+     * Function handler for going back a page
+     * @throws IOException file
+     * @throws SQLException database
+     */
     @FXML
     public void goBack() throws IOException, SQLException {
         FXMLLoader userLoader = new FXMLLoader();
@@ -249,6 +272,11 @@ public class ControllerDetails implements Observer<EntityChangeEvent> {
         guiController.setController(controller,detailStage);
     }
 
+    /**
+     * Creates the chat Controller
+     * @throws IOException file
+     * @throws SQLException database
+     */
     @FXML
     public void chat() throws IOException, SQLException {
       /*  FXMLLoader loader = new FXMLLoader();
@@ -280,6 +308,9 @@ public class ControllerDetails implements Observer<EntityChangeEvent> {
         controllerDetails.setService(controller, detailStage, this.friend);
     }
 
+    /**
+     * Initialises all the tableViews used
+     */
     @FXML
     public void initialize(){
         tableColumnFirstName.setCellValueFactory(new PropertyValueFactory<User, String>("FirstName"));
@@ -311,6 +342,10 @@ public class ControllerDetails implements Observer<EntityChangeEvent> {
         });
     }
 
+    /**
+     * Visuals for the page
+     * @param event
+     */
     public void showFriends(ActionEvent event)
     {
         tableViewRequestsReceived.setVisible(false);
@@ -326,6 +361,10 @@ public class ControllerDetails implements Observer<EntityChangeEvent> {
         cancelRequest.setVisible(false);
     }
 
+    /**
+     * Visuals for the page
+     * @param event
+     */
     public void showSentRequests(ActionEvent event)
     {
         tableViewRequestsReceived.setVisible(false);
@@ -341,6 +380,10 @@ public class ControllerDetails implements Observer<EntityChangeEvent> {
         cancelRequest.setVisible(true);
     }
 
+    /**
+     * Visuals for the page
+     * @param event
+     */
     public void showReceivedRequests(ActionEvent event)
     {
         tableViewRequestsReceived.setVisible(true);
@@ -356,6 +399,11 @@ public class ControllerDetails implements Observer<EntityChangeEvent> {
         cancelRequest.setVisible(false);
     }
 
+    /**
+     * Function handler for cancelling a request
+     * @param event
+     * @throws SQLException database
+     */
     public void cancelRequest(ActionEvent event) throws SQLException {
         FriendRequestDTO selectedUser = tableViewRequestsSent.getSelectionModel().getSelectedItem();
         if(selectedUser == null)
@@ -380,6 +428,11 @@ public class ControllerDetails implements Observer<EntityChangeEvent> {
 
     }
 
+    /**
+     * Updates the model (observer)
+     * @param entityChangeEvent the event that occurred
+     * @throws SQLException database
+     */
     @Override
     public void update(EntityChangeEvent entityChangeEvent) throws SQLException {
         initModelRequestSent(friend);

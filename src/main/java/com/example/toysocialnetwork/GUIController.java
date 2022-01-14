@@ -101,6 +101,12 @@ public class GUIController {
             showUserFriendRequest(selectedUser);*/
     }
 
+    /**
+     * Initialises the controllerDetails
+     * @param user the user for whom to load the controller
+     * @throws IOException file
+     * @throws SQLException database
+     */
     public void showUserFriendRequest(User user) throws IOException, SQLException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("friendrequests-view.fxml"));
@@ -117,6 +123,13 @@ public class GUIController {
 
     }
 
+    /**
+     * Function handler for the login Button
+     * @param event
+     * @throws SQLException database
+     * @throws NoSuchAlgorithmException hash
+     * @throws IOException file
+     */
     public void loginButtonOnAction(ActionEvent event) throws SQLException, NoSuchAlgorithmException, IOException {
         if(emailTextField.getText().isBlank() == false && enterPasswordField.getText().isBlank() == false)
         {
@@ -128,7 +141,14 @@ public class GUIController {
         }
     }
 
-
+    /**
+     * We need to check that the given data corresponds with the database credentials
+     * @param email the email given
+     * @param password the password given
+     * @throws SQLException database
+     * @throws NoSuchAlgorithmException hash
+     * @throws IOException file
+     */
     public void validateLogin(String email, String password) throws SQLException, NoSuchAlgorithmException, IOException {
         if(controller.login(email,password)!=null)
         {
@@ -139,6 +159,9 @@ public class GUIController {
             loginMessageLabel.setText("Email or password invalid!");
     }
 
+    /**
+     * Initialises the register Controller
+     */
     public void createAccountForm()
     {
         try{

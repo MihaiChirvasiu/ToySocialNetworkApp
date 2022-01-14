@@ -30,6 +30,12 @@ public class PDFReport {
         this.name = name;
     }
 
+    /**
+     * Creates a PDF file with the messages received by a user
+     * @param tile The title of the PDF
+     * @param messageList The list of messages
+     * @throws IOException for the file
+     */
     public void writeToFile(String tile, List<Message> messageList) throws IOException {
         PDDocument document = new PDDocument();
         PDPage page = new PDPage();
@@ -124,6 +130,13 @@ public class PDFReport {
         document.close();
     }
 
+    /**
+     * Creates a PDF file with all the new friends made and messages received by a user
+     * @param title The title of the PDF file
+     * @param messageList The list of messages received
+     * @param friends The list of new friends made
+     * @throws IOException for the file
+     */
     public void writeToFileFriends(String title, List<Message> messageList, List<Friendship> friends) throws IOException {
         DefaultPieDataset dataset = new DefaultPieDataset();
         dataset.setValue("MessagesReceived", messageList.size());

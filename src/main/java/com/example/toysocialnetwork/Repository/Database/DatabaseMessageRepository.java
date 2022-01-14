@@ -61,6 +61,11 @@ public class DatabaseMessageRepository<ID, E extends Entity<ID>, E1 extends Enti
         }
     }
 
+    /**
+     *
+     * @param message message to be set the group
+     * @param group the group to be set
+     */
     public void setMessageGroup(E message, E2 group){
         Message message1 = (Message) message;
         message1.setGroupChat((GroupChat) group);
@@ -101,6 +106,12 @@ public class DatabaseMessageRepository<ID, E extends Entity<ID>, E1 extends Enti
 
     }
 
+    /**
+     *
+     * @param message the message to be added
+     * @param users the list of users that receive the message
+     * @throws SQLException database
+     */
     private void addMessageUsersTo(E message, List<User> users) throws SQLException{
         for(int i = 0; i < users.size(); i++) {
             String sql = "insert into message_to_users (id_message, id_to ) values(?, ?)";
@@ -116,6 +127,12 @@ public class DatabaseMessageRepository<ID, E extends Entity<ID>, E1 extends Enti
 
     }
 
+    /**
+     *
+     * @param id the ID of teh message
+     * @return the list of IDs of the users
+     * @throws SQLException database
+     */
     public List<ID> getUsersFromIDMessage(Long id) throws SQLException {
         List<Long> idList = new ArrayList<>();
         String sql = "select id_to from message_to_users where id_message = " + id;
@@ -165,6 +182,13 @@ public class DatabaseMessageRepository<ID, E extends Entity<ID>, E1 extends Enti
         return null;
     }
 
+    /**
+     *
+     * @param idUser1 the first User
+     * @param idUser2 the second User
+     * @return the list of message IDs
+     * @throws SQLException database
+     */
     private List<ID> idMessageConversation(E1 idUser1, E1 idUser2) throws SQLException {
         List<Long> idList = new ArrayList<>();
         String sql = "select id_message from message_to_users where id_to = " + idUser2.getId() + " or id_to = " + idUser1.getId();
@@ -225,6 +249,13 @@ public class DatabaseMessageRepository<ID, E extends Entity<ID>, E1 extends Enti
         return messageList;
     }
 
+    /**
+     *
+     * @param idUser1 An user
+     * @param groupChat A groupChat
+     * @return the list of messages sent by the user in the groupChat
+     * @throws SQLException database
+     */
     public List<E> getConversationGroup(E1 idUser1, E2 groupChat) throws SQLException{
         Map<E1, List<ID>> mapConv = new HashMap<>();
         List<E1> idUsersTo = (List<E1>) databaseGroupRepository.getUsersFromGroup((GroupChat) groupChat);
@@ -266,6 +297,12 @@ public class DatabaseMessageRepository<ID, E extends Entity<ID>, E1 extends Enti
         return messageList;
     }
 
+    /**
+     *
+     * @param idUser1 User
+     * @return the list of all messages sent by the user
+     * @throws SQLException database
+     */
     public List<E> getAllConversation(E1 idUser1) throws SQLException{
         List<E> messageList = new ArrayList<>();
         String sql = "select * from messages where id_user_from = " + idUser1.getId() + " order by date";
@@ -279,6 +316,12 @@ public class DatabaseMessageRepository<ID, E extends Entity<ID>, E1 extends Enti
         return messageList;
     }
 
+    /**
+     *
+     * @param idUser1 User
+     * @return a list of all the messages received by the user
+     * @throws SQLException database
+     */
     public List<E> getAllReceivedMessages(E1 idUser1) throws SQLException {
         List<ID> idMessageConv = getAllMessagesForActivity(idUser1);
         List<E> messageList = new ArrayList<>();
@@ -298,6 +341,12 @@ public class DatabaseMessageRepository<ID, E extends Entity<ID>, E1 extends Enti
         return messageList;
     }
 
+    /**
+     *
+     * @param idUser1 User
+     * @return the list of IDs of the messages for the report
+     * @throws SQLException database
+     */
     public List<ID> getAllMessagesForActivity(E1 idUser1) throws SQLException{
         List<Long> idList = new ArrayList<>();
         String sql = "select id_message from message_to_users where id_to = " + idUser1.getId();

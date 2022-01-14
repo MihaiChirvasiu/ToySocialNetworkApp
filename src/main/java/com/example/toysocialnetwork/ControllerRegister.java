@@ -59,6 +59,13 @@ public class ControllerRegister {
         this.primaryStage = stage;
     }
 
+    /**
+     * Register Button handler
+     * @param event
+     * @throws NoSuchAlgorithmException for the hash
+     * @throws SQLException database
+     * @throws IOException file
+     */
     public void registerButtonOnAction(ActionEvent event) throws NoSuchAlgorithmException, SQLException, IOException {
         if(!firstnameTextField.getText().isBlank()&&!lastnameTextField.getText().isBlank()&&!emailTextField.getText().isBlank()&&!setPasswordField.getText().isBlank()&&!confirmPasswordField.getText().isBlank())
         {
@@ -87,6 +94,12 @@ public class ControllerRegister {
         }
     }
 
+    /**
+     * Handler for the Cancel Button, goes back a page to login page
+     * @param event
+     * @throws IOException file
+     * @throws SQLException database
+     */
     public void cancelButtonOnAction(ActionEvent event) throws IOException, SQLException {
         FXMLLoader userLoader = new FXMLLoader();
         userLoader.setLocation(getClass().getResource("login.fxml"));

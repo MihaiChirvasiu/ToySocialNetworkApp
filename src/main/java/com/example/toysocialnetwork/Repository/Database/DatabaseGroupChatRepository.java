@@ -33,6 +33,11 @@ public class DatabaseGroupChatRepository <ID, E extends Entity<ID>, E1 extends E
         return ps;
     }
 
+    /**
+     * Generates a random ID for the groupChat
+     * @param groupChat the groupChat that will receive a random ID
+     * @throws SQLException database
+     */
     private void generateID(GroupChat groupChat) throws SQLException {
         while(true){
             long randomID = ThreadLocalRandom.current().nextInt(0, 10001);
@@ -46,6 +51,11 @@ public class DatabaseGroupChatRepository <ID, E extends Entity<ID>, E1 extends E
         }
     }
 
+    /**
+     * Generates a random access code
+     * @param groupChat the groupChat that will have the joinCode
+     * @throws SQLException
+     */
     private void generateCode(GroupChat groupChat) throws SQLException {
         while (true){
             StringBuilder joinCode = new StringBuilder();
@@ -63,6 +73,11 @@ public class DatabaseGroupChatRepository <ID, E extends Entity<ID>, E1 extends E
         }
     }
 
+    /**
+     *
+     * @param groupChat that will be added in the database
+     * @throws SQLException database
+     */
     public void addGroup(GroupChat groupChat) throws SQLException {
 
         generateID(groupChat);
@@ -75,6 +90,12 @@ public class DatabaseGroupChatRepository <ID, E extends Entity<ID>, E1 extends E
         ps.executeUpdate();
     }
 
+    /**
+     *
+     * @param groupChat The groupChat of which all users will be returned
+     * @return a list of all users from the groupChat
+     * @throws SQLException database
+     */
     public List<User> getUsersFromGroup(GroupChat groupChat) throws SQLException {
         List<User> users = new ArrayList<>();
         String sql = "select id_user from group_users where id_group = " + groupChat.getId();
@@ -87,6 +108,12 @@ public class DatabaseGroupChatRepository <ID, E extends Entity<ID>, E1 extends E
         return users;
     }
 
+    /**
+     *
+     * @param user The user that wants to join a group
+     * @param groupChat the groupChat that the user will join
+     * @throws SQLException database
+     */
     public void joinGroup(User user, GroupChat groupChat) throws SQLException {
         List<User> users = getUsersFromGroup(groupChat);
         if(users.contains(user))
@@ -98,6 +125,12 @@ public class DatabaseGroupChatRepository <ID, E extends Entity<ID>, E1 extends E
         ps.executeUpdate();
     }
 
+    /**
+     *
+     * @param user The user that will leave the group
+     * @param groupChat the groupChat that the user wants to leave
+     * @throws SQLException database
+     */
     public void leaveGroup(User user, GroupChat groupChat) throws SQLException {
         List<User> users = getUsersFromGroup(groupChat);
         if(!users.contains(user))
@@ -107,6 +140,12 @@ public class DatabaseGroupChatRepository <ID, E extends Entity<ID>, E1 extends E
         ps.executeUpdate();
     }
 
+    /**
+     *
+     * @param idGroup the ID of the group that we search for
+     * @return the groupChat or null otherwise
+     * @throws SQLException database
+     */
     public GroupChat getGroupByIDGroup(ID idGroup) throws SQLException{
         String sql = "select * from group_chat where id_group = " + idGroup;
         PreparedStatement ps = getStatement(sql);
@@ -121,6 +160,12 @@ public class DatabaseGroupChatRepository <ID, E extends Entity<ID>, E1 extends E
         return null;
     }
 
+    /**
+     *
+     * @param joinCode The joinCode for the groupChat
+     * @return the groupChat or null otherwise
+     * @throws SQLException database
+     */
     public GroupChat getGroupByJoinCode(String joinCode) throws SQLException{
         String sql = "select * from group_chat where join_code = '" + joinCode + "'";
         PreparedStatement ps = getStatement(sql);
@@ -135,6 +180,12 @@ public class DatabaseGroupChatRepository <ID, E extends Entity<ID>, E1 extends E
         return null;
     }
 
+    /**
+     *
+     * @param idUser the ID of the User
+     * @return a list of groupChats that the user is joined
+     * @throws SQLException database
+     */
     public List<GroupChat> getGroupChatByIDUser(ID idUser) throws SQLException{
         List<GroupChat> groups = new ArrayList<>();
         String sql = "select id_group from group_users where id_user = " + idUser;

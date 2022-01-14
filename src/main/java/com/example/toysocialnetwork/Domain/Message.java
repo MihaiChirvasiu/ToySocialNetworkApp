@@ -25,10 +25,18 @@ public class Message extends Entity<Long> {
         this.groupChat = null;
     }
 
+    /**
+     * Getter for the GroupChat
+     * @return the groupChat in which the message was sent
+     */
     public GroupChat getGroupChat() {
         return groupChat;
     }
 
+    /**
+     * Setter for the groupChat
+     * @param groupChat the new groupChat to be set
+     */
     public void setGroupChat(GroupChat groupChat) {
         this.groupChat = groupChat;
     }
