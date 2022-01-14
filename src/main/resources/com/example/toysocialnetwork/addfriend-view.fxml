@@ -8,7 +8,7 @@
 <?import javafx.scene.effect.Blend?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="543.0" prefWidth="785.0" styleClass="bodybg3" stylesheets="file:/E:/MAP/ReparareToySocialNetwork/Sources/Background3.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toysocialnetwork.ControllerAddFriend">
+<AnchorPane prefHeight="543.0" prefWidth="785.0" styleClass="bodybg3" stylesheets="@Sources/Background3.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toysocialnetwork.ControllerAddFriend">
    <children>
       <TableView fx:id="tableViewAddFriend" layoutX="100.0" layoutY="71.0" prefHeight="379.0" prefWidth="344.0">
         <columns>
@@ -16,17 +16,17 @@
           <TableColumn fx:id="tableColumnLastName" minWidth="0.0" prefWidth="150.4000244140625" text="LastName" />
         </columns>
       </TableView>
-      <TextField fx:id="searchFriend" layoutX="472.0" layoutY="171.0" prefHeight="26.0" prefWidth="176.0" />
-      <Button alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="472.0" layoutY="220.0" mnemonicParsing="false" onAction="#handleAdd" prefHeight="102.0" prefWidth="218.0" styleClass="button3" stylesheets="file:/E:/MAP/ReparareToySocialNetwork/Sources/Button3.css" text="Add" textAlignment="CENTER" textFill="WHITE">
+      <TextField fx:id="searchFriend" layoutX="472.0" layoutY="171.0" prefHeight="26.0" prefWidth="218.0" />
+      <Button alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="472.0" layoutY="220.0" mnemonicParsing="false" onAction="#handleAdd" prefHeight="102.0" prefWidth="218.0" styleClass="button3" stylesheets="@Sources/Button3.css" text="Add" textAlignment="CENTER" textFill="WHITE">
          <effect>
             <Blend mode="MULTIPLY" />
          </effect></Button>
-      <Label alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="472.0" layoutY="152.0" prefHeight="18.0" prefWidth="176.0" text="Search user to add as friend" textAlignment="CENTER">
+      <Label alignment="CENTER" blendMode="MULTIPLY" contentDisplay="CENTER" layoutX="472.0" layoutY="152.0" prefHeight="18.0" prefWidth="218.0" text="Search user to add as friend" textAlignment="CENTER">
          <effect>
             <Blend mode="MULTIPLY" />
          </effect>
       </Label>
-      <Button fx:id="backButton" blendMode="MULTIPLY" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#goBack" prefHeight="26.0" prefWidth="36.0" styleClass="backbutton" stylesheets="file:/E:/MAP/ReparareToySocialNetwork/Sources/BackButton.css">
+      <Button fx:id="backButton" blendMode="MULTIPLY" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#goBack" prefHeight="26.0" prefWidth="36.0" styleClass="backbutton" stylesheets="@Sources/BackButton.css">
          <effect>
             <Blend mode="MULTIPLY" />
          </effect>

@@ -3,6 +3,7 @@ package com.example.toysocialnetwork;
 import com.example.toysocialnetwork.Domain.*;
 import com.example.toysocialnetwork.Events.EntityChangeEvent;
 import com.example.toysocialnetwork.Observer.Observer;
+import com.example.toysocialnetwork.Repository.RepoException;
 import com.example.toysocialnetwork.Service.Controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -70,6 +71,9 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
     private TableColumn<GroupChat, String> groupName;
 
     @FXML
+    private TableColumn<GroupChat, String> joinCode;
+
+    @FXML
     private Button createGroup;
 
     @FXML
@@ -98,6 +102,12 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
 
     @FXML
     private Button generatePDFButton;
+
+    @FXML
+    private Label noNameGroup;
+
+    @FXML
+    private Label noCodeGroup;
 
 
     Controller<Long, User, Friendship, FriendRequest, Message, PublicEvent, GroupChat> controller;
@@ -136,6 +146,7 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
         userFirstName.setCellValueFactory(new PropertyValueFactory<User, String>("FirstName"));
         userLastName.setCellValueFactory(new PropertyValueFactory<User, String>("LastName"));
         groupName.setCellValueFactory(new PropertyValueFactory<GroupChat, String>("name"));
+        joinCode.setCellValueFactory(new PropertyValueFactory<GroupChat, String>("joinCode"));
         searchReceiver.textProperty().addListener(o-> {
             try {
                 handleFilter();
@@ -204,15 +215,29 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
     public void createGroup() throws SQLException {
         String groupName = insertGroupName.getText();
         if(!groupName.isEmpty()){
+            noNameGroup.setText("");
             controller.addGroup(groupName, friend.getId());
         }
-        //TODO add label for no text input
+        else
+        {
+            noNameGroup.setText("Group name cannot be empty!");
+        }
     }
 
     public void joinGroup() throws SQLException {
-        String joinCode = insertJoinCode.getText();
-        if(!joinCode.isEmpty()){
-            controller.joinGroupServ(controller.getGroupByJoinCode(joinCode).getId(), friend.getId(), joinCode);
+        try{
+            String joinCode = insertJoinCode.getText();
+            if (!joinCode.isEmpty()) {
+                controller.joinGroupServ(controller.getGroupByJoinCode(joinCode).getId(), friend.getId(), joinCode);
+            } else {
+                noCodeGroup.setText("A join code cannot be empty!");
+            }
+        }catch (NullPointerException e)
+        {
+            noCodeGroup.setText("Wrong join code!");
+        }catch (RepoException e)
+        {
+            noCodeGroup.setText(e.getErrorMessage());
         }
     }
 

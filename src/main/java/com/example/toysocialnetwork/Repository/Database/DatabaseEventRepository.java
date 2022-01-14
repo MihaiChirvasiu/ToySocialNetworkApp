@@ -6,10 +6,12 @@ import com.example.toysocialnetwork.Domain.PublicEvent;
 import com.example.toysocialnetwork.Domain.User;
 import com.example.toysocialnetwork.Repository.RepoException;
 import com.example.toysocialnetwork.Repository.UserRepository;
+import com.example.toysocialnetwork.Utils.ComparatorForDate;
 
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -112,6 +114,24 @@ public class DatabaseEventRepository<ID, E extends Entity<ID>, E1 extends Entity
             var event = getEventByIDEvent((ID) idEvent);
             events.add(event);
         }
+        return events;
+    }
+
+    public List<PublicEvent> getEventByIDUserOrderByDate(ID idUser) throws SQLException{
+        List<PublicEvent> events = new ArrayList<>();
+        List<PublicEvent> eventsByDate = new ArrayList<>();
+        String sql = "select id_event from users_subscribed where id_user = " + idUser;
+        PreparedStatement ps = getStatement(sql);
+        ResultSet resultSet = ps.executeQuery();
+        while(resultSet.next()){
+            Long idEvent = resultSet.getLong(1);
+            var event = getEventByIDEvent((ID) idEvent);
+            events.add(event);
+        }
+        for(int i=0;i<events.size();i++)
+            if(events.get(i).getEventDate().isBefore(LocalDateTime.now()))
+                events.remove(i);
+        Collections.sort(events, new ComparatorForDate());
         return events;
     }
 

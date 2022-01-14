@@ -273,6 +273,10 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
         return eventRepository.getEventByIDUser(idUser);
     }
 
+    public List<PublicEvent> getSubscribedEventsForUserOrdered(ID idUser) throws SQLException {
+        return eventRepository.getEventByIDUserOrderByDate(idUser);
+    }
+
     public void addGroup(String name, ID idUser) throws SQLException {
         GroupChat groupChat = new GroupChat(name);
         groupChatRepository.addGroup(groupChat);
@@ -284,16 +288,10 @@ public class Controller<ID, E extends Entity<ID>, E1 extends Entity<ID>, E2 exte
     }
 
     public void joinGroupServ(ID idGroup, ID idUser, String joinCode) throws SQLException {
-        if(findOneServ(idUser) != null && groupChatRepository.getGroupByIDGroup(idGroup) != null && getGroupByJoinCode(joinCode) != null){
+        if(getGroupByJoinCode(joinCode) != null){
             groupChatRepository.joinGroup((User) findOneServ(idUser), groupChatRepository.getGroupByIDGroup(idGroup));
             notifyObservers(new EntityChangeEvent(ChangeEventType.ADD, groupChatRepository.getGroupByIDGroup(idGroup)));
         }
-        if(findOneServ(idUser) == null)
-            throw new RepoException("User doesn't exist!");
-        if(groupChatRepository.getGroupByIDGroup(idGroup) == null)
-            throw new RepoException("Group doesn't exist!");
-        if(getGroupByJoinCode(joinCode) == null)
-            throw new RepoException("Wrong join code!");
     }
 
     public void leaveGroupServ(ID idGroup, ID idUser) throws SQLException {

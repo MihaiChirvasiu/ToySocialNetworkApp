@@ -2,43 +2,63 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.Blend?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="543.0" prefWidth="785.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toysocialnetwork.ControllerChat">
+<AnchorPane prefHeight="543.0" prefWidth="785.0" styleClass="bodybgChat" stylesheets="@Sources/BackgroundChat.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.toysocialnetwork.ControllerChat">
    <children>
-      <TableView fx:id="usersView" layoutX="14.0" layoutY="57.0" onMouseClicked="#buildChatBox" prefHeight="284.0" prefWidth="185.0">
+      <TableView fx:id="usersView" layoutX="14.0" layoutY="74.0" onMouseClicked="#buildChatBox" prefHeight="154.0" prefWidth="342.0">
         <columns>
-          <TableColumn fx:id="userFirstName" prefWidth="89.0" text="FirstName" />
-            <TableColumn fx:id="userLastName" prefWidth="92.0" text="LastName" />
+          <TableColumn fx:id="userFirstName" prefWidth="171.2000150680542" text="FirstName" />
+            <TableColumn fx:id="userLastName" prefWidth="168.7999725341797" text="LastName" />
         </columns>
       </TableView>
-      <TextField fx:id="searchReceiver" layoutX="14.0" layoutY="30.0" prefHeight="26.0" prefWidth="185.0" />
-      <Button fx:id="backButton" blendMode="MULTIPLY" layoutX="14.0" layoutY="3.0" mnemonicParsing="false" onAction="#goBack" prefHeight="26.0" prefWidth="36.0" styleClass="backbutton" stylesheets="file:/E:/MAP/ReparareToySocialNetwork/Sources/BackButton.css">
+      <TextField fx:id="searchReceiver" layoutX="14.0" layoutY="35.0" prefHeight="26.0" prefWidth="342.0" promptText="Search friend" />
+      <Button fx:id="backButton" blendMode="MULTIPLY" layoutX="14.0" layoutY="3.0" mnemonicParsing="false" onAction="#goBack" prefHeight="26.0" prefWidth="36.0" styleClass="backbutton" stylesheets="@Sources/BackButton.css">
          <effect>
             <Blend mode="MULTIPLY" />
          </effect>
       </Button>
-      <TableView fx:id="groupsView" layoutX="252.0" layoutY="48.0" onMouseClicked="#buildGroupChatBox" prefHeight="302.0" prefWidth="261.0">
+      <TableView fx:id="groupsView" layoutX="14.0" layoutY="245.0" onMouseClicked="#buildGroupChatBox" prefHeight="154.0" prefWidth="342.0">
         <columns>
-          <TableColumn fx:id="groupName" prefWidth="258.0" text="GroupName" />
+          <TableColumn fx:id="groupName" prefWidth="176.0000638961792" text="GroupName" />
+            <TableColumn fx:id="joinCode" prefWidth="164.0000457763672" text="JoinCode" />
         </columns>
       </TableView>
-      <TextField fx:id="insertGroupName" layoutX="252.0" layoutY="376.0" />
-      <TextField fx:id="insertJoinCode" layoutX="252.0" layoutY="411.0" />
-      <Button fx:id="createGroup" layoutX="401.0" layoutY="376.0" mnemonicParsing="false" onAction="#createGroup" text="CreateGroup" />
-      <Button fx:id="joinGroup" layoutX="401.0" layoutY="411.0" mnemonicParsing="false" onAction="#joinGroup" prefHeight="25.0" prefWidth="84.0" text="JoinGroup" />
-      <TableView fx:id="usersViewQuery" layoutX="545.0" layoutY="48.0" onMouseClicked="#messageQuery" prefHeight="200.0" prefWidth="200.0">
+      <TextField fx:id="insertGroupName" layoutX="14.0" layoutY="411.0" prefHeight="26.0" prefWidth="262.0" promptText="Enter Group Name" />
+      <TextField fx:id="insertJoinCode" layoutX="14.0" layoutY="472.0" prefHeight="26.0" prefWidth="262.0" promptText="Enter Join Code" />
+      <Button fx:id="createGroup" blendMode="MULTIPLY" layoutX="254.0" layoutY="405.0" mnemonicParsing="false" onAction="#createGroup" prefHeight="38.0" prefWidth="150.0" styleClass="button4" stylesheets="@Sources/Button4.css" text="CreateGroup" textFill="WHITE" />
+      <TableView fx:id="usersViewQuery" layoutX="437.0" layoutY="74.0" onMouseClicked="#messageQuery" prefHeight="305.0" prefWidth="322.0">
         <columns>
-          <TableColumn fx:id="userFirstNameQuery" prefWidth="75.0" text="FirstName" />
-          <TableColumn fx:id="userLastNameQuery" prefWidth="75.0" text="LastName" />
+          <TableColumn fx:id="userFirstNameQuery" prefWidth="162.4000244140625" text="FirstName" />
+          <TableColumn fx:id="userLastNameQuery" prefWidth="158.4000244140625" text="LastName" />
         </columns>
       </TableView>
-      <ComboBox fx:id="start" layoutX="545.0" layoutY="272.0" prefWidth="150.0" />
-      <ComboBox fx:id="end" layoutX="545.0" layoutY="316.0" prefWidth="150.0" />
-      <Button fx:id="generatePDFButton" layoutX="545.0" layoutY="364.0" mnemonicParsing="false" onAction="#generatePDF" text="Button" />
+      <ComboBox fx:id="start" layoutX="437.0" layoutY="424.0" prefWidth="150.0" promptText="Start" style="-fx-background-color: skyblue;" />
+      <ComboBox fx:id="end" layoutX="608.0" layoutY="424.0" prefWidth="150.0" promptText="End" style="-fx-background-color: skyblue;" />
+      <Label fx:id="noNameGroup" layoutX="14.0" layoutY="390.0" prefHeight="18.0" prefWidth="150.0" textFill="RED">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="noCodeGroup" layoutX="14.0" layoutY="453.0" prefHeight="18.0" prefWidth="150.0" textFill="RED">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" layoutX="437.0" layoutY="35.0" prefHeight="26.0" prefWidth="322.0" text="Generate PDF Report For Messages Received" textFill="#03f2ff">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Separator layoutX="389.0" layoutY="-2.0" orientation="VERTICAL" prefHeight="548.0" prefWidth="10.0" />
+      <Button fx:id="joinGroup" blendMode="MULTIPLY" layoutX="254.0" layoutY="466.0" mnemonicParsing="false" onAction="#joinGroup" prefHeight="38.0" prefWidth="150.0" styleClass="button4" stylesheets="@Sources/Button4.css" text="JoinGroup" textFill="WHITE" />
+      <Button fx:id="generatePDFButton" blendMode="MULTIPLY" layoutX="512.0" layoutY="466.0" mnemonicParsing="false" onAction="#generatePDF" prefHeight="38.0" prefWidth="150.0" styleClass="button4" stylesheets="@Sources/Button4.css" text="CreatePDF" textFill="WHITE" />
    </children>
 </AnchorPane>
