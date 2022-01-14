@@ -345,7 +345,7 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
         messageField.setPrefHeight(25);
         messageField.setPrefWidth(700);
 
-        Image playImage=new Image("file:///E:/MAP/ReparareToySocialNetwork/src/main/resources/com/example/toysocialnetwork/Sources/Send.jpeg");
+        Image playImage=new Image("file:src/main/resources/com/example/toysocialnetwork/Sources/Send.jpeg");
         ImageView iv=new ImageView(playImage);
         iv.setFitHeight(18);
         iv.setFitWidth(18);
@@ -374,7 +374,7 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
                 Message selectedMessage = messageList.get(i);
                 Label label = new Label(messageList.get(i).getMessage());
                 label.setWrapText(true);
-                Image playI=new Image("file:///E:/MAP/ReparareToySocialNetwork/src/main/resources/com/example/toysocialnetwork/Sources/replyIcon.jpeg");
+                Image playI=new Image("file:src/main/resources/com/example/toysocialnetwork/Sources/replyIcon.jpeg");
                 ImageView iv1=new ImageView(playI);
                 iv1.setFitHeight(10);
                 iv1.setFitWidth(10);
@@ -409,7 +409,7 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
                 Message selectedMessage = messageList.get(i);
                 Label label = new Label(messageList.get(i).getMessage());
                 label.setWrapText(true);
-                Image playI=new Image("file:///E:/MAP/ReparareToySocialNetwork/src/main/resources/com/example/toysocialnetwork/Sources/replyIcon.jpeg");
+                Image playI=new Image("file:src/main/resources/com/example/toysocialnetwork/Sources/replyIcon.jpeg");
                 ImageView iv1=new ImageView(playI);
                 iv1.setFitHeight(10);
                 iv1.setFitWidth(10);
@@ -442,7 +442,7 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
             }
         }
 
-        Image playI=new Image("file:///E:/MAP/ReparareToySocialNetwork/src/main/resources/com/example/toysocialnetwork/Sources/Refresh.jpeg");
+        Image playI=new Image("file:src/main/resources/com/example/toysocialnetwork/Sources/Refresh.jpeg");
         ImageView iv1=new ImageView(playI);
         iv1.setFitHeight(18);
         iv1.setFitWidth(18);
@@ -506,7 +506,7 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
         messageField.setPrefHeight(25);
         messageField.setPrefWidth(700);
 
-        Image playImage=new Image("file:///E:/MAP/ReparareToySocialNetwork/src/main/resources/com/example/toysocialnetwork/Sources/Send.jpeg");
+        Image playImage=new Image("file:src/main/resources/com/example/toysocialnetwork/Sources/Send.jpeg");
         ImageView iv=new ImageView(playImage);
         iv.setFitHeight(18);
         iv.setFitWidth(18);
@@ -535,7 +535,7 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
                 Message selectedMessage = messageList.get(i);
                 Label label1 = new Label(messageList.get(i).getMessage());
                 label1.setWrapText(true);
-                Image playI=new Image("file:///E:/MAP/ReparareToySocialNetwork/src/main/resources/com/example/toysocialnetwork/Sources/replyIcon.jpeg");
+                Image playI=new Image("file:src/main/resources/com/example/toysocialnetwork/Sources/replyIcon.jpeg");
                 ImageView iv1=new ImageView(playI);
                 iv1.setFitHeight(10);
                 iv1.setFitWidth(10);
@@ -572,7 +572,7 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
                 Message selectedMessage = messageList.get(i);
                 Label label1 = new Label(messageList.get(i).getMessage());
                 label1.setWrapText(true);
-                Image playI=new Image("file:///E:/MAP/ReparareToySocialNetwork/src/main/resources/com/example/toysocialnetwork/Sources/replyIcon.jpeg");
+                Image playI=new Image("file:src/main/resources/com/example/toysocialnetwork/Sources/replyIcon.jpeg");
                 ImageView iv1=new ImageView(playI);
                 iv1.setFitHeight(10);
                 iv1.setFitWidth(10);
@@ -606,7 +606,7 @@ public class ControllerChat implements Observer<EntityChangeEvent> {
             }
         }
 
-        Image playI=new Image("file:///E:/MAP/ReparareToySocialNetwork/src/main/resources/com/example/toysocialnetwork/Sources/Refresh.jpeg");
+        Image playI=new Image("file:src/main/resources/com/example/toysocialnetwork/Sources/Refresh.jpeg");
         ImageView iv1=new ImageView(playI);
         iv1.setFitHeight(18);
         iv1.setFitWidth(18);

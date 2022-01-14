@@ -130,7 +130,7 @@ public class ControllerEvent extends Thread implements Observer<EntityChangeEven
         tableColumnNameSubscribed.setCellValueFactory(new PropertyValueFactory<PublicEvent, String>("nameEvent"));
         tableColumnDateSubscribed.setCellValueFactory(new PropertyValueFactory<PublicEvent, String>("eventDate"));
         tableViewEventsSubscribed.setItems(modelSubscribed);
-        Image image = new Image("File:/E:/MAP/ReparareToySocialNetwork/src/main/resources/com/example/toysocialnetwork/Sources/NotificationBell.jpeg");
+        Image image = new Image("file:src/main/resources/com/example/toysocialnetwork/Sources/NotificationBell.jpeg");
         ImageView imageView2 = new ImageView(image);
         imageView2.setFitHeight(34);
         imageView2.setFitWidth(36);
@@ -256,7 +256,7 @@ public class ControllerEvent extends Thread implements Observer<EntityChangeEven
                     long minutesD = ChronoUnit.MINUTES.between(data2, data1);
                     if (minutesD > 0) {
                         if (days > 366) {
-                            Image image = new Image("File:/E:/MAP/ReparareToySocialNetwork/src/main/resources/com/example/toysocialnetwork/Sources/NotificationBellOverYear.jpeg");
+                            Image image = new Image("file:src/main/resources/com/example/toysocialnetwork/Sources/NotificationBellOverYear.jpeg");
                             ImageView imageView2 = new ImageView(image);
                             imageView2.setFitHeight(34);
                             imageView2.setFitWidth(36);
@@ -264,7 +264,7 @@ public class ControllerEvent extends Thread implements Observer<EntityChangeEven
                         }
                         if (days <= 366) {
                             if (days <= 31) {
-                                Image image = new Image("File:/E:/MAP/ReparareToySocialNetwork/src/main/resources/com/example/toysocialnetwork/Sources/NotificationBellLessThanMonth.jpeg");
+                                Image image = new Image("file:src/main/resources/com/example/toysocialnetwork/Sources/NotificationBellLessThanMonth.jpeg");
                                 ImageView imageView2 = new ImageView(image);
                                 imageView2.setFitHeight(34);
                                 imageView2.setFitWidth(36);
@@ -272,7 +272,7 @@ public class ControllerEvent extends Thread implements Observer<EntityChangeEven
                             }
                             if (days <= 1) {
                                 {
-                                    Image image = new Image("File:/E:/MAP/ReparareToySocialNetwork/src/main/resources/com/example/toysocialnetwork/Sources/NotificationBellLessThanDay.jpeg");
+                                    Image image = new Image("file:src/main/resources/com/example/toysocialnetwork/Sources/NotificationBellLessThanDay.jpeg");
                                     ImageView imageView2 = new ImageView(image);
                                     imageView2.setFitHeight(34);
                                     imageView2.setFitWidth(36);
@@ -281,7 +281,7 @@ public class ControllerEvent extends Thread implements Observer<EntityChangeEven
                             }
                             long minutes = ChronoUnit.MINUTES.between(data2, data1);
                             if (minutes < 60) {
-                                Image image = new Image("File:/E:/MAP/ReparareToySocialNetwork/src/main/resources/com/example/toysocialnetwork/Sources/NotificationBellLessThanHour.jpeg");
+                                Image image = new Image("file:src/main/resources/com/example/toysocialnetwork/Sources/NotificationBellLessThanHour.jpeg");
                                 ImageView imageView2 = new ImageView(image);
                                 imageView2.setFitHeight(34);
                                 imageView2.setFitWidth(36);
@@ -291,7 +291,7 @@ public class ControllerEvent extends Thread implements Observer<EntityChangeEven
                     }
                     else
                     {
-                        Image image = new Image("File:/E:/MAP/ReparareToySocialNetwork/src/main/resources/com/example/toysocialnetwork/Sources/NotificationBell.jpeg");
+                        Image image = new Image("file:src/main/resources/com/example/toysocialnetwork/Sources/NotificationBell.jpeg");
                         ImageView imageView2 = new ImageView(image);
                         imageView2.setFitHeight(34);
                         imageView2.setFitWidth(36);
@@ -302,7 +302,7 @@ public class ControllerEvent extends Thread implements Observer<EntityChangeEven
             }
             else
             {
-                Image image = new Image("File:/E:/MAP/ReparareToySocialNetwork/src/main/resources/com/example/toysocialnetwork/Sources/NotificationBell.jpeg");
+                Image image = new Image("file:src/main/resources/com/example/toysocialnetwork/Sources/NotificationBell.jpeg");
                 ImageView imageView2 = new ImageView(image);
                 imageView2.setFitHeight(34);
                 imageView2.setFitWidth(36);

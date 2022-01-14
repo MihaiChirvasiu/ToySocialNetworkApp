@@ -276,22 +276,7 @@ public class ControllerDetails implements Observer<EntityChangeEvent> {
      */
     @FXML
     public void chat() throws IOException, SQLException {
-      /*  FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("chat-view.fxml"));
 
-        AnchorPane root = (AnchorPane) loader.load();
-
-        Stage dialogStage = new Stage();
-        dialogStage.setTitle("Chat");
-        dialogStage.initModality(Modality.WINDOW_MODAL);
-//        dialogStage.initOwner(primaryStage);
-        Scene scene = new Scene(root);
-        dialogStage.setScene(scene);
-
-        ControllerChat controllerDetails = loader.getController();
-        controllerDetails.setService(controller, dialogStage, this.friend);
-
-        dialogStage.show();*/
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("chat-view.fxml"));
 
